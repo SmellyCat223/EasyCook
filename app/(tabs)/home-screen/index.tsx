@@ -12,7 +12,7 @@ import GroupReq from "./components/header";
 import Article from "./components/article";
 import Stats from "./components/stats";
 
-const Index = () => {
+const Home = () => {
     return (
         <View className="flex-1 pt-10 bg-stone-950">
             <Header />
@@ -31,4 +31,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default Home;

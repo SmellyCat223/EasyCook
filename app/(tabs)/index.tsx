@@ -3,12 +3,12 @@ import { Text, View, Button, Image, TouchableOpacity, ScrollView } from "react-n
 import { Icon } from 'react-native-elements';
 import { Link, Redirect, Stack, useNavigation } from 'expo-router';
 import { useEffect } from 'react';
-import INdex from "./home-screen/index";
+import Home from "./home-screen/index";
 
 const Index = () => {
     return (
         <View className="flex-1 pt-10 bg-stone-950">
-            <Index />
+            <Home />
         </View>
     );
 };
