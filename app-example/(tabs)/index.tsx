@@ -1,32 +1,3 @@
-import { Text, View, Button, Image, TouchableOpacity } from "react-native";
-import { styled } from "nativewind";
-
-//export default function Index() {
-//  let name = "Berlinh";
-
-//  const handlePress = () => {
-//    console.log("go to grocery list");
-//  };
-
-const Header = () => {
-  let name = "Berlinh";
-
-  return (
-    <View className="flex-1 p-4 bg-gray-950 text-#f2f4f3">
-
-      {/* Top part */}
-      <View className="flex-row justify-between">  
-        <View>
-          <Text className="text-base text-white">Hi Berlinh</Text>
-          <Text className="text-base text-white">Welcome back</Text>
-        </View>
-        <Text className="text-base text-white">grocery</Text> 
-      </View>
-    </View>
-  )
-}
-
-/*
 import { Image, StyleSheet, Platform } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
@@ -97,4 +68,3 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
-*/
