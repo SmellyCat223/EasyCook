@@ -3,12 +3,12 @@ import { Text, View, Button, Image, TouchableOpacity, ScrollView } from "react-n
 import { Icon } from 'react-native-elements';
 import { Link } from 'expo-router';
 
-const LogIn = () => {
+const Login = () => {
     return (
         <View className="flex-1 p-4 bg-stone-950">
-            <Text className="text-base text-zinc-100">This is settings page</Text>
+            <Text className="text-base text-zinc-100">This is login page</Text>
         </View>
     );
 };
 
-export default LogIn;
+export default Login;
