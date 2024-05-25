@@ -3,10 +3,10 @@ import { Text, View, Button, Image, TouchableOpacity, ScrollView } from "react-n
 import { Icon } from 'react-native-elements';
 import { Link } from 'expo-router';
 
-const Grocery = () => {
+const Inventory = () => {
     return (
         <View className="flex-1 p-4 bg-stone-950">
-            <Text className="text-base text-zinc-100">This is grocery page</Text>
+            <Text className="text-base text-zinc-100">This is inventory page</Text>
             <Filter />
             <Body />
         </View>
@@ -42,4 +42,4 @@ const Body = () => {
     )
 }
 
-export default Grocery;
+export default Inventory;

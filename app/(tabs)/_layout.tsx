@@ -12,7 +12,7 @@ const TabsLayout = () => {
             tabBarStyle: {
                 backgroundColor: '#0c0a09',
               },
-            tabBarActiveTintColor: '#f4f4f5',
+            // tabBarActiveTintColor: '#f4f4f5',
             tabBarInactiveTintColor: '#71717a',
             }}
         >
@@ -21,29 +21,83 @@ const TabsLayout = () => {
                 options={{
                     headerShown: false,
                     title: "Home",
-                    tabBarIcon: () => <Icon name="home" type="antdesign" size={24} color="#f3f4f6" />,
+                    tabBarIcon: () => <Icon name="home" size={24} color="#f3f4f6" />,
                 }}
             />
             <Tabs.Screen name="recipe" options={{
                 headerTitle: "Recipe",
                 title: "Recipe",
-                tabBarIcon: () => <Icon name="find" type="antdesign" size={24} color="#f3f4f6" />,
+                tabBarIcon: () => <Icon name="search" color="#f3f4f6" />,
             }} />
             <Tabs.Screen name="meal-planner" options={{
                 headerTitle: "Meal Planner",
                 title: "Meal Planner",
-                tabBarIcon: () => <Icon name="calendar" type="antdesign" size={24} color="#f3f4f6" />,
+                tabBarIcon: () => <Icon name="calendar-today" color="#f3f4f6" />,
             }} />
             <Tabs.Screen name="grocery" options={{
                 headerTitle: "Grocery",
                 title: "Grocery",
-                tabBarIcon: () => <Icon name="shoppingcart" type="antdesign" size={24} color="#f3f4f6" />,
+                tabBarIcon: () => <Icon name="shopping-basket" color="#f3f4f6" />,
             }} />
             <Tabs.Screen name="profile" options={{
                 headerTitle: "Profile",
                 title: "Profile",
-                tabBarIcon: () => <Icon name="account-circle" type="materialcommunityicons" size={24} color="#f3f4f6" />,
+                tabBarIcon: () => <Icon name="account-circle" color="#f3f4f6" />,
             }} />
+            <Tabs.Screen
+                name="home-screen/index"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="home-screen/components/header"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="home-screen/components/search"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="home-screen/components/update-inventory"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="home-screen/components/next-meal"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="home-screen/components/expiring"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="home-screen/components/group-request"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="home-screen/components/article"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="home-screen/components/stats"
+                options={{
+                    href: null,
+                }}
+            />
         </Tabs>
     );
 };

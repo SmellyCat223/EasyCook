@@ -15,9 +15,11 @@ const Header = () => {
                 </View>
                 <Text className="text-zinc-100">Welcome back!</Text>
             </View>
-            <Link href="./menu">
+            {/*
+            <View>
                 <Icon name="menu" type="feather" color="#f4f4f5" />
-            </Link>
+            </View>
+            */}
         </View>
     );
 };

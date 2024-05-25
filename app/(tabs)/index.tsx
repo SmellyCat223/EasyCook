@@ -7,7 +7,7 @@ import Home from "./home-screen/index";
 
 const Index = () => {
     return (
-        <View className="flex-1 pt-10 bg-stone-950">
+        <View className="flex-1 bg-stone-950">
             <Home />
         </View>
     );
