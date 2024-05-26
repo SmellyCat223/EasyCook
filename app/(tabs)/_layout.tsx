@@ -153,6 +153,24 @@ const TabsLayout = () => {
                     href: null,
                 }}
             />
+            <Tabs.Screen
+                name="mealPlanner-screen/index"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="mealPlanner-screen/components/headerDate"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="mealPlanner-screen/components/threeMealsADay"
+                options={{
+                    href: null,
+                }}
+            />
         </Tabs>
     );
 };
