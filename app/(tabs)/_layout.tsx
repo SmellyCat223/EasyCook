@@ -3,17 +3,17 @@ import { Icon } from 'react-native-elements';
 
 const TabsLayout = () => {
     return (
-        <Tabs     
+        <Tabs
             screenOptions={{
-            headerStyle: {
-              backgroundColor: '#0c0a09',
-            },
-            headerTintColor: "#f4f4f5",
-            tabBarStyle: {
-                backgroundColor: '#0c0a09',
-              },
-            // tabBarActiveTintColor: '#f4f4f5',
-            tabBarInactiveTintColor: '#71717a',
+                headerStyle: {
+                    backgroundColor: '#0c0a09',
+                },
+                headerTintColor: "#f4f4f5",
+                tabBarStyle: {
+                    backgroundColor: '#0c0a09',
+                },
+                // tabBarActiveTintColor: '#f4f4f5',
+                tabBarInactiveTintColor: '#71717a',
             }}
         >
             <Tabs.Screen
