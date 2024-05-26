@@ -98,6 +98,30 @@ const TabsLayout = () => {
                     href: null,
                 }}
             />
+            <Tabs.Screen
+                name="recipe-screen/components/header"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="recipe-screen/components/recipe-first"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="recipe-screen/components/search-bar"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="recipe-screen/index"
+                options={{
+                    href: null,
+                }}
+            />
         </Tabs>
     );
 };

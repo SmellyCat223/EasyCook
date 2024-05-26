@@ -14,4 +14,4 @@ const RecipeA = () => { // to edit
     );
 };
 
-export default Search;
+export default RecipeA;
