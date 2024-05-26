@@ -9,8 +9,8 @@ const RootLayOut = () => {
         >
             <Stack.Screen
                 name="(tabs)"
-            >
-            </Stack.Screen>
+                options={{ headerShown: false}}
+            />
         </Stack>        
     );
 };

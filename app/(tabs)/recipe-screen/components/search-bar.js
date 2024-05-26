@@ -1,17 +1,34 @@
-import React, { useState } from 'react';
-import { Text, View, Button, Image, TouchableOpacity, ScrollView } from "react-native";
+import React from 'react';
+import { Text, View, StyleSheet } from "react-native";
 import { Icon } from 'react-native-elements';
-import { Link, Redirect, Stack, useNavigation } from 'expo-router';
 
 const Search = () => {
     return (
-        <View className="py-1">
-            <View className="flex flex-row rounded-2xl p-2 bg-zinc-200">
-                <Icon name="search1" type="antdesign" color="#6b7280" size = {16}/>
-                <Text className="text-zinc-500">  Search Recipe</Text>
+        <View style={styles.container}>
+            <View style={styles.searchBar}>
+                <Icon name="search1" type="antdesign" color="#6b7280" size={16} />
+                <Text style={styles.text}>Search Recipe</Text>
             </View>
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        paddingVertical: 10,
+    },
+    searchBar: {
+        flexDirection: 'row',
+        borderRadius: 20,
+        padding: 8,
+        backgroundColor: '#f0f0f0',
+        alignItems: 'center',
+    },
+    text: {
+        marginLeft: 5,
+        fontSize: 13,
+        color: '#6b7280',
+    },
+});
 
 export default Search;

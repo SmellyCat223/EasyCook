@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
-import { Text, View, Button, Image, TouchableOpacity, ScrollView } from "react-native";
-import { Icon } from 'react-native-elements';
-import { Link, Redirect, Stack, useNavigation } from 'expo-router';
+import React from 'react';
+import { Text, View, StyleSheet } from 'react-native';
 
 const Header = () => {
     return (
-        <View className="flex flex-row justify-between p-4">
-            <View>
-                <Text className="text-zinc-100"> My Recipe </Text>
-            </View>
+        <View style={styles.container}>
+            <Text style={styles.text}>My Recipe</Text>
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 10,
+    },
+    text: {
+        color: '#f0f0f0',
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+});
 
 export default Header;
