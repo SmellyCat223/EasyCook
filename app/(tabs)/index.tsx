@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { Text, View, Button, Image, TouchableOpacity, ScrollView } from "react-native";
-import { Icon } from 'react-native-elements';
-import { Link, Redirect, Stack, useNavigation } from 'expo-router';
-import { useEffect } from 'react';
+import React from 'react';
+import { View } from "react-native";
 import Home from "./home-screen/index";
+import { enableScreens } from 'react-native-screens';
+enableScreens();
 
 const Index = () => {
     return (
