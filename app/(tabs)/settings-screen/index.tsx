@@ -6,6 +6,9 @@ import { useRouter } from 'expo-router';
 import Button from '../../components/button';
 import Button2 from '../../components/button2';
 import ProfilePicture from '../../components/profile-picture';
+import { enableScreens } from 'react-native-screens';
+enableScreens();
+
 
 const Settings = () => {
     const router = useRouter();

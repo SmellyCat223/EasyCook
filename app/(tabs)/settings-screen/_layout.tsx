@@ -1,6 +1,4 @@
 import { Stack } from "expo-router";
-import { Icon } from 'react-native-elements';
-import { View, Text } from 'react-native';
 
 const StackLayOut = () => {
   return (
@@ -11,13 +9,9 @@ const StackLayOut = () => {
             backgroundColor: '#0c0a09',
             },
             headerTintColor: "#f4f4f5",
-            // TabBarStyle: {
-            //     backgroundColor: '#0c0a09',
-            //     borderTopWidth: 0,
-            // },
         }}
     >
-      <Stack.Screen 
+      {/* <Stack.Screen 
         name="components/profile"
         options={{
           headerTitle: "Profile",
@@ -33,6 +27,12 @@ const StackLayOut = () => {
         name="components/login"
         options={{
           headerTitle: "Login",
+        }}
+      /> */}
+      <Stack.Screen 
+        name="index"
+        options={{
+          headerTitle: "Settings",
         }}
       />
     </Stack>

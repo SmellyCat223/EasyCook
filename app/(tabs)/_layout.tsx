@@ -110,7 +110,7 @@ const TabsLayout = () => {
                 options={{
                     href: null,
                 }}
-            />
+            />{/*
             <Tabs.Screen
                 name="recipe-screen/components/header"
                 options={{
@@ -152,6 +152,7 @@ const TabsLayout = () => {
                 options={{
                     href: null,
                 }}
+<<<<<<< HEAD
             />
             <Tabs.Screen
                 name="mealPlanner-screen/index"
@@ -171,10 +172,14 @@ const TabsLayout = () => {
                     href: null,
                 }}
             />
+=======
+            />*/}
+>>>>>>> 6da508395bc0ed05168ff9ffa43ac3c2a14f5990
         </Tabs>
     );
 };
 
+<<<<<<< HEAD
 export default TabsLayout;
 
 /*
@@ -224,3 +229,6 @@ return (
 
 export default StackLayOut;
 */
+=======
+export default TabsLayout;
+>>>>>>> 6da508395bc0ed05168ff9ffa43ac3c2a14f5990
