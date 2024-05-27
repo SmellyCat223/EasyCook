@@ -15,7 +15,7 @@ const Settings = () => {
 
     const handlePress = (path: string) => {
         router.push(path);
-      };
+    };
 
     return (
         <View className="flex-1 bg-stone-950">
