@@ -110,7 +110,7 @@ const TabsLayout = () => {
                 options={{
                     href: null,
                 }}
-            />
+            />{/*
             <Tabs.Screen
                 name="recipe-screen/components/header"
                 options={{
@@ -152,75 +152,9 @@ const TabsLayout = () => {
                 options={{
                     href: null,
                 }}
-            />
-            <Tabs.Screen
-                name="mealPlanner-screen/index"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="mealPlanner-screen/components/headerDate"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="mealPlanner-screen/components/threeMealsADay"
-                options={{
-                    href: null,
-                }}
-            />
+            />*/}
         </Tabs>
     );
 };
 
 export default TabsLayout;
-
-/*
-const Stack = createStackNavigator();
-
-const StackLayOut = () => {
-return (
-    <Stack.Navigator>
-    <Stack.Screen 
-        name="Home"
-        component={Index}
-        options={{
-          headerShown: false, // Hide the header for the parent Home screen
-        }}
-    />
-    <Stack.Screen 
-        name="Profile"
-        component={Recipe}
-        options={{
-          headerTitle: "Profile", // Set the title for the Profile screen
-        }}
-    />
-    <Stack.Screen 
-        name="Recipe"
-        component={MealPlanner}
-        options={{
-          headerTitle: "Recipe", // Set the title for the Recipe screen
-        }}
-/>
-    <Stack.Screen 
-        name="MealPlanner"
-        component={Grocery}
-        options={{
-          headerTitle: "Meal Planner", // Set the title for the Meal Planner screen
-        }}
-    />
-    <Stack.Screen 
-        name="Grocery"
-        component={Profile}
-        options={{
-          headerTitle: "Grocery", // Set the title for the Grocery screen
-        }}
-    />
-    </Stack.Navigator>
-);
-};
-
-export default StackLayOut;
-*/
