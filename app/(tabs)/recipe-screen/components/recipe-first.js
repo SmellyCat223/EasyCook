@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, View, Image, StyleSheet, ScrollView } from "react-native";
+import { Text, View, Image, ScrollView } from "react-native";
 import { Icon } from 'react-native-elements';
+import { styled } from 'nativewind';
 
-const recipes = [
+const recipes = [ // to get from database later on
     {
         name: "Oats with Berries",
         imageUrl: "https://laurenfitfoodie.com/wp-content/uploads/2023/06/mixed-berry-overnight-oats-07-scaled.jpg",
@@ -58,39 +59,40 @@ const RecipeA = ({ name, imageUrl, instructions, ingredients }) => {
         // Add delete functionality here
         console.log(`Delete recipe: ${name}`);
     };
+
     return (
-        <View style={styles.container}>
-            <View style={styles.innerContainer}>
-                <View style={styles.rowContainer}>
-                    <View style={styles.imageIngredientsContainer}>
-                        <View style={styles.doubleBorder}>
-                            <View style={styles.singleBorder}>
+        <View className="p-1">
+            <View className="p-3 bg-yellow-100 rounded-lg">
+                <View className="flex-row">
+                    <View className="mr-3">
+                        <View className="p-0.5 border-2 border-black rounded-full">
+                            <View className="p-0.5 border-2 border-black rounded-full overflow-hidden">
                                 <Image
                                     source={{ uri: imageUrl }}
-                                    style={styles.image}
+                                    className="w-24 h-24 rounded-full"
                                 />
                             </View>
                         </View>
-                        <View style={styles.ingredientsContainer}>
-                            <Text style={styles.writeup}>Ingredients:</Text>
+                        <View className="mt-2 ml-2">
+                            <Text className="text-s text-gray-800 mt-2">Ingredients:</Text>
                             {ingredients.map((ingredient, index) => (
-                                <Text key={index} style={styles.writeup}>{ingredient}</Text>
+                                <Text key={index} className="text-xs text-gray-700 mt-1">{ingredient}</Text>
                             ))}
                         </View>
                     </View>
-                    <View style={styles.textContainer}>
-                        <View style={styles.ratingContainer}>
+                    <View className="flex-1">
+                        <View className="flex-row mt-2">
                             {[1, 2, 3, 4, 5].map((_, index) => (
                                 <Icon key={index} name="star" type="font-awesome" color="gold" size={20} />
                             ))}
                         </View>
-                        <Text style={styles.heading}>{name}</Text>
+                        <Text className="text-xl font-bold text-darkred mt-2">{name}</Text>
                         {instructions.map((instruction, index) => (
-                            <Text key={index} style={styles.writeup}>{instruction}</Text>
+                            <Text key={index} className="text-sm mt-1">{instruction}</Text>
                         ))}
-                        <View style={styles.iconRow}>
-                            <Icon name="edit" type="antdesign" size={20} style={styles.icon} />
-                            <Icon name="delete" type="material" size={20} style={styles.icon} />
+                        <View className="flex-row mt-2 justify-end">
+                            <Icon name="edit" type="antdesign" size={20} className="ml-2" />
+                            <Icon name="delete" type="material" size={20} className="ml-2" />
                         </View>
                     </View>
                 </View>
@@ -111,84 +113,13 @@ const RecipeScreen = () => {
                     ingredients={recipe.ingredients}
                 />
             ))}
-            <View style={styles.container}>
-                <View style={styles.innerContainer}>
-                    <View style={styles.plusContainer}>
-                        <Icon name="plus" type="font-awesome" color="black" />
-                    </View>
+            <View className="p-1">
+                <View className="p-5 bg-yellow-100 rounded-lg">
+                    <Icon name="plus" type="font-awesome" color="black" />
                 </View>
             </View>
         </ScrollView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        paddingVertical: 10,
-    },
-    innerContainer: {
-        padding: 8,
-        backgroundColor: 'rgba(253, 243, 217, 0.8)',
-    },
-    rowContainer: {
-        flexDirection: 'row',
-    },
-    imageIngredientsContainer: {
-        marginRight: 13,
-    },
-    doubleBorder: {
-        padding: 1,
-        borderWidth: 2,
-        borderColor: 'black',
-        borderRadius: 100,
-    },
-    singleBorder: {
-        padding: 3,
-        borderWidth: 2,
-        borderColor: 'black',
-        borderRadius: 100,
-        overflow: 'hidden',
-    },
-    image: {
-        width: 125,
-        height: 125,
-        borderRadius: 100,
-    },
-    ingredientsContainer: {
-        marginTop: 10,
-        marginLeft: 10,
-    },
-    textContainer: {
-        flex: 1,
-    },
-    heading: {
-        fontSize: 23,
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica-Oblique',
-        color: 'darkred',
-        lineHeight: 27,
-    },
-    writeup: {
-        marginTop: 5,
-        fontSize: 13,
-        fontFamily: 'Helvetica',
-        lineHeight: 17,
-    },
-    plusContainer: {
-        paddingVertical: 20,
-    },
-    iconRow: {
-        flexDirection: 'row',
-        marginTop: 10,
-        justifyContent: 'flex-end',
-    },
-    ratingContainer: {
-        flexDirection: 'row',
-        marginTop: 10,
-    },
-    icon: {
-        marginLeft: 10,
-    },
-});
 
 export default RecipeScreen;

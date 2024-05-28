@@ -1,38 +1,18 @@
 import React from 'react';
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View } from "react-native";
 import { Icon } from 'react-native-elements';
+import { styled } from 'nativewind';
 
 const Search = () => {
     return (
-        <View style={styles.container}>
-            <View style={styles.searchBar}>
+        <View className="p-1">
+            <View className="flex-row items-center bg-white rounded-full p-2">
                 <Icon name="search1" type="antdesign" color="#6b7280" size={16} />
-                <Text style={styles.text}>Search Recipe</Text>
-                <Icon name="filter" type="antdesign" color="#6b7280" size={16} style={styles.filter} />
+                <Text className="ml-2 flex-1 text-sm text-gray-600">Search Recipe</Text>
+                <Icon name="filter" type="antdesign" color="#6b7280" size={16} className="ml-2" />
             </View>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        paddingVertical: 10,
-    },
-    searchBar: {
-        flexDirection: 'row',
-        borderRadius: 20,
-        padding: 8,
-        backgroundColor: '#f0f0f0',
-    },
-    text: {
-        flex: 1,
-        marginLeft: 5,
-        fontSize: 13,
-        color: '#6b7280',
-    },
-    filter: {
-        marginLeft: 10,
-    }
-});
 
 export default Search;

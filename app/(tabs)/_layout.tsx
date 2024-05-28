@@ -177,7 +177,7 @@ const TabsLayout = () => {
 
 export default TabsLayout;
 
-/*
+{/*
 const Stack = createStackNavigator();
 
 const StackLayOut = () => {
@@ -223,4 +223,4 @@ return (
 };
 
 export default StackLayOut;
-*/
+*/}
