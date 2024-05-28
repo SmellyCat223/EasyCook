@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, View, Image, StyleSheet, ScrollView } from "react-native";
+import { Text, View, ScrollView } from "react-native";
 import { Icon } from 'react-native-elements';
+import { styled } from 'nativewind';
 
-const meals = [
+const meals = [ // to link to database later on
     {
         day: "Mon",
         date: "20/05",
@@ -11,8 +12,9 @@ const meals = [
         lunchTitle: "Grilled Chicken",
         lunchCal: "245kcal",
         dinnerTitle: "ChaShu Ramen",
-        dinnerCal: "375kcal",
+        dinnerCal: "375kcal"
     },
+
     {
         day: "Tues",
         date: "21/05",
@@ -21,8 +23,9 @@ const meals = [
         lunchTitle: "Turkey and Avocado Wrap",
         lunchCal: "5kcal",
         dinnerTitle: "Spaghetti Bolognese",
-        dinnerCal: "5kcal",
+        dinnerCal: "5kcal"
     },
+
     {
         day: "Wed",
         date: "22/05",
@@ -31,8 +34,9 @@ const meals = [
         lunchTitle: "Grilled Vegetable Panini",
         lunchCal: "205kcal",
         dinnerTitle: "Lemon Herb Chicken",
-        dinnerCal: "305kcal",
+        dinnerCal: "305kcal"
     },
+
     {
         day: "Thurs",
         date: "23/05",
@@ -41,8 +45,9 @@ const meals = [
         lunchTitle: "Tomato Basil Soup",
         lunchCal: "24kcal",
         dinnerTitle: "Stir-Fry with Vegetables",
-        dinnerCal: "37kcal",
+        dinnerCal: "37kcal"
     },
+
     {
         day: "Fri",
         date: "24/05",
@@ -51,8 +56,9 @@ const meals = [
         lunchTitle: "Quinoa Salad",
         lunchCal: "45kcal",
         dinnerTitle: "Grilled Salmon",
-        dinnerCal: "75kcal",
+        dinnerCal: "75kcal"
     },
+
     {
         day: "Sat",
         date: "25/05",
@@ -61,8 +67,9 @@ const meals = [
         lunchTitle: "Caprese Sandwich",
         lunchCal: "25kcal",
         dinnerTitle: "Vegetarian Chili",
-        dinnerCal: "35kcal",
+        dinnerCal: "35kcal"
     },
+
     {
         day: "Sun",
         date: "26/05",
@@ -71,7 +78,7 @@ const meals = [
         lunchTitle: "Chicken Caesar Salad",
         lunchCal: "200kcal",
         dinnerTitle: "Shrimp Scampi",
-        dinnerCal: "300kcal",
+        dinnerCal: "300kcal"
     },
 ];
 
@@ -86,48 +93,43 @@ const Day: React.FC<{
     dinnerCal: string;
 }> = ({ day, date, bfastTitle, bfastCal, lunchTitle, lunchCal, dinnerTitle, dinnerCal }) => {
     return (
-        <View style={styles.container}>
-            <View style={styles.innerContainer}>
-                <View style={styles.dayContainer}>
-                    <View style={styles.dayDateContainer}>
-                        <Text>{day} {date}</Text>
+        <View className="m-2 p-4 bg-green-200 shadow rounded-lg">
+            <View className="mb-2 border-b pb-2">
+                <Text className="text-lg font-semibold">{day} {date}</Text>
+            </View>
+            <View className="flex-row justify-between mb-2">
+                <Text>Breakfast: {bfastTitle}</Text>
+                <View className="flex-row items-center">
+                    <Text>{bfastCal}</Text>
+                    <View className="flex-row ml-2">
+                        <Icon name="edit" type="antdesign" size={15} />
+                        <Icon name="delete" type="material" size={15} />
                     </View>
-                    <View style={styles.mealContainer}>
-                        <Text>Breakfast : {bfastTitle}</Text>
-                        <View style={styles.caloriesContainer}>
-                            <Text>{bfastCal}</Text>
-                            <View style={styles.iconRow}>
-                                <Icon name="edit" type="antdesign" size={15} style={styles.icon} />
-                                <Icon name="delete" type="material" size={15} style={styles.icon} />
-                            </View>
-                        </View>
+                </View>
+            </View>
+            <View className="flex-row justify-between mb-2">
+                <Text>Lunch: {lunchTitle}</Text>
+                <View className="flex-row items-center">
+                    <Text>{lunchCal}</Text>
+                    <View className="flex-row ml-2">
+                        <Icon name="edit" type="antdesign" size={15} />
+                        <Icon name="delete" type="material" size={15} />
                     </View>
-                    <View style={styles.mealContainer}>
-                        <Text>Lunch : {lunchTitle}</Text>
-                        <View style={styles.caloriesContainer}>
-                            <Text>{lunchCal}</Text>
-                            <View style={styles.iconRow}>
-                                <Icon name="edit" type="antdesign" size={15} style={styles.icon} />
-                                <Icon name="delete" type="material" size={15} style={styles.icon} />
-                            </View>
-                        </View>
-                    </View>
-                    <View style={styles.mealContainer}>
-                        <Text>Dinner : {dinnerTitle}</Text>
-                        <View style={styles.caloriesContainer}>
-                            <Text>{dinnerCal}</Text>
-                            <View style={styles.iconRow}>
-                                <Icon name="edit" type="antdesign" size={15} style={styles.icon} />
-                                <Icon name="delete" type="material" size={15} style={styles.icon} />
-                            </View>
-                        </View>
+                </View>
+            </View>
+            <View className="flex-row justify-between mb-2">
+                <Text>Dinner: {dinnerTitle}</Text>
+                <View className="flex-row items-center">
+                    <Text>{dinnerCal}</Text>
+                    <View className="flex-row ml-2">
+                        <Icon name="edit" type="antdesign" size={15} />
+                        <Icon name="delete" type="material" size={15} />
                     </View>
                 </View>
             </View>
         </View>
     );
 };
-
 
 const MealPlannerScreenComponent = () => {
     return (
@@ -148,36 +150,5 @@ const MealPlannerScreenComponent = () => {
         </ScrollView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        padding: 3,
-    },
-    innerContainer: {
-        padding: 8,
-        backgroundColor: 'rgba(253, 243, 217, 0.8)',
-    },
-    dayContainer: {
-        padding: 8,
-    },
-    dayDateContainer: {
-        marginBottom: 5,
-        borderBottomWidth: 1,
-    },
-    mealContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    iconRow: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-    },
-    icon: {
-        marginLeft: 8,
-    },
-    caloriesContainer: {
-        flexDirection: 'row',
-    },
-});
 
 export default MealPlannerScreenComponent;

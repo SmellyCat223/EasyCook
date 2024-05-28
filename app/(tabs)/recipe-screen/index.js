@@ -3,7 +3,6 @@ import { Text, View, Button, Image, TouchableOpacity, ScrollView } from "react-n
 import { Icon } from 'react-native-elements';
 import { Link, Redirect, Stack, useNavigation } from 'expo-router';
 import { useEffect } from 'react';
-import Header from "./components/header"; // unnecessary as of now
 import Search from "./components/search-bar";
 import RecipeA from "./components/recipe-first";
 
