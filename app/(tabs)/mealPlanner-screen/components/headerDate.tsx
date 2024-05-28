@@ -1,18 +1,13 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
+import { styled } from 'nativewind';
 
 const Header = () => {
     return (
-        <Text style={styles.text}>20 May - 26 May</Text>
+        <View className="flex flex-row justify-center items-center">
+            <Text className="text-gray-100 text-xl font-bold">20 May ~ 26 May</Text>
+        </View>
     );
 };
-
-const styles = StyleSheet.create({
-    text: {
-        color: '#f0f0f0',
-        fontSize: 23,
-        fontWeight: 'bold',
-    },
-});
 
 export default Header;
