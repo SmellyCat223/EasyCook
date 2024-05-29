@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiUrl = "http://localhost:4000/api/";
+const apiUrl = "http://localhost:8081/api/";
 
 interface User {
   username: string;
