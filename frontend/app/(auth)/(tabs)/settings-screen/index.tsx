@@ -18,8 +18,8 @@ const Settings = () => {
                 <Button2 text="Go to my profile" icon1="account-circle" icon2="chevron-right" onPress={() => handlePress("./settings-screen/components/profile")} />
                 <Button2 text="Go to inventory" icon1="inventory" icon2="chevron-right" onPress={() => handlePress("./settings-screen/components/inventory")} />
                 <Button2 text="Go to light mode" icon1="dark-mode" icon2="chevron-right" onPress={() => console.log("light mode")} />
-                <Button2 text="Go to login" icon1="login" icon2="chevron-right" onPress={() => handlePress("./settings-screen/components/login")} />
-                <Button2 text="Go to register" icon1="login" icon2="chevron-right" onPress={() => handlePress("./settings-screen/components/register")} />
+                <Button2 text="Go to login" icon1="login" icon2="chevron-right" onPress={() => handlePress("../../login")} />
+                <Button2 text="Go to register" icon1="login" icon2="chevron-right" onPress={() => handlePress("../../register")} />
             </View>
         </View>
     );
