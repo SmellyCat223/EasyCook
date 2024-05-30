@@ -1,3 +1,4 @@
+import {Text} from 'react-native';
 import { Redirect, Stack } from 'expo-router';
 
 import { useSession } from '../ctx';
@@ -7,18 +8,7 @@ export default function AppLayout() {
 
   // You can keep the splash screen open, or render a loading screen like we do here.
   if (isLoading) {
-    return (
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen
-          name="(tabs)"
-          options={{ headerShown: false }}
-        />
-      </Stack>
-    );
+    <Text>...Loading</Text>
   }
 
   // Only require authentication within the (app) group's layout as users
