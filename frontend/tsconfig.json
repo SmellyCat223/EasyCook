@@ -35,7 +35,8 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "frontend/easycook/expo-env.d.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "src/**/*", "expo-secure-store.d.ts"
   ],
   "compileOnSave": true,
   "exclude": [

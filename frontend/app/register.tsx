@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { Link } from 'expo-router';
 import { Formik, Field, FormikProps, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { registerUser } from "./service/index.services";
@@ -57,32 +58,26 @@ const Register: React.FC = () => {
             )}
             <View className="mb-3">
               <Text className="text-white">Username</Text>
-              <Field
-                type="username"
-                name="username"
-                as={TextInput}
-                className="p-2 border border-gray-200 rounded"
-                placeholder="Username"
+              <TextInput
+                className="bg-white border border-gray-300 rounded p-2"
+                id="email"
+                placeholder="Enter your username"
               />
             </View>
             <View className="mb-3">
               <Text className="text-white">Email</Text>
-              <Field
-                type="email"
-                name="email"
-                as={TextInput}
-                className="p-2 border border-gray-200 rounded"
-                placeholder="Email"
+              <TextInput
+                className="bg-white border border-gray-300 rounded p-2"
+                id="email"
+                placeholder="Enter your email"
               />
             </View>
             <View className="mb-3">
               <Text className="text-white">Password</Text>
-              <Field
-                type="password"
-                name="password"
-                as={TextInput}
-                className="p-2 border border-gray-200 rounded"
-                placeholder="Password"
+              <TextInput
+                className="bg-white border border-gray-300 rounded p-2"
+                id="email"
+                placeholder="Enter your password"
               />
             </View>
             <TouchableOpacity
@@ -94,6 +89,13 @@ const Register: React.FC = () => {
           </View>
         )}
       </Formik>
+      
+      <View className="p-4">
+        <Link href="./login">
+          <Text className="text-white">Log-in here</Text>
+        </Link>
+      </View>
+      
     </View>
   );
 };
