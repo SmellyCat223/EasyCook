@@ -11,7 +11,7 @@ interface User {
 // register the user service
 export const registerUser = async (user: User) => {
   try {
-    const response = await axios.post(`${apiUrl}user/register`, user);
+    const response = await axios.post(`${apiUrl}user/sign-up`, user);
     return response.data;
   } catch (error) {
     return error;
@@ -21,7 +21,7 @@ export const registerUser = async (user: User) => {
 // login the user service
 export const loginUser = async (user: User) => {
   try {
-    const response = await axios.post(`${apiUrl}user/login`, user);
+    const response = await axios.post(`${apiUrl}user/sign-in`, user);
     return response.data;
   } catch (error) {
     return error;
