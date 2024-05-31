@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
@@ -31,20 +31,23 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
 
   return (
     <View>
-      <View className="flex-row justify-between p-4 items-center">
-        <View className="p-2 items-center">
-          <TouchableOpacity
-            onPress={switchComponent}
-          >
-            <Text className="text-base text-white font-bold">SIGN IN</Text>
-          </TouchableOpacity>
-        </View>
-        <View className="p-2 items-center border-b border-green-500">
-          <Text className="text-base text-white font-bold">SIGN UP</Text>
-        </View>
+      <View className="items-center">
+        <View className="flex-row justify-between p-4 w-4/5 items-center">
+          <View className="p-2 items-center">
+            <TouchableOpacity
+              onPress={switchComponent}
+            >
+              <Text className="text-base text-white font-bold">SIGN IN</Text>
+            </TouchableOpacity>
+          </View>
+          <View className="p-2 items-center border-b border-green-500">
+            <Text className="text-base text-white font-bold">SIGN UP</Text>
+          </View>
+        </View>        
       </View>
 
-      <View className="flex p-4">
+
+      <View className="flex py-4">
         <Formik
           initialValues={{ username: '', email: '', password: '' }}
           validationSchema={validationSchema}
@@ -52,13 +55,13 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
         >
           {(props) => (
             <View>
-              <View className="space-y-2">
+              <View className="space-y-1">
                 <View className="mb-3">
                   <TextInput
-                    className="bg-white border border-gray-300 rounded-full p-3"
+                    className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-20"
                     id="username"
                     placeholder="Username"
-                    placeholderTextColor="#6b7280"
+                    placeholderTextColor="#f9fafb"
                     onChangeText={props.handleChange('username')}
                     onBlur={props.handleBlur('username')}
                     value={props.values.username}
@@ -67,10 +70,10 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
 
                 <View className="mb-3">
                   <TextInput
-                    className="bg-white border border-gray-300 rounded-full p-3"
+                    className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-20"
                     id="email"
                     placeholder="Email"
-                    placeholderTextColor="#6b7280"
+                    placeholderTextColor="#f9fafb"
                     onChangeText={props.handleChange('email')}
                     onBlur={props.handleBlur('email')}
                     value={props.values.email}
@@ -79,10 +82,11 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
 
                 <View className="mb-3">
                   <TextInput
-                    className="bg-white border border-gray-300 rounded-full p-3"
+                    className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-20"
                     id="password"
                     placeholder="Password"
-                    placeholderTextColor="#6b7280"
+                    placeholderTextColor="#f9fafb"
+                    secureTextEntry={true}
                     onChangeText={props.handleChange('password')}
                     onBlur={props.handleBlur('password')}
                     value={props.values.password}

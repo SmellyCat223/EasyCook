@@ -52,6 +52,7 @@
     "react-native-web": "^0.19.11",
     "tailwind-rn": "^4.2.0",
     "tailwindcss-react-native": "^1.7.10",
+    "twrnc": "^4.2.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {

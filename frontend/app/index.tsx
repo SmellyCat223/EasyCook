@@ -1,8 +1,8 @@
-
 import { FC, useState } from 'react';
 import { View, Text } from 'react-native';
 import SignIn from './sign-in';
 import SignUp from './sign-up';
+import { Icon } from 'react-native-elements';
 
 const Index: FC = () => {
     const [currentComponent, setCurrentComponent] = useState<'one' | 'two'>('one');
@@ -13,9 +13,15 @@ const Index: FC = () => {
 
     return (
         <View className="flex-1 justify-center items-center bg-stone-950">
-            <View className="h-100 w-4/5">
-                <View className="h-16 space-y-2 p-4 items-center">
-                    <Text className="text-3xl text-white font-bold">EasyCook</Text>
+            <View className="h-100">
+                <View className="h-20 space-y-2 p-4 items-center">
+                    <View className="flex flex-row items-center">
+                        <View className="rounded-full bg-green-500 w-12 h-12 items-center justify-center">
+                            <Icon name="restaurant" color="black" size={36} />      
+                        </View>
+                        <Text className="text-3xl text-white font-bold">  EasyCook</Text>                        
+                    </View>
+
                 </View>
                 <View className="h-80">
                     {currentComponent === 'one' ? (
