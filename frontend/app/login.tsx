@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
-import { Formik, Field, FormikProps, FormikHelpers } from 'formik';
+import { Formik, FormikProps, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
 interface FormValues {
@@ -38,7 +38,7 @@ const Login: FC = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ handleSubmit }: FormikProps<FormValues>) => (
+        {(props) => (
           <View className="space-y-4">
             <View className="mb-3">
               <Text className="text-white">Email</Text>
@@ -46,18 +46,24 @@ const Login: FC = () => {
                 className="bg-white border border-gray-300 rounded p-2"
                 id="email"
                 placeholder="Enter your email"
+                onChangeText={props.handleChange('email')}
+                onBlur={props.handleBlur('email')}
+                value={props.values.email}
               />
             </View>
             <View className="mb-3">
               <Text className="text-white">Password</Text>
               <TextInput
                 className="bg-white border border-gray-300 rounded p-2"
-                id="email"
+                id="password"
                 placeholder="Enter your password"
+                onChangeText={props.handleChange('password')}
+                onBlur={props.handleBlur('password')}
+                value={props.values.password}
               />
             </View>
             <TouchableOpacity
-              onPress={() => handleSubmit}
+              onPress={() => props.handleSubmit()}
               className="bg-blue-500 p-2 rounded text-white w-full"
             >
               <Text>Sign In</Text>
