@@ -14,7 +14,7 @@ import Stats from "./components/stats";
 
 const Home = () => {
     return (
-        <View className="flex-1 pt-10 bg-stone-950">
+        <View id="home" className="flex-1 pt-10 bg-stone-950">
             <Header />
             <ScrollView className="flex-grow">
                 <View className="px-4 pb-6 bg-stone-950">

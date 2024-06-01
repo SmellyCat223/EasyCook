@@ -1,5 +1,9 @@
 import React from 'react';
 import { useStorageState } from './useStorageState';
+import { router } from 'expo-router';
+// import Home from './(auth)/index';
+// import { useNavigation, ParamListBase } from '@react-navigation/native';
+// import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const AuthContext = React.createContext<{
   signIn: () => void;
@@ -21,11 +25,11 @@ export function useSession() {
       throw new Error('useSession must be wrapped in a <SessionProvider />');
     }
   }
-
   return value;
 }
 
 export function SessionProvider(props: React.PropsWithChildren) {
+  // const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [[isLoading, session], setSession] = useStorageState('session');
 
   return (
@@ -34,6 +38,10 @@ export function SessionProvider(props: React.PropsWithChildren) {
         signIn: () => {
           // Perform sign-in logic here
           setSession('xxx');
+
+          // // Navigate to the homepage after signing in
+          // router.push('/about');
+          // navigation.navigate('Home');
         },
         signOut: () => {
           setSession(null);

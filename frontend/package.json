@@ -2,7 +2,6 @@
   "name": "easycook",
   "main": "expo-router/entry",
   "version": "1.0.0",
-  
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -52,6 +51,7 @@
     "react-native-screens": "3.31.1",
     "react-native-vector-icons": "^10.1.0",
     "react-native-web": "^0.19.11",
+    "react-router-dom": "^6.23.1",
     "tailwind-rn": "^4.2.0",
     "tailwindcss-react-native": "^1.7.10",
     "twrnc": "^4.2.0",

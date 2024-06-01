@@ -3,6 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { router } from 'expo-router';
 
 interface FormValues {
   email: string;
@@ -14,6 +16,7 @@ interface SignInProps {
 }
 
 const SignIn: FC<SignInProps> = ({ switchComponent }) => {
+  // const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
@@ -40,6 +43,10 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
       // Handle the response
       console.log(response.data); // Assuming your backend returns a message
       setSubmitting(false);
+      // navigate('/home');
+      // router.push('/home');
+      router.push('./(auth)/(tabs)/home-screen');
+
     } catch (error) {
       console.error(error);
       setSubmitting(false);
@@ -74,7 +81,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
             <View className="space-y-1">
               <View className="mb-3">
                 <TextInput
-                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-20"
+                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
                   id="email"
                   placeholder="Email"
                   placeholderTextColor="#f9fafb"
@@ -86,7 +93,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
               </View>
               <View className="mb-3">
                 <TextInput
-                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-20"
+                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
                   id="password"
                   placeholder="Password"
                   placeholderTextColor="#f9fafb"
