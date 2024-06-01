@@ -31,7 +31,7 @@ export const register = async (req: Request, res: Response) => {
 
     // execute SQL query to insert user into the database
     const query = `
-      INSERT INTO users (username, email, password)
+      INSERT INTO users.users (username, email, password)
       VALUES ($1, $2, $3)
     `;
     await pool.query(query, [username, email, hashedPassword]);

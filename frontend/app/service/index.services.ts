@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiUrl = "http://localhost:8081/api/";
+const apiUrl = "http://192.168.4.13:5000/api/";
 
 interface User {
   username: string;
@@ -11,7 +11,7 @@ interface User {
 // register the user service
 export const registerUser = async (user: User) => {
   try {
-    const response = await axios.post(`${apiUrl}user/sign-up`, user);
+    const response = await axios.post(`${apiUrl}user/login`, user);
     return response.data;
   } catch (error) {
     return error;
@@ -21,7 +21,7 @@ export const registerUser = async (user: User) => {
 // login the user service
 export const loginUser = async (user: User) => {
   try {
-    const response = await axios.post(`${apiUrl}user/sign-in`, user);
+    const response = await axios.post(`${apiUrl}user/register`, user);
     return response.data;
   } catch (error) {
     return error;

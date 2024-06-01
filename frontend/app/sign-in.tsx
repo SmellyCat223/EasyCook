@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 
 interface FormValues {
   email: string;
@@ -19,18 +20,35 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
     password: Yup.string().required('Password is required'),
   });
 
-  const handleSubmit = (
+  // const handleSubmit = (
+  //   values: FormValues,
+  //   { setSubmitting }: FormikHelpers<FormValues>
+  // ) => {
+  //   // Handle form submission
+  //   console.log(values);
+  //   setSubmitting(false);
+  // };
+
+  const handleSubmit = async (
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
-    // Handle form submission
-    console.log(values);
-    setSubmitting(false);
+    try {
+      // Make a POST request to your backend endpoint
+      const response = await axios.post('http://192.168.4.13:3000/api/user/login', values); // use backend port
+
+      // Handle the response
+      console.log(response.data); // Assuming your backend returns a message
+  
+      setSubmitting(false);
+    } catch (error) {
+      console.error(error);
+      setSubmitting(false);
+    }
   };
 
   return (
     <View>
-      {/* <Text className="text-white">test</Text> */}
       <View className="items-center">
         <View className="flex-row justify-between w-4/5 p-4">
           <View className="p-2 border-b border-green-500 items-center">
