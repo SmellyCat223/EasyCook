@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -15,8 +15,6 @@ interface SignUpProps {
 }
 
 const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
-
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
@@ -37,7 +35,6 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
     try {
-      setErrorMessage(null);
       // Make a POST request to your backend endpoint
       const response = await axios.post('http://192.168.1.113:3000/api/user/register', values); // use backend port
 
