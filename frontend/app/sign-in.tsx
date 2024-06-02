@@ -3,8 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 interface FormValues {
   email: string;
@@ -16,8 +15,9 @@ interface SignInProps {
 }
 
 const SignIn: FC<SignInProps> = ({ switchComponent }) => {
-  // const navigate = useNavigate();
 
+  const router = useRouter();
+  
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -41,11 +41,13 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
       const response = await axios.post('http://192.168.1.113:3000/api/user/login', values); // use backend port
 
       // Handle the response
-      console.log(response.data); // Assuming your backend returns a message
+      console.log(response.data.message); // Assuming your backend returns a message
+  
       setSubmitting(false);
-      // navigate('/home');
-      // router.push('/home');
-      router.push('./(auth)/(tabs)/home-screen');
+
+      if (response.data.message == "User logged in successfully") {
+        router.push('/(tabs)');
+      };
 
     } catch (error) {
       console.error(error);
@@ -67,7 +69,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
               <Text className="text-base text-white font-bold">SIGN UP</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View>        
       </View>
 
 
@@ -81,7 +83,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
             <View className="space-y-1">
               <View className="mb-3">
                 <TextInput
-                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
+                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-20"
                   id="email"
                   placeholder="Email"
                   placeholderTextColor="#f9fafb"
@@ -93,7 +95,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
               </View>
               <View className="mb-3">
                 <TextInput
-                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
+                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-20"
                   id="password"
                   placeholder="Password"
                   placeholderTextColor="#f9fafb"
