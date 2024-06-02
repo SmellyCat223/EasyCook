@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { useRouter } from 'expo-router';
 
 interface FormValues {
   email: string;
@@ -15,6 +16,8 @@ interface SignInProps {
 
 const SignIn: FC<SignInProps> = ({ switchComponent }) => {
 
+  const router = useRouter();
+  
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -38,9 +41,14 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
       const response = await axios.post('http://192.168.4.13:3000/api/user/login', values); // use backend port
 
       // Handle the response
-      console.log(response.data); // Assuming your backend returns a message
+      console.log(response.data.message); // Assuming your backend returns a message
   
       setSubmitting(false);
+
+      if (response.data.message == "User logged in successfully") {
+        router.push('/(tabs)');
+      };
+
     } catch (error) {
       console.error(error);
       setSubmitting(false);
