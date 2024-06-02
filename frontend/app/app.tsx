@@ -4,7 +4,7 @@ import SignIn from './sign-in';
 import SignUp from './sign-up';
 import { Icon } from 'react-native-elements';
 
-const Index: FC = () => {
+const App: FC = () => {
     const [currentComponent, setCurrentComponent] = useState<'one' | 'two'>('one');
 
     const switchComponent = () => {
@@ -35,4 +35,4 @@ const Index: FC = () => {
     );
 };
 
-export default Index;
+export default App;

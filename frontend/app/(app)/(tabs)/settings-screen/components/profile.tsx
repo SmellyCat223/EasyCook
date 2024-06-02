@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, Button, Image, TouchableOpacity, ScrollView } from "react-native";
 import { Icon } from 'react-native-elements';
 import { Link } from 'expo-router';
-import ProfilePicture from '../../../components/profile-picture';
+import ProfilePicture from '../../../../components/profile-picture';
 
 const Profile = () => {
     return (

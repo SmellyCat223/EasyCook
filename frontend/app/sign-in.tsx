@@ -23,15 +23,6 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
     password: Yup.string().required('Password is required'),
   });
 
-  // const handleSubmit = (
-  //   values: FormValues,
-  //   { setSubmitting }: FormikHelpers<FormValues>
-  // ) => {
-  //   // Handle form submission
-  //   console.log(values);
-  //   setSubmitting(false);
-  // };
-
   const handleSubmit = async (
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>
@@ -41,7 +32,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
       const response = await axios.post('http://192.168.4.13:3000/api/user/login', values); // use backend port
 
       // Handle the response
-      console.log(response.data.message); // Assuming your backend returns a message
+      console.log(response.data); // Assuming your backend returns a message
   
       setSubmitting(false);
 
