@@ -17,7 +17,7 @@ interface SignInProps {
 const SignIn: FC<SignInProps> = ({ switchComponent }) => {
 
   const router = useRouter();
-  
+
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -33,7 +33,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
 
       // Handle the response
       console.log(response.data); // Assuming your backend returns a message
-  
+
       setSubmitting(false);
 
       if (response.data.message == "User logged in successfully") {
@@ -60,7 +60,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
               <Text className="text-base text-white font-bold">SIGN UP</Text>
             </TouchableOpacity>
           </View>
-        </View>        
+        </View>
       </View>
 
 
@@ -74,7 +74,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
             <View className="space-y-1">
               <View className="mb-3">
                 <TextInput
-                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
+                  className="bg-zinc-700 border border-stone-700 text-white rounded-full p-3 opacity-70"
                   id="email"
                   placeholder="Email"
                   placeholderTextColor="#f9fafb"
@@ -86,7 +86,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
               </View>
               <View className="mb-3">
                 <TextInput
-                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
+                  className="bg-zinc-700 border border-stone-700 text-white rounded-full p-3 opacity-70"
                   id="password"
                   placeholder="Password"
                   placeholderTextColor="#f9fafb"

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -16,19 +16,12 @@ interface SignUpProps {
 
 const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
 
+  const [registrationMessage, setRegistrationMessage] = useState<string | null>(null);
+
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
-
-  // const handleSubmit = (
-  //   values: FormValues,
-  //   { setSubmitting }: FormikHelpers<FormValues>
-  // ) => {
-  //   // Handle form submission
-  //   console.log(values);
-  //   setSubmitting(false);
-  // };
 
   const handleSubmit = async (
     values: FormValues,
@@ -41,6 +34,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
       // Handle the response
       console.log(response.data); // Assuming your backend returns a message
 
+      setRegistrationMessage('Registration successful!');
       setSubmitting(false);
     } catch (error) {
       console.error(error);
@@ -77,7 +71,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
               <View className="space-y-1">
                 <View className="mb-3">
                   <TextInput
-                    className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
+                    className="bg-zinc-700 border border-stone-700 text-white rounded-full p-3 opacity-70"
                     id="username"
                     placeholder="Username"
                     placeholderTextColor="#f9fafb"
@@ -89,7 +83,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
 
                 <View className="mb-3">
                   <TextInput
-                    className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
+                    className="bg-zinc-700 border border-stone-700 text-white rounded-full p-3 opacity-70"
                     id="email"
                     placeholder="Email"
                     placeholderTextColor="#f9fafb"
@@ -101,7 +95,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
 
                 <View className="mb-3">
                   <TextInput
-                    className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
+                    className="bg-zinc-700 border border-stone-700 text-white rounded-full p-3 opacity-70"
                     id="password"
                     placeholder="Password"
                     placeholderTextColor="#f9fafb"
@@ -121,6 +115,23 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
             </View>
           )}
         </Formik>
+        <View className="p-6 items-center">
+
+          {registrationMessage && (
+            <View className="items-center space-y-2">
+              <Text className="text-zinc-700">{registrationMessage}</Text>
+              <TouchableOpacity
+                onPress={switchComponent}
+              >
+                <View className="flex flex-row">
+                  <Text className="text-zinc-700">Click here to </Text>
+                  <Text className="text-blue-500">sign in</Text>
+                  <Text className="text-zinc-700">.</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );
