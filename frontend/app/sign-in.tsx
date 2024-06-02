@@ -74,7 +74,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
             <View className="space-y-1">
               <View className="mb-3">
                 <TextInput
-                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-20"
+                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
                   id="email"
                   placeholder="Email"
                   placeholderTextColor="#f9fafb"
@@ -86,7 +86,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
               </View>
               <View className="mb-3">
                 <TextInput
-                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-20"
+                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
                   id="password"
                   placeholder="Password"
                   placeholderTextColor="#f9fafb"

@@ -3,7 +3,7 @@ import { Text, View, Button, Image, TouchableOpacity, ScrollView } from "react-n
 import { Icon } from 'react-native-elements';
 import { Link, Redirect, Stack, useNavigation } from 'expo-router';
 import { useEffect } from 'react';
-import RecipeScreen from "./recipe-screen/index";
+import RecipeScreen from "./recipe-screen/index_recipe";
 
 const Recipe = () => {
   return (

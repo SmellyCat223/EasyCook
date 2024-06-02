@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import Home from "./home-screen/index";
+import Home from "./home-screen/index_homescreen";
 import { enableScreens } from 'react-native-screens';
 enableScreens();
 
