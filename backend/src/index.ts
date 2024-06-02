@@ -52,6 +52,6 @@ app.use((req: Request, res: Response) => {
 
 // Start the server
 app.listen(PORT, async () => {
-  console.log(`Server is running on http://192.168.4.13:${PORT}`);
+  console.log(`Server is running on http://192.168.32.202:${PORT}`);
   await connectDB(); // connect to the database
 });

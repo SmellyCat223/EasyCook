@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiUrl = "http://192.168.1.113:8081/api/";
+const apiUrl = "http://192.168.32.202:8081/api/";
 
 interface User {
   username: string;

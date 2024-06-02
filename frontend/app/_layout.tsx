@@ -8,7 +8,7 @@ const RootLayOut = () => {
       }}
     >
       <Stack.Screen
-        name="app"
+        name="index"
         options={{ headerShown: false }}
       />
     </Stack>

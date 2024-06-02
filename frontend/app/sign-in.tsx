@@ -29,7 +29,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
   ) => {
     try {
       // Make a POST request to your backend endpoint
-      const response = await axios.post('http://192.168.1.113:3000/api/user/login', values); // use backend port
+      const response = await axios.post('http://192.168.32.202:3000/api/user/login', values); // use backend port
 
       // Handle the response
       console.log(response.data); // Assuming your backend returns a message
@@ -74,10 +74,10 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
             <View className="space-y-1">
               <View className="mb-3">
                 <TextInput
-                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
+                  className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
                   id="email"
                   placeholder="Email"
-                  placeholderTextColor="#f9fafb"
+                  placeholderTextColor="#44403c"
                   selectionColor="#fafafa"
                   onChangeText={props.handleChange('email')}
                   onBlur={props.handleBlur('email')}
@@ -86,10 +86,10 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
               </View>
               <View className="mb-3">
                 <TextInput
-                  className="bg-zinc-700 border border-gray-300 text-white rounded-full p-3 opacity-80"
+                  className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
                   id="password"
                   placeholder="Password"
-                  placeholderTextColor="#f9fafb"
+                  placeholderTextColor="#44403c"
                   secureTextEntry={true}
                   onChangeText={props.handleChange('password')}
                   onBlur={props.handleBlur('password')}
