@@ -29,7 +29,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
   ) => {
     try {
       // Make a POST request to your backend endpoint
-      const response = await axios.post('http://192.168.4.13:3000/api/user/login', values); // use backend port
+      const response = await axios.post('http://192.168.1.113:3000/api/user/login', values); // use backend port
 
       // Handle the response
       console.log(response.data); // Assuming your backend returns a message
