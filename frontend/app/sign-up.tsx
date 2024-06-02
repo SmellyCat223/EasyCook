@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { useRouter } from 'expo-router';
 
 interface FormValues {
   username: string;
@@ -15,6 +16,7 @@ interface SignUpProps {
 }
 
 const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
+  const router = useRouter();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -33,6 +35,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
   // };
 
   const handleSubmit = async (
+
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
@@ -42,9 +45,12 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
       const response = await axios.post('http://192.168.1.113:3000/api/user/register', values); // use backend port
 
       // Handle the response
-      console.log(response.data); // Assuming your backend returns a message
+      console.log(response.data.message); // Assuming your backend returns a message
 
       setSubmitting(false);
+      if (response.data.message == "User logged in successfully") {
+        router.push('/(tabs)');
+      };
     } catch (error) {
       console.error(error);
       setSubmitting(false);

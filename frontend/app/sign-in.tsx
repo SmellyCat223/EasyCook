@@ -17,7 +17,7 @@ interface SignInProps {
 const SignIn: FC<SignInProps> = ({ switchComponent }) => {
 
   const router = useRouter();
-  
+
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -42,11 +42,14 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
 
       // Handle the response
       console.log(response.data.message); // Assuming your backend returns a message
-  
+
       setSubmitting(false);
 
       if (response.data.message == "User logged in successfully") {
-        router.push('/(tabs)');
+        router.push('/(auth)/(tabs)');
+
+
+
       };
 
     } catch (error) {
@@ -69,7 +72,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
               <Text className="text-base text-white font-bold">SIGN UP</Text>
             </TouchableOpacity>
           </View>
-        </View>        
+        </View>
       </View>
 
 
