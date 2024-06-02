@@ -58,7 +58,7 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="home-screen/index"
+                name="home-screen/index_homescreen"
                 options={{
                     href: null,
                 }}
@@ -136,7 +136,7 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="recipe-screen/index"
+                name="recipe-screen/index_recipe"
                 options={{
                     href: null,
                 }}
@@ -148,7 +148,7 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="mealPlanner-screen/index"
+                name="mealPlanner-screen/index_mealPlanner"
                 options={{
                     href: null,
                 }}

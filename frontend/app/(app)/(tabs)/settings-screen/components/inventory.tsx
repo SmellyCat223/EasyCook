@@ -17,7 +17,7 @@ const Filter = () => {
     return (
         <View className="flex flex-row pt-3 pb-3 justify-between">
             <View className="flex flex-row rounded-2xl p-2 w-4/5 bg-zinc-200">
-                <Icon name="search1" type="antdesign" color="#6b7280" size = {16}/>
+                <Icon name="search1" type="antdesign" color="#6b7280" size={16} />
                 <Text className="text-zinc-500">  Search Item</Text>
             </View>
             <Text className="text-yellow-500">Filter</Text>
