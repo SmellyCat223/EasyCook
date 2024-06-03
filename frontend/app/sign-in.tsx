@@ -4,6 +4,7 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
+import { BACKEND_PORT, IP } from '../base';
 
 interface FormValues {
   email: string;
@@ -29,7 +30,10 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
   ) => {
     try {
       // Make a POST request to your backend endpoint
-      const response = await axios.post('http://192.168.32.202:3000/api/user/login', values); // use backend port
+
+      console.log(`${IP}:${BACKEND_PORT}/api/user/login`);
+
+      const response = await axios.post(`${IP}:${BACKEND_PORT}/api/user/login`, values); // use backend port
 
       // Handle the response
       console.log(response.data); // Assuming your backend returns a message

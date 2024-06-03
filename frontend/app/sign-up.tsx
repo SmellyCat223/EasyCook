@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { BACKEND_PORT, IP } from '../base';
 
 interface FormValues {
   username: string;
@@ -29,7 +30,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
   ) => {
     try {
       // Make a POST request to your backend endpoint
-      const response = await axios.post('http://192.168.32.202:3000/api/user/register', values); // use backend port
+      const response = await axios.post(`${IP}:${BACKEND_PORT}/api/user/register`, values); // use backend port
 
       // Handle the response
       console.log(response.data); // Assuming your backend returns a message

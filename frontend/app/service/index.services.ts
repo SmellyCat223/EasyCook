@@ -1,6 +1,7 @@
 import axios from "axios";
+import { BACKEND_PORT, IP } from '../../base';
 
-const apiUrl = "http://192.168.32.202:8081/api/";
+const apiUrl = `${IP}:${BACKEND_PORT}/api/`;
 
 interface User {
   username: string;

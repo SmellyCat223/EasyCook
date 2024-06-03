@@ -19,6 +19,7 @@ app.use(morgan("dev")); // Log all requests to the console
 // Get the PORT from the environment variables
 // Add PORT=3000 to the .env file
 const PORT = process.env.PORT;
+const IP = process.env.IP;
 
 // Basic route
 app.get("/", (req: Request, res: Response) => {
@@ -52,6 +53,6 @@ app.use((req: Request, res: Response) => {
 
 // Start the server
 app.listen(PORT, async () => {
-  console.log(`Server is running on http://192.168.32.202:${PORT}`);
+  console.log(`Server is running on ${IP}:${PORT}`);
   await connectDB(); // connect to the database
 });
