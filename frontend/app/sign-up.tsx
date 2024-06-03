@@ -35,10 +35,12 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
       // Handle the response
       console.log(response.data); // Assuming your backend returns a message
 
-      setRegistrationMessage('Registration successful!');
+      setRegistrationMessage(`${response.data.message}`);
+
       setSubmitting(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setRegistrationMessage(`${error.message}`);
       setSubmitting(false);
     }
   };
@@ -118,19 +120,19 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
         <View className="p-6 items-center">
 
         {registrationMessage && (
-        <View className="items-center space-y-2">
-          <Text className="text-zinc-700">{registrationMessage}</Text>
-          <TouchableOpacity
-            onPress={switchComponent}
-          >
-            <View className="flex flex-row">
-              <Text className="text-zinc-700">Click here to </Text>
-              <Text className="text-blue-500">sign in</Text>
-              <Text className="text-zinc-700">.</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      )}
+          <View className="items-center space-y-2">
+            <Text className="text-zinc-700">{registrationMessage}</Text>
+            <TouchableOpacity
+              onPress={switchComponent}
+            >
+              <View className="flex flex-row">
+                <Text className="text-zinc-700">Click here to </Text>
+                <Text className="text-blue-500">sign in</Text>
+                <Text className="text-zinc-700">.</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
         </View>
       </View>
     </View>

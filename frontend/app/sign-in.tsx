@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -17,6 +17,8 @@ interface SignInProps {
 
 const SignIn: FC<SignInProps> = ({ switchComponent }) => {
 
+  const [loginMessage, setLoginMessage] = useState<string | null>(null);
+
   const router = useRouter();
   
   const validationSchema = Yup.object().shape({
@@ -30,22 +32,22 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
   ) => {
     try {
       // Make a POST request to your backend endpoint
-
-      console.log(`${IP}:${BACKEND_PORT}/api/user/login`);
-
       const response = await axios.post(`${IP}:${BACKEND_PORT}/api/user/login`, values); // use backend port
 
       // Handle the response
       console.log(response.data); // Assuming your backend returns a message
-  
+      console.log(response.status);
       setSubmitting(false);
 
-      if (response.data.message == "User logged in successfully") {
+      if (response.status == 200) {
         router.push('/(tabs)');
       };
 
-    } catch (error) {
+      setLoginMessage(response.data.message);
+
+    } catch (error: any) {
       console.error(error);
+      setLoginMessage(`${error.message}`);
       setSubmitting(false);
     }
   };
@@ -100,6 +102,11 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
                   value={props.values.password}
                 />
               </View>
+              {loginMessage && (
+                <View className="items-center space-y-2">
+                  <Text className="text-zinc-700">{loginMessage}</Text>
+                </View>
+              )}
               <TouchableOpacity
                 onPress={() => props.handleSubmit()}
                 className="bg-green-500 p-3 rounded-full items-center text-white w-full"
@@ -109,7 +116,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
             </View>
           )}
         </Formik>
-        <View className="p-6 items-center">
+        <View className="p-6 items-center space-y-2">
           <TouchableOpacity
             onPress={() => console.log("Forgot password")}
           >
