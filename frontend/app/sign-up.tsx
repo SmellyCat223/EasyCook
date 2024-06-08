@@ -4,6 +4,12 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { BACKEND_PORT, IP } from '../base';
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = 'https://groqymaprjsixdqtrwvh.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdyb3F5bWFwcmpzaXhkcXRyd3ZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc4MzM4MDQsImV4cCI6MjAzMzQwOTgwNH0.ri8B3v7pqSWH-rt0c-rqS1Furq7Cr_CdBqaJwzP8xGs';
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 interface FormValues {
   username: string;
@@ -25,23 +31,70 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
     password: Yup.string().required('Password is required'),
   });
 
+  // const handleSubmit = async (
+  //   values: FormValues,
+  //   { setSubmitting }: FormikHelpers<FormValues>
+  // ) => {
+  //   try {
+  //     // Make a POST request to your backend endpoint
+  //     const response = await axios.post(`${IP}:${BACKEND_PORT}/api/user/register`, values); // use backend port
+
+  //     // Handle the response
+  //     console.log(response.data); // Assuming your backend returns a message
+
+  //     setRegistrationMessage(`${response.data.message}`);
+
+  //     setSubmitting(false);
+  //   } catch (error: any) {
+  //     console.error(error);
+  //     setRegistrationMessage(`${error.message}`);
+  //     setSubmitting(false);
+  //   }
+  // };
+
   const handleSubmit = async (
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
     try {
-      // Make a POST request to your backend endpoint
-      const response = await axios.post(`${IP}:${BACKEND_PORT}/api/user/register`, values); // use backend port
-
-      // Handle the response
-      console.log(response.data); // Assuming your backend returns a message
-
-      setRegistrationMessage(`${response.data.message}`);
-
+      // Sign up the user using Supabase
+      const { data, error } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password
+      });
+  
+      if (error) {
+        throw error;
+      }
+  
+      // Check if data contains user information
+      if (data && data.user) {
+        // Update user profile with additional information
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .upsert({
+            id: data.user.id,
+            username: values.username,
+            phoneNo: values.phoneNo,
+          });
+          
+        if (profileError) {
+          throw profileError;
+        }
+      
+        // Handle successful sign-up
+        console.log('User signed up successfully:', data.user);
+        setRegistrationMessage('User signed up successfully.');
+    
+        // Optionally, you can handle any additional user data storage or UI navigation here.
+      } else {
+        throw new Error('User information not available');
+      }
+  
       setSubmitting(false);
     } catch (error: any) {
-      console.error(error);
-      setRegistrationMessage(`${error.message}`);
+      console.error('Error signing up user:', error);
+      setRegistrationMessage(`Error signing up user: ${error.message}`);
       setSubmitting(false);
     }
   };
