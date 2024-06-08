@@ -16,9 +16,9 @@ CREATE TABLE users.ingredientCategory (
 
 CREATE TABLE users.ingredient (
     ingredientID SERIAL PRIMARY KEY,
-    FOREIGN KEY (ingredientCategoryID) REFRENCES users.ingredientCategory(ingredientCategoryID),
+    FOREIGN KEY (ingredientCategoryID) REFERENCES users.ingredientCategory(ingredientCategoryID),
     ingredientName VARCHAR(100) NOT NULL,
-    ingredientCalories DOUBLE NOT NULL
+    ingredientCalories INT NOT NULL
 );
 
 CREATE TABLE users.inventory (
@@ -26,7 +26,7 @@ CREATE TABLE users.inventory (
     FOREIGN KEY (userID) REFERENCES users.users(userID),
     totalNo INT NOT NULL,
     expiredNo INT NOT NULL,
-    wastagePercentage DOUBLE NOT NULL
+    wastagePercentage INT NOT NULL
 );
 
 CREATE TABLE users.shoppingList (
@@ -58,13 +58,13 @@ CREATE TABLE users.recipe (
     recipeName VARCHAR(100) NOT NULL,
     recipePicture VARCHAR(300) NOT NULL,
     recipeDescription VARCHAR(300) NOT NULL,
-    recipeCalories DOUBLE NOT NULL
+    recipeCalories INT NOT NULL
 );
 
 CREATE TABLE users.recupeIngredient (
     FOREIGN KEY (recipeID) REFERENCES users.recipe(recipeID),
     FOREIGN KEY (ingredientID) REFERENCES users.ingredient(ingredientID),
-    ingredientQuantity DOUBLE NOT NULL,
+    ingredientQuantity INT NOT NULL,
     measurementUnit VARCHAR(5) NOT NULL
 );
 
@@ -73,11 +73,11 @@ CREATE TABLE users.meal (
     FOREIGN KEY (userID) REFERENCES users.users(userID),
     mealDate DATE NOT NULL,
     mealType VARCHAR(50) NOT NULL,
-    mealCalories DOUBLE NOT NULL
+    mealCalories INT NOT NULL
 );
 
 CREATE TABLE users.mealIngredient (
     FOREIGN KEY (mealID) REFERENCES users.meal(mealID),
     FOREIGN KEY (ingredientID) REFERENCES users.ingredient(ingredientID),
-    portionNo DOUBLE NOT NULL,
+    portionNo INT NOT NULL,
 );
