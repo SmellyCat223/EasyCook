@@ -17,9 +17,9 @@ const App: FC = () => {
                 <View className="h-20 space-y-2 p-4 items-center">
                     <View className="flex flex-row items-center">
                         <View className="rounded-full bg-green-500 w-12 h-12 items-center justify-center">
-                            <Icon name="restaurant" color="black" size={36} />      
+                            <Icon name="restaurant" color="black" size={36} />
                         </View>
-                        <Text className="text-3xl text-white font-bold">  EasyCook</Text>                        
+                        <Text className="text-3xl text-white font-bold">  EasyCook</Text>
                     </View>
 
                 </View>
