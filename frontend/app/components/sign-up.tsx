@@ -47,7 +47,9 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
           .upsert({
             id: data.user.id,
             username: values.username,
+            email: values.email,
             phone: values.phone,
+            password: values.password,
           });
 
         if (profileError) {
