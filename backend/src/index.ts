@@ -37,14 +37,12 @@ app.get("/", (req: Request, res: Response) => {
 // User routes
 app.use("/api/user", userRouter);
 
-// Unknown route handler
-app.use((req: Request, res: Response) => {
-  return res.status(404).json({
-    message: "Route not found",
-  });
-});
+//for recipes
+app.get("/api/recipes/search", async (req: Request, res: Response) => {
+  res.json({ message: 'success!' })
+})
 
-// unknonw route handler
+// Unknown route handler
 app.use((req: Request, res: Response) => {
   return res.status(404).json({
     message: "Route not found",
