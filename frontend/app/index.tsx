@@ -21,7 +21,6 @@ const Index = () => {
   return (
     <View className="flex-1 bg-red-500">
       <App />
-      {session && session.user && <Text>{session.user.id}</Text>}
     </View>
   );
 };
