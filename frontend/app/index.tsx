@@ -13,7 +13,7 @@ const App: FC = () => {
 
     return (
         <View className="flex-1 justify-center items-center bg-stone-950">
-            <View className="h-100">
+            <View className="h-2/3">
                 <View className="h-20 space-y-2 p-4 items-center">
                     <View className="flex flex-row items-center">
                         <View className="rounded-full bg-green-500 w-12 h-12 items-center justify-center">

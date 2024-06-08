@@ -6,10 +6,10 @@ import bcrypt from "bcryptjs";
 export const register = async (req: Request, res: Response) => {
   try {
     // get the user data from the request body
-    const { username, email, password } = req.body;
+    const { username, email, phoneNo, password } = req.body;
 
     // check if user data is provided
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !phoneNo) {
       return res.status(400).json({
         message: "Please provide all user details",
       });
@@ -31,10 +31,10 @@ export const register = async (req: Request, res: Response) => {
 
     // execute SQL query to insert user into the database
     const query = `
-      INSERT INTO users.users (username, email, password)
-      VALUES ($1, $2, $3)
+      INSERT INTO users.users (username, email, phoneNo, password)
+      VALUES ($1, $2, $3, $4)
     `;
-    await pool.query(query, [username, email, hashedPassword]);
+    await pool.query(query, [username, email, phoneNo, hashedPassword]);
 
     return res.status(200).json({
       message: "User registered successfully",
