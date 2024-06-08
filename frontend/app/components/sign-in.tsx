@@ -43,7 +43,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
       if (user) {
         // Redirect to the main page after successful login
         router.push('/(tabs)');
-
+  
         // Optionally, you can handle any additional user data storage or UI navigation here.
       } else {
         throw new Error('User information not available');
@@ -57,8 +57,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
       setSubmitting(false);
     }
   };
-
-
+  
   return (
     <View>
       <View className="items-center">

@@ -18,7 +18,7 @@ interface SignUpProps {
 const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
 
   const [registrationMessage, setRegistrationMessage] = useState<string | null>(null);
-  
+
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -34,11 +34,11 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
         email: values.email,
         password: values.password
       });
-  
+
       if (error) {
         throw error;
       }
-  
+
       // Check if data contains user information
       if (data && data.user) {
         // Update user profile with additional information
@@ -49,20 +49,19 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
             username: values.username,
             phone: values.phone,
           });
-          
+
         if (profileError) {
           throw profileError;
         }
-      
+
         // Handle successful sign-up
         console.log('User signed up successfully:', data.user);
         setRegistrationMessage('User signed up successfully.\nPlease sign in.');
-    
         // Optionally, you can handle any additional user data storage or UI navigation here.
       } else {
         throw new Error('User information not available');
       }
-  
+
       setSubmitting(false);
     } catch (error: any) {
       console.error('Error signing up user:', error);
@@ -154,9 +153,8 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
               </View>
             </View>
           )}
-        </Formik>       
+        </Formik>
         <View className="p-6 items-center">
-
           <View className="items-center space-y-2">
             <Text className="text-zinc-700">{registrationMessage}</Text>
           </View>
