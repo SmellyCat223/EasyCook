@@ -19,7 +19,7 @@ const Index = () => {
   }, [])
 
   return (
-    <View className="flex-1 justify-center items-center bg-stone-950">
+    <View className="flex-1 bg-red-500">
       <App />
       {session && session.user && <Text>{session.user.id}</Text>}
     </View>
