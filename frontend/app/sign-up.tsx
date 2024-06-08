@@ -8,6 +8,7 @@ import { BACKEND_PORT, IP } from '../base';
 interface FormValues {
   username: string;
   email: string;
+  phoneNo: string;
   password: string;
 }
 
@@ -64,7 +65,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
 
       <View className="flex py-4">
         <Formik
-          initialValues={{ username: '', email: '', password: '' }}
+          initialValues={{ username: '', email: '', phoneNo: '', password: '' }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -92,6 +93,18 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
                     onChangeText={props.handleChange('email')}
                     onBlur={props.handleBlur('email')}
                     value={props.values.email}
+                  />
+                </View>
+
+                <View className="mb-3">
+                  <TextInput
+                    className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
+                    id="password"
+                    placeholder="Phone number"
+                    placeholderTextColor="#44403c"
+                    onChangeText={props.handleChange('phoneNo')}
+                    onBlur={props.handleBlur('phoneNo')}
+                    value={props.values.phoneNo}
                   />
                 </View>
 
