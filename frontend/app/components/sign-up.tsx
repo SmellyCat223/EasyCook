@@ -2,9 +2,7 @@ import { FC, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
-import { BACKEND_PORT, IP } from '../base';
-import { supabase } from './supabase';
+import { supabase } from '../supabase';
 
 interface FormValues {
   username: string;
@@ -25,27 +23,6 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
-
-  // const handleSubmit = async (
-  //   values: FormValues,
-  //   { setSubmitting }: FormikHelpers<FormValues>
-  // ) => {
-  //   try {
-  //     // Make a POST request to your backend endpoint
-  //     const response = await axios.post(`${IP}:${BACKEND_PORT}/api/user/register`, values); // use backend port
-
-  //     // Handle the response
-  //     console.log(response.data); // Assuming your backend returns a message
-
-  //     setRegistrationMessage(`${response.data.message}`);
-
-  //     setSubmitting(false);
-  //   } catch (error: any) {
-  //     console.error(error);
-  //     setRegistrationMessage(`${error.message}`);
-  //     setSubmitting(false);
-  //   }
-  // };
 
   const handleSubmit = async (
     values: FormValues,

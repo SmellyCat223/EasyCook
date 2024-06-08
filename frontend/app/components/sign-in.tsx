@@ -2,10 +2,8 @@ import { FC, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 import { useRouter } from 'expo-router';
-import { BACKEND_PORT, IP } from '../base';
-import { supabase } from './supabase';
+import { supabase } from '../supabase';
 
 interface FormValues {
   email: string;
@@ -26,32 +24,6 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
-
-  // const handleSubmit = async (
-  //   values: FormValues,
-  //   { setSubmitting }: FormikHelpers<FormValues>
-  // ) => {
-  //   try {
-  //     // Make a POST request to your backend endpoint
-  //     const response = await axios.post(`${IP}:${BACKEND_PORT}/api/user/login`, values); // use backend port
-
-  //     // Handle the response
-  //     console.log(response.data); // Assuming your backend returns a message
-  //     console.log(response.status);
-  //     setSubmitting(false);
-
-  //     if (response.status == 200) {
-  //       router.push('/(tabs)');
-  //     };
-
-  //     setLoginMessage(response.data.message);
-
-  //   } catch (error: any) {
-  //     console.error(error);
-  //     setLoginMessage(`${error.message}`);
-  //     setSubmitting(false);
-  //   }
-  // };
 
   const handleSubmit = async (
     values: FormValues,
@@ -86,7 +58,6 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
     }
   };
   
-
   return (
     <View>
       <View className="items-center">
