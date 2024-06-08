@@ -44,10 +44,12 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
         // Update user profile with additional information
         const { error: profileError } = await supabase
           .from('profiles')
-          .upsert({
+          .upsert({ // add all fields required for profiles
             id: data.user.id,
             username: values.username,
+            email: values.email,
             phone: values.phone,
+            password: values.password
           });
 
         if (profileError) {
@@ -57,11 +59,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
         // Handle successful sign-up
         console.log('User signed up successfully:', data.user);
         setRegistrationMessage('User signed up successfully.\nPlease sign in.');
-
-        // Optionally, you can handle any additional user data storage or UI navigation here.
-      } else {
-        throw new Error('User information not available');
-      }
+      };
 
       setSubmitting(false);
     } catch (error: any) {
@@ -124,7 +122,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
                 <View className="mb-3">
                   <TextInput
                     className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
-                    id="password"
+                    id="phone"
                     placeholder="Phone number"
                     placeholderTextColor="#44403c"
                     onChangeText={props.handleChange('phone')}
