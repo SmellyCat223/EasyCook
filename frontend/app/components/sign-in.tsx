@@ -2,15 +2,8 @@ import { FC, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 import { useRouter } from 'expo-router';
-import { BACKEND_PORT, IP } from '../base';
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = 'https://groqymaprjsixdqtrwvh.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdyb3F5bWFwcmpzaXhkcXRyd3ZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc4MzM4MDQsImV4cCI6MjAzMzQwOTgwNH0.ri8B3v7pqSWH-rt0c-rqS1Furq7Cr_CdBqaJwzP8xGs';
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from '../supabase';
 
 interface FormValues {
   email: string;
@@ -26,63 +19,36 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
   const [loginMessage, setLoginMessage] = useState<string | null>(null);
 
   const router = useRouter();
-  
+
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
 
-  // const handleSubmit = async (
-  //   values: FormValues,
-  //   { setSubmitting }: FormikHelpers<FormValues>
-  // ) => {
-  //   try {
-  //     // Make a POST request to your backend endpoint
-  //     const response = await axios.post(`${IP}:${BACKEND_PORT}/api/user/login`, values); // use backend port
-
-  //     // Handle the response
-  //     console.log(response.data); // Assuming your backend returns a message
-  //     console.log(response.status);
-  //     setSubmitting(false);
-
-  //     if (response.status == 200) {
-  //       router.push('/(tabs)');
-  //     };
-
-  //     setLoginMessage(response.data.message);
-
-  //   } catch (error: any) {
-  //     console.error(error);
-  //     setLoginMessage(`${error.message}`);
-  //     setSubmitting(false);
-  //   }
-  // };
-
   const handleSubmit = async (
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
-    const router = useRouter(); // Initialize router
     try {
       // Sign in the user using Supabase
       const { data: { user }, error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
       });
-  
+
       if (error) {
         throw error;
       }
-  
+
       if (user) {
         // Redirect to the main page after successful login
-        router.push('/tabs');
-  
+        router.push('/(tabs)');
+
         // Optionally, you can handle any additional user data storage or UI navigation here.
       } else {
         throw new Error('User information not available');
       }
-  
+
       setSubmitting(false);
     } catch (error: any) {
       console.error('Error signing in user:', error.message);
@@ -91,7 +57,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
       setSubmitting(false);
     }
   };
-  
+
 
   return (
     <View>
@@ -107,7 +73,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
               <Text className="text-base text-white font-bold">SIGN UP</Text>
             </TouchableOpacity>
           </View>
-        </View>        
+        </View>
       </View>
 
 

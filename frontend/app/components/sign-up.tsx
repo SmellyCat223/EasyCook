@@ -2,19 +2,12 @@ import { FC, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
-import { BACKEND_PORT, IP } from '../base';
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = 'https://groqymaprjsixdqtrwvh.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdyb3F5bWFwcmpzaXhkcXRyd3ZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc4MzM4MDQsImV4cCI6MjAzMzQwOTgwNH0.ri8B3v7pqSWH-rt0c-rqS1Furq7Cr_CdBqaJwzP8xGs';
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from '../supabase';
 
 interface FormValues {
   username: string;
   email: string;
-  phoneNo: string;
+  phone: string;
   password: string;
 }
 
@@ -30,27 +23,6 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
-
-  // const handleSubmit = async (
-  //   values: FormValues,
-  //   { setSubmitting }: FormikHelpers<FormValues>
-  // ) => {
-  //   try {
-  //     // Make a POST request to your backend endpoint
-  //     const response = await axios.post(`${IP}:${BACKEND_PORT}/api/user/register`, values); // use backend port
-
-  //     // Handle the response
-  //     console.log(response.data); // Assuming your backend returns a message
-
-  //     setRegistrationMessage(`${response.data.message}`);
-
-  //     setSubmitting(false);
-  //   } catch (error: any) {
-  //     console.error(error);
-  //     setRegistrationMessage(`${error.message}`);
-  //     setSubmitting(false);
-  //   }
-  // };
 
   const handleSubmit = async (
     values: FormValues,
@@ -75,7 +47,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
           .upsert({
             id: data.user.id,
             username: values.username,
-            phoneNo: values.phoneNo,
+            phone: values.phone,
           });
           
         if (profileError) {
@@ -84,7 +56,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
       
         // Handle successful sign-up
         console.log('User signed up successfully:', data.user);
-        setRegistrationMessage('User signed up successfully.');
+        setRegistrationMessage('User signed up successfully.\nPlease sign in.');
     
         // Optionally, you can handle any additional user data storage or UI navigation here.
       } else {
@@ -94,7 +66,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
       setSubmitting(false);
     } catch (error: any) {
       console.error('Error signing up user:', error);
-      setRegistrationMessage(`Error signing up user: ${error.message}`);
+      setRegistrationMessage(`${error.message}`);
       setSubmitting(false);
     }
   };
@@ -118,7 +90,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
 
       <View className="flex py-4">
         <Formik
-          initialValues={{ username: '', email: '', phoneNo: '', password: '' }}
+          initialValues={{ username: '', email: '', phone: '', password: '' }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -155,9 +127,9 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
                     id="password"
                     placeholder="Phone number"
                     placeholderTextColor="#44403c"
-                    onChangeText={props.handleChange('phoneNo')}
-                    onBlur={props.handleBlur('phoneNo')}
-                    value={props.values.phoneNo}
+                    onChangeText={props.handleChange('phone')}
+                    onBlur={props.handleBlur('phone')}
+                    value={props.values.phone}
                   />
                 </View>
 
@@ -185,20 +157,9 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
         </Formik>       
         <View className="p-6 items-center">
 
-        {registrationMessage && (
           <View className="items-center space-y-2">
             <Text className="text-zinc-700">{registrationMessage}</Text>
-            <TouchableOpacity
-              onPress={switchComponent}
-            >
-              <View className="flex flex-row">
-                <Text className="text-zinc-700">Click here to </Text>
-                <Text className="text-blue-500">sign in</Text>
-                <Text className="text-zinc-700">.</Text>
-              </View>
-            </TouchableOpacity>
           </View>
-        )}
         </View>
       </View>
     </View>
