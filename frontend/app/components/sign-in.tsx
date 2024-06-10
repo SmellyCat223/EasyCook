@@ -53,7 +53,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
     } catch (error: any) {
       console.error('Error signing in user:', error.message);
       // Set the login message to the error message if an error occurs
-      setLoginMessage(`Error signing in user: ${error.message}`);
+      setLoginMessage(`${error.message}`);
       setSubmitting(false);
     }
   };
@@ -109,7 +109,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
                 />
               </View>
               {loginMessage && (
-                <View className="items-center space-y-2">
+                <View className="items-center space-y-2 mb-2">
                   <Text className="text-zinc-700">{loginMessage}</Text>
                 </View>
               )}
@@ -122,7 +122,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
             </View>
           )}
         </Formik>
-        <View className="p-6 items-center space-y-2">
+        <View className="p-3 items-center space-y-2">
           <TouchableOpacity
             onPress={() => console.log("Forgot password")}
           >
