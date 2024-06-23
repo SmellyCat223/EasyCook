@@ -44,7 +44,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
         // Update user profile with additional information
         const { error: profileError } = await supabase
           .from('profiles')
-          .upsert({
+          .upsert({ // add all fields required for profiles
             id: data.user.id,
             username: values.username,
             email: values.email,
@@ -59,10 +59,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
         // Handle successful sign-up
         console.log('User signed up successfully:', data.user);
         setRegistrationMessage('User signed up successfully.\nPlease sign in.');
-        // Optionally, you can handle any additional user data storage or UI navigation here.
-      } else {
-        throw new Error('User information not available');
-      }
+      };
 
       setSubmitting(false);
     } catch (error: any) {
@@ -125,7 +122,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
                 <View className="mb-3">
                   <TextInput
                     className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
-                    id="password"
+                    id="phone"
                     placeholder="Phone number"
                     placeholderTextColor="#44403c"
                     onChangeText={props.handleChange('phone')}
@@ -146,6 +143,11 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
                     value={props.values.password}
                   />
                 </View>
+                <View className="p-6 items-center">
+                  <View className="items-center space-y-2 mb-2">
+                    <Text className="text-zinc-700">{registrationMessage}</Text>
+                  </View>
+                </View>
                 <TouchableOpacity
                   onPress={() => props.handleSubmit()}
                   className="w-full items-center bg-green-500 p-3 rounded-full text-white"
@@ -156,11 +158,6 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
             </View>
           )}
         </Formik>
-        <View className="p-6 items-center">
-          <View className="items-center space-y-2">
-            <Text className="text-zinc-700">{registrationMessage}</Text>
-          </View>
-        </View>
       </View>
     </View>
   );
