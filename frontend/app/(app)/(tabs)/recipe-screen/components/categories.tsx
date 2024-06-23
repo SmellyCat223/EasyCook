@@ -1,37 +1,39 @@
 import React from 'react';
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const categoryData = [
-    { name: 'Full Meal', image: 'https://images.app.goo.gl/w3CuJfpz4Whizz98A' },
-    { name: 'Desserts', image: 'https://images.app.goo.gl/emWTxzvPydaJiKWz7' },
-    // Add more category objects as needed
-];
+interface CategoriesProps {
+    categories: { strCategory: string, strCategoryThumb: string }[];
+    activeCategory: string;
+    setActiveCategory: (category: string) => void;
+}
 
-export default function Categories() {
+export default function Categories({ categories, activeCategory, setActiveCategory }: CategoriesProps) {
     return (
         <View>
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={styles.scrollView}
-                contentContainerStyle={styles.contentContainer}
-            >
-                {categoryData.map((cat, index) => {
-                    return (
-                        <TouchableOpacity key={index} style={styles.categoryItem}>
-                            <View style={styles.imageContainer}>
-                                <Image
-                                    source={{ uri: cat.image }}
-                                    style={[styles.image, { width: hp(6), height: hp(6) }]} // Set the height to 10% of the screen height
-                                />
-                            </View>
-                            <Text style={styles.text}>{cat.name}</Text>
-                        </TouchableOpacity>
-                    );
-                })}
-            </ScrollView>
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.scrollView}
+                    contentContainerStyle={styles.contentContainer}
+                >
+                    {categories.map((cat, index) => {
+                        let isActive = cat.strCategory === activeCategory;
+                        let activeButtonClass = isActive ? 'bg-amber-400' : 'bg-black/10';
+                        return (
+                            <TouchableOpacity key={index} onPress={() => setActiveCategory(cat.strCategory)} style={styles.categoryItem}>
+                                <View style={[styles.imageContainer, { backgroundColor: activeButtonClass }]}>
+                                    <Image
+                                        source={{ uri: cat.strCategoryThumb }}
+                                        style={[styles.image, { width: hp(6), height: hp(6) }]}
+                                    />
+                                </View>
+                                <Text style={styles.text}>{cat.strCategory}</Text>
+                            </TouchableOpacity>
+                        );
+                    })}
+                </ScrollView>
+
         </View>
     );
 }
