@@ -5,6 +5,7 @@ import { Link, Redirect, Stack, useNavigation } from 'expo-router';
 import { useEffect } from 'react';
 import Search from "./components/search-bar";
 import RecipeA from "./components/recipe-first";
+import Categories from './components/categories';
 
 const RecipeScreen = () => {
     return (
@@ -12,6 +13,7 @@ const RecipeScreen = () => {
             <ScrollView className="flex-grow">
                 <View className="px-4 pb-6 bg-stone-950">
                     <Search />
+                    <Categories />
                     <RecipeA />
                 </View>
             </ScrollView>
