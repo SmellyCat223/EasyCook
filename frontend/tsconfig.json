@@ -38,7 +38,7 @@
     "expo-secure-store.d.ts",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ],
+, "components"  ],
   "compileOnSave": true,
   "exclude": [
     "node_modules",

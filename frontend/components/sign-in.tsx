@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'expo-router';
-import { supabase } from '../supabase';
+import { supabase } from '../app/supabase';
 
 interface FormValues {
   email: string;

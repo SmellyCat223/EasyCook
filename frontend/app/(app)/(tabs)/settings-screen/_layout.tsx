@@ -30,7 +30,7 @@ const StackLayOut = () => {
         }}
       /> */}
       <Stack.Screen 
-        name="index"
+        name="index-settings"
         options={{
           headerTitle: "Settings",
         }}

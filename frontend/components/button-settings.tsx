@@ -7,12 +7,12 @@ type Button2Props = {
     icon2: string;
     onPress: (path: string) => void;
 };
-const Button2 = ({ text, icon1, icon2, onPress }: Button2Props) => {
+const Button2: React.FC<Button2Props> = ({ text, icon1, icon2, onPress }: Button2Props) => {
 
     return (
         <View className="border-b border-t border-zinc-800">
             <TouchableOpacity
-                onPress={(path: string) => onPress(path)}
+                onPress={onPress}
                 className={`flex justify-center bg-zinc-800/50 h-10`}
             >
                 <View className="flex flex-row justify-between px-2">

@@ -1,5 +1,4 @@
 import { TouchableOpacity, Text, View } from "react-native";
-import { Icon } from 'react-native-elements';
 
 type Button2Props = {
     text1: string;
@@ -12,7 +11,7 @@ const Button2 = ({ text1, text2, text3, onPress }: Button2Props) => {
     return (
         <View className="border-b border-t border-zinc-800">
             <TouchableOpacity
-                onPress={(path: string) => onPress(path)}
+                onPress={onPress}
                 className={`flex justify-center bg-zinc-800/50 h-10`}
             >
                 <View className="flex flex-row justify-between px-2">
