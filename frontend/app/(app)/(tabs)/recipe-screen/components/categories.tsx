@@ -1,68 +1,78 @@
 import React from 'react';
 import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 interface CategoriesProps {
     categories: { strCategory: string, strCategoryThumb: string }[];
     activeCategory: string;
-    setActiveCategory: (category: string) => void;
+    handleChangeCategory: (category: string) => void;
 }
 
-export default function Categories({ categories, activeCategory, setActiveCategory }: CategoriesProps) {
+export default function Categories({ categories, activeCategory, handleChangeCategory }: CategoriesProps) {
     return (
         <View>
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.scrollView}
-                    contentContainerStyle={styles.contentContainer}
-                >
-                    {categories.map((cat, index) => {
-                        let isActive = cat.strCategory === activeCategory;
-                        let activeButtonClass = isActive ? 'bg-amber-400' : 'bg-black/10';
-                        return (
-                            <TouchableOpacity key={index} onPress={() => setActiveCategory(cat.strCategory)} style={styles.categoryItem}>
-                                <View style={[styles.imageContainer, { backgroundColor: activeButtonClass }]}>
-                                    <Image
-                                        source={{ uri: cat.strCategoryThumb }}
-                                        style={[styles.image, { width: hp(6), height: hp(6) }]}
-                                    />
-                                </View>
-                                <Text style={styles.text}>{cat.strCategory}</Text>
-                            </TouchableOpacity>
-                        );
-                    })}
-                </ScrollView>
-
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={styles.scrollView}
+                contentContainerStyle={styles.contentContainer}
+            >
+                {categories.map((cat, index) => {
+                    let isActive = cat.strCategory === activeCategory;
+                    return (
+                        <TouchableOpacity
+                            key={index}
+                            onPress={() => handleChangeCategory(cat.strCategory)}
+                            style={[styles.categoryItem, isActive && styles.activeCategoryItem]}
+                        >
+                            <View style={[styles.imageContainer, isActive && styles.activeImageContainer]}>
+                                <Image
+                                    source={{ uri: cat.strCategoryThumb }}
+                                    style={[styles.image, { width: hp(6), height: hp(6) }]}
+                                />
+                            </View>
+                            <Text style={[styles.text, isActive && styles.activeText]}>{cat.strCategory}</Text>
+                        </TouchableOpacity>
+                    );
+                })}
+            </ScrollView>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     scrollView: {
-        height: 100, // Adjust the height as needed
+        height: 80, 
     },
     contentContainer: {
-        paddingHorizontal: 15,
+        paddingHorizontal: 10,
     },
     categoryItem: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 4,
+        padding: 2,
+        borderRadius: 999,
+        backgroundColor: 'black', // Default background color
+    },
+    activeCategoryItem: {
+        backgroundColor: 'white', // Active background color
     },
     imageContainer: {
-        borderRadius: 999,
-        padding: 6,
-        backgroundColor: '#ccc',
+        borderRadius: 50,
+    },
+    activeImageContainer: {
+        backgroundColor: 'white', 
     },
     image: {
-        width: 50, // Adjust the width as needed
         borderRadius: 999,
     },
     text: {
-        fontSize: 12, // Adjust the font size as needed
+        fontSize: 12,
         color: 'white',
-        marginTop: 4,
+    },
+    activeText: {
+        color: 'black', 
     },
 });
