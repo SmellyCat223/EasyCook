@@ -4,7 +4,6 @@ import { Icon } from 'react-native-elements';
 import { Link, Redirect, Stack, useNavigation } from 'expo-router';
 import { useEffect } from 'react';
 import Search from "./components/search-bar";
-import RecipeA from "./components/recipe-first";
 import Categories from './components/categories';
 import Recipes from './components/recipes';
 import axios from 'axios';
