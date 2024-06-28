@@ -26,8 +26,10 @@ export default Header;
 import React from 'react';
 import { View, Text } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { useUser } from '../../../../UserContext';
 
 const Header = ({ username }: { username: string | null }) => {
+
     return (
         <View className="flex flex-row justify-between p-4">
             <View>

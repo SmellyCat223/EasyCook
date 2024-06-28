@@ -42,23 +42,24 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
       }
 
       if (user) {
-      // Fetch the user profile data
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('username')
-        .eq('id', user.id)
-        .single();
+        // Fetch the user profile data
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('id', user.id)
+          .single();
 
-      if (profileError) {
-        throw profileError;
-      }
+        if (profileError) {
+          throw profileError;
+        }
 
-      // Store the username in session or global state
-      setUsername(profile.username);
+        // Store the username in session or global state
+        setUsername(profile.username);
+        console.log('SignIn - username set:', profile.username);
 
-      // Redirect to the main page after successful login
-      router.push('/(tabs)');
-  
+        // Redirect to the main page after successful login
+        router.push('/(tabs)');
+
         // Optionally, you can handle any additional user data storage or UI navigation here.
       } else {
         throw new Error('User information not available');
@@ -72,7 +73,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
       setSubmitting(false);
     }
   };
-  
+
   return (
     <View>
       <View className="items-center">
