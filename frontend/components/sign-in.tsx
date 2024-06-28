@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
+import { useUser } from '../UserContext';
 import { useRouter } from 'expo-router';
 import { supabase } from '../app/supabase';
 
@@ -15,11 +16,11 @@ interface SignInProps {
 }
 
 const SignIn: FC<SignInProps> = ({ switchComponent }) => {
-
+  const { setUsername } = useUser(); // Use the useUser hook
   const [loginMessage, setLoginMessage] = useState<string | null>(null);
 
   const router = useRouter();
-  
+
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -35,20 +36,35 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
         email: values.email,
         password: values.password,
       });
-  
+
       if (error) {
         throw error;
       }
-  
+
       if (user) {
+        // Fetch the user profile data
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) {
+          throw profileError;
+        }
+
+        // Store the username in session or global state
+        setUsername(profile.username);
+        console.log('SignIn - username set:', profile.username);
+
         // Redirect to the main page after successful login
         router.push('/(tabs)');
-  
+
         // Optionally, you can handle any additional user data storage or UI navigation here.
       } else {
         throw new Error('User information not available');
       }
-  
+
       setSubmitting(false);
     } catch (error: any) {
       console.error('Error signing in user:', error.message);
@@ -57,7 +73,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
       setSubmitting(false);
     }
   };
-  
+
   return (
     <View>
       <View className="items-center">
@@ -72,7 +88,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
               <Text className="text-base text-white font-bold">SIGN UP</Text>
             </TouchableOpacity>
           </View>
-        </View>        
+        </View>
       </View>
 
 

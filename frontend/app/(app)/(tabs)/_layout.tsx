@@ -124,7 +124,7 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="recipe-screen/components/recipe-first"
+                name="recipe-screen/components/recipe-indi"
                 options={{
                     href: null,
                 }}
@@ -137,6 +137,18 @@ const TabsLayout = () => {
             />
             <Tabs.Screen
                 name="recipe-screen/index_recipe"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="recipe-screen/components/recipes"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="recipe-screen/components/categories"
                 options={{
                     href: null,
                 }}
