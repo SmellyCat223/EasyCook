@@ -43,6 +43,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, TextInput } from "react-native";
 import { Icon } from 'react-native-elements';
+import { Link } from 'expo-router';
 import { supabase } from '../../../../supabase';
 import Button3 from '../../../../components/button3';
 import Filter from '../../../../components/filter';
@@ -74,7 +75,7 @@ const Inventory: React.FC = () => {
                 )
                 `,
             );
-    
+
         if (error) {
             console.error('Error fetching items:', error);
         } else if (data) {
@@ -111,7 +112,8 @@ const Body: React.FC<BodyProps> = ({ items }) => {
                         text1={item.item_name}
                         text2={new Date(item.expiration_date).toLocaleDateString()}
                         text3={`${item.item_quantity}g`}
-                        onPress={() => console.log(`Pressed item ${item.item_id}`)}
+                        // onPress={() => console.log(`Pressed item ${item.item_id}`)}
+                        onPress={() => console.log(`Pressed item ${item.item_id}`)} path=""
                     />
                 ))}
             </ScrollView>

@@ -49,7 +49,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
             username: values.username,
             email: values.email,
             phone: values.phone,
-            password: values.password
+            password: values.password,
           });
 
         if (profileError) {
