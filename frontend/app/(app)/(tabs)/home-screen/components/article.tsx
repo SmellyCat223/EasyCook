@@ -6,13 +6,19 @@ import { Link, Redirect, Stack, useNavigation } from 'expo-router';
 const Article = () => {
     let article = "5 ways to eat healthy";
 
+    const showAlert = () => {
+        alert('Feature coming soon!');
+    };
+
     return (
-        <View className="py-1">
-            <View className="rounded-2xl p-4 bg-gray-50">
-                <Text>Article of the day</Text>
-                <Text className="text-xl">{article}</Text>
+        <TouchableOpacity onPress={showAlert}>
+            <View className="py-1">
+                <View className="rounded-2xl p-4 bg-gray-50">
+                    <Text>Article of the day</Text>
+                    <Text className="text-xl">{article}</Text>
+                </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 

@@ -26,6 +26,10 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
     password: Yup.string().required('Password is required'),
   });
 
+  const handleForgotPassword = () => {
+    alert("Feature coming soon!");
+  };
+
   const handleSubmit = async (
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>
@@ -139,9 +143,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
           )}
         </Formik>
         <View className="p-3 items-center space-y-2">
-          <TouchableOpacity
-            onPress={() => console.log("Forgot password")}
-          >
+          <TouchableOpacity onPress={handleForgotPassword}>
             <Text className="text-zinc-700">Forgot password</Text>
           </TouchableOpacity>
         </View>
