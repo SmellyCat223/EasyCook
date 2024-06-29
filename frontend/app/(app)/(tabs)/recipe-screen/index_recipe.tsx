@@ -1,8 +1,5 @@
-import React, { useState } from 'react';
-import { Text, View, Button, Image, TouchableOpacity, ScrollView } from "react-native";
-import { Icon } from 'react-native-elements';
-import { Link, Redirect, Stack, useNavigation } from 'expo-router';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Text, View, ScrollView } from "react-native";
 import Search from "./components/search-bar";
 import Categories from './components/categories';
 import Recipes from './components/recipes';
