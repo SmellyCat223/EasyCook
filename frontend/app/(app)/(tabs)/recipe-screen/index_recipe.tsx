@@ -48,11 +48,22 @@ const RecipeScreen = () => {
         }
     }
 
+    const searchRecipes = async (query: string) => {
+        try {
+            const response = await axios.get(`https://themealdb.com/api/json/v1/1/search.php?s=${query}`);
+            if (response && response.data) {
+                setMeals(response.data.meals);
+            }
+        } catch (err: any) {
+            console.log('error: ', err.message);
+        }
+    };
+
 return (
     <View className="flex-1 pt-1 bg-stone-950">
         <ScrollView className="flex-grow">
             {/* <View className="px-4 pb-6 bg-stone-950"> */}
-            <Search />
+            <Search onSearch={searchRecipes} />
             <View>
                 {categories.length > 0 && <Categories categories={categories} activeCategory={activeCategory} handleChangeCategory={handleChangeCategory} />}
             </View>
