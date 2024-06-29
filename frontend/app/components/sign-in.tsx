@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -56,7 +56,8 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
         // Store the username in session or global state
         setUsername(profile.username);
         console.log('SignIn - username set:', profile.username);
-
+        // console.log('SignIn - username updated in context:', username);
+          
         // Redirect to the main page after successful login
         router.push('/(tabs)');
 

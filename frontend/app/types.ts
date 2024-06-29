@@ -35,14 +35,15 @@ export type ShoppingList = {
 
 export type Item = {
     item_id: number;
+    item_name: string;
     ingredient_id: number;
-    inventory_id: number;
+    inventory_id?: number;
     shopping_list_id?: number; // make it optional
     item_quantity: number;
     expiration_date: string; // use string type for DATE
     purchase_date: string; // use string type for DATE
     mfg: string; // use string type for DATE
-    item_name: string;  // additional attribute
+    user_id: string;
 }
 
 export type RecipeCategory = {
