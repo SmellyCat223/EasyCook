@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, View } from "react-native";
+import { TextInput, View, TouchableOpacity } from "react-native";
 import { Icon } from 'react-native-elements';
 
 const Search = ({ onSearch }) => {
@@ -7,6 +7,11 @@ const Search = ({ onSearch }) => {
 
     const handleSearch = () => {
         onSearch(searchText);
+    };
+
+    const handleClear = () => {
+        setSearchText('');
+        onSearch(''); 
     };
 
     return (
@@ -22,6 +27,11 @@ const Search = ({ onSearch }) => {
                     onChangeText={setSearchText}
                     onSubmitEditing={handleSearch}
                 />
+                {searchText.length > 0 && (
+                    <TouchableOpacity onPress={handleClear}>
+                        <Icon name="close" type="antdesign" color="#6b7280" size={16} />
+                    </TouchableOpacity>
+                )}
             </View>
         </View>
     );
