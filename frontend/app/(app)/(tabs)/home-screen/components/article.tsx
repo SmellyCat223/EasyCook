@@ -42,28 +42,28 @@ const Article = () => {
 
     return (
         <TouchableOpacity onPress={openArticle}>
-                <ImageBackground 
-                    source={article ? { uri: article.urlToImage } : null} 
-                    style={{
-                        borderRadius: 20,
-                        padding: 16,
-                        backgroundColor: '#f0f0f0',
-                        overflow: 'hidden',
-                    }}
-                    imageStyle={{ borderRadius: 20, opacity: 0.3 }}
-                >
-                    <View>
-                        <Text style={{fontSize: 16, marginBottom: 10 }}>Article of the day</Text>
-                        {article ? (
-                            <>
-                                <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{article.title}</Text>
-                                <Text style={{fontSize: 14, marginBottom: 10 }}>{article.description}</Text>
-                            </>
-                        ) : (
-                            <Text style={{ color: '#fff' }}>No article found</Text>
-                        )}
-                    </View>
-                </ImageBackground>
+            <ImageBackground
+                source={article ? { uri: article.urlToImage } : null}
+                style={{
+                    borderRadius: 20,
+                    padding: 16,
+                    backgroundColor: '#f0f0f0',
+                    overflow: 'hidden',
+                }}
+                imageStyle={{ borderRadius: 20, opacity: 0.3 }}
+            >
+                <View>
+                    <Text style={{ fontSize: 16, marginBottom: 10 }}>Article of the day</Text>
+                    {article ? (
+                        <>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{article.title}</Text>
+                            <Text style={{ fontSize: 14, marginBottom: 10 }}>{article.description}</Text>
+                        </>
+                    ) : (
+                        <Text style={{ color: '#fff' }}>No article found</Text>
+                    )}
+                </View>
+            </ImageBackground>
         </TouchableOpacity>
     );
 };
