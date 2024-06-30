@@ -2,7 +2,7 @@ import { TouchableOpacity, Text, View } from "react-native";
 import { Icon } from 'react-native-elements';
 
 type ButtonAddProps = {
-    onPress: (path: string) => void;
+    onPress: () => void;
 };
 const ButtonAdd: React.FC<ButtonAddProps> = ({ onPress }: ButtonAddProps) => {
 

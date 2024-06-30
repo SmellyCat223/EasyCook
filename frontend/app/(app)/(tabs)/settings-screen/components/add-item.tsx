@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Alert } from 'react-native';
-import { Formik } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { format, parse } from 'date-fns';
 import { supabase } from '../../../../supabase';
 
 // Function to parse date strings in dd/MM/yyyy format
-const parseDateString = (value, originalValue) => {
+const parseDateString = (value: any, originalValue: any) => {
     const parsedDate = parse(originalValue, 'dd/MM/yyyy', new Date());
     return parsedDate;
 };
@@ -36,7 +36,7 @@ const AddItem = () => {
         fetchUserId();
     }, []);
 
-    const handleSubmit = async (values: any, { resetForm }) => {
+    const handleSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
         try {
             const { data, error } = await supabase
                 .from('item')
