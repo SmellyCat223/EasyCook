@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { supabase } from '../app/supabase';
+import { supabase } from '../supabase';
 
 interface FormValues {
   username: string;
@@ -49,7 +49,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
             username: values.username,
             email: values.email,
             phone: values.phone,
-            password: values.password
+            password: values.password,
           });
 
         if (profileError) {

@@ -1,6 +1,8 @@
 import { Stack } from 'expo-router';
+import { useUser } from '../UserContext';
 
 export default function Root() {
+
   return (
     <Stack
       screenOptions={{
