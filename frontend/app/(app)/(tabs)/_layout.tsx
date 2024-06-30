@@ -94,7 +94,7 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="home-screen/expiring-screen"
+                name="expiring-screen"
                 options={{
                     href: null,
                 }}
