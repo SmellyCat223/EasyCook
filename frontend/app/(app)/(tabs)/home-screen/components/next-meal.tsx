@@ -6,10 +6,10 @@ import { Link } from 'expo-router';
 const NextMeal = () => {
     let date = "07 Tue";
     let meal = "Lunch Menu";
-    let food1 = "Lorem ipsum";
-    let food2 = "Lorem ipsum";
-    let food3 = "Lorem ipsum";
-    let calories = "xxx";
+    let food1 = "Grilled Chicken";
+    let food2 = "Pesto Pasta";
+    let food3 = "Greek Yoghurt";
+    let calories = 600;
 
     return (
         <Link href="/meal-planner" asChild>
