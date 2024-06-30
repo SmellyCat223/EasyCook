@@ -5,7 +5,7 @@ import Button3 from '../../../../../../components/button-inventory';
 import Filter from '../../../../../../components/filter';
 import ButtonAdd from '../../../../../../components/button-add';
 import { Item } from '../../../../../types';
-import { useRouter } from 'expo-router';
+import { useRouter, useNavigation } from 'expo-router';
 
 const Inventory: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
