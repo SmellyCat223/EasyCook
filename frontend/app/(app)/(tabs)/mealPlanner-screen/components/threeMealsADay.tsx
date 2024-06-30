@@ -22,7 +22,12 @@ const Day: React.FC<{
     lunchCal: number;
     dinnerTitle: string;
     dinnerCal: number;
+    // onDelete: () => void;
 }> = ({ day, date, bfastTitle, bfastCal, lunchTitle, lunchCal, dinnerTitle, dinnerCal }) => {
+    const showAlert = () => {
+        alert('Feature coming soon!');
+    };
+
     return (
         <View style={{ margin: 10, padding: 16, backgroundColor: '#B2F5EA', borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.8, shadowRadius: 2, elevation: 5 }}>
             <View style={{ marginBottom: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
@@ -34,7 +39,7 @@ const Day: React.FC<{
                     <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{bfastTitle}</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <Icon name="edit" type="antdesign" size={15} style={{ marginRight: 8 }} />
-                        <Icon name="delete" type="material" size={15} />
+                        <Icon name="delete" type="material" size={15} onPress={showAlert} />
                     </View>
                 </View>
             </View>
@@ -44,7 +49,7 @@ const Day: React.FC<{
                     <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{lunchTitle}</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <Icon name="edit" type="antdesign" size={15} style={{ marginRight: 8 }} />
-                        <Icon name="delete" type="material" size={15} />
+                        <Icon name="delete" type="material" size={15} onPress={showAlert} />
                     </View>
                 </View>
             </View>
@@ -54,7 +59,7 @@ const Day: React.FC<{
                     <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{dinnerTitle}</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <Icon name="edit" type="antdesign" size={15} style={{ marginRight: 8 }} />
-                        <Icon name="delete" type="material" size={15} />
+                        <Icon name="delete" type="material" size={15} onPress={showAlert} />
                     </View>
                 </View>
             </View>
@@ -106,7 +111,8 @@ const MealPlannerScreenComponent = () => {
                 meal_date,
                 meal_type,
                 user_id,
-                meal_title
+                meal_title,
+                meal_id
             `)
             .eq('user_id', userId)
             .gte('meal_date', start)
@@ -119,6 +125,25 @@ const MealPlannerScreenComponent = () => {
             setItems(data);
         }
     };
+
+    // const deleteMeal = async (mealId: string) => {
+    //     const { error } = await supabase
+    //         .from('meal')
+    //         .delete()
+    //         .eq('meal_id', mealId);
+    
+    //     if (error) {
+    //         console.error('Error deleting meal:', error);
+    //     } else {
+    //         // Re-fetch meals after deletion
+    //         fetchMeals(userId);
+    //     }
+    // };
+    
+    // const handleDeleteMeal = (mealId: string) => {
+    //     deleteMeal(mealId);
+    // };
+    
 
     const generateWeekDates = (start: Date) => {
         return Array.from({ length: 7 }).map((_, index) => addDays(start, index));
@@ -182,6 +207,7 @@ const MealPlannerScreenComponent = () => {
                             lunchCal={lunchCal}
                             dinnerTitle={dinnerTitle}
                             dinnerCal={dinnerCal}
+                            // onDelete={() => handleDeleteMeal(mealId)}
                         />
                     );
                 })}
