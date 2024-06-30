@@ -11,7 +11,6 @@ const Inventory: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [userId, setUserId] = useState<string | null>(null);
-    const router = useRouter();
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -66,9 +65,9 @@ const Inventory: React.FC = () => {
 
     return (
         <View className="flex-1 bg-stone-950">
-                <View className="px-4 py-2">
-                    <Filter setSearchQuery={setSearchQuery} />
-                </View>
+            <View className="px-4 py-2">
+                <Filter setSearchQuery={setSearchQuery} />
+            </View>
             <Body items={filteredItems} />
         </View>
     );
