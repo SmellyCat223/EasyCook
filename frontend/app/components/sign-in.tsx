@@ -58,6 +58,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
         }
 
         // Store the username in session or global state
+        console.log('Setting username:', profile.username);
         setUsername(profile.username);
         console.log('SignIn - username set:', profile.username);
 

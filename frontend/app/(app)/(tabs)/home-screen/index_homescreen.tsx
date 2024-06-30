@@ -48,6 +48,7 @@ import { useUser } from '../../../UserContext';
 
 const Home = () => {
     const { username } = useUser();
+    console.log('Index Home screen username:', username);
 
     return (
         <View className="flex-1 pt-10 bg-stone-950">

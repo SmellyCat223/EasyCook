@@ -1,17 +1,13 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+/* import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Icon } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-interface RecipeDetailScreenProps {
-    route: any;
-    props: any;
-}
 
-export default function RecipeDetailScreen() {
-// const RecipeDetailScreen: React.FC<{ route: { params: { item: Meal } } }> = ({ route }) => {
+export default function RecipeDetailScreen(props) {
+    console.log(props.route.params);
     // const { item } = route.params;
     // const [isFavourite, setIsFavourite] = useState(false);
 
@@ -40,6 +36,23 @@ export default function RecipeDetailScreen() {
     )
 }
 
+*/
+import React from 'react';
+import { View, Text, Image } from 'react-native';
+
+const RecipeDetailScreen = ({ route }) => {
+    const { strMealThumb, strMeal } = route.params; // Destructure the parameters from route.params
+
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Image source={{ uri: strMealThumb }} style={{ width: 200, height: 200, borderRadius: 100 }} />
+            <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20 }}>{strMeal}</Text>
+            {/* Add more details here if needed */}
+        </View>
+    );
+};
+
+export default RecipeDetailScreen;
 
 
 
