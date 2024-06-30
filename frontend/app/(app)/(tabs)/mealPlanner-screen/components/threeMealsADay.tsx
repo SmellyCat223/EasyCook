@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Button } from "react-native";
+import { Text, View, ScrollView, Button, ActivityIndicator } from "react-native";
 import { Icon } from 'react-native-elements';
 import { supabase } from '../../../../supabase';
-import { format, addDays, startOfWeek, endOfWeek } from 'date-fns';
+import { format, addDays, startOfWeek, endOfWeek, isToday, parseISO } from 'date-fns';
+import NextMeal from '../../home-screen/components/next-meal';
+
 interface Item {
     meal_calories: number;
     meal_date: string; // Will be formatted to a string for display
@@ -22,36 +24,36 @@ const Day: React.FC<{
     dinnerCal: number;
 }> = ({ day, date, bfastTitle, bfastCal, lunchTitle, lunchCal, dinnerTitle, dinnerCal }) => {
     return (
-        <View className="m-2 p-4 bg-green-200 shadow rounded-lg">
-            <View className="mb-2 border-b pb-2">
-                <Text className="text-lg font-semibold">{day} {date}</Text>
+        <View style={{ margin: 10, padding: 16, backgroundColor: '#B2F5EA', borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.8, shadowRadius: 2, elevation: 5 }}>
+            <View style={{ marginBottom: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
+                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{day} {date}</Text>
             </View>
-            <View className="flex-row justify-between mb-2">
+            <View className="flex-row justify-between mb-5">
                 <Text>Breakfast: {bfastTitle}</Text>
-                <View className="flex-row items-center">
-                    <Text>{bfastCal} kcal</Text>
-                    <View className="flex-row ml-2">
-                        <Icon name="edit" type="antdesign" size={15} />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{bfastTitle}</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Icon name="edit" type="antdesign" size={15} style={{ marginRight: 8 }} />
                         <Icon name="delete" type="material" size={15} />
                     </View>
                 </View>
             </View>
-            <View className="flex-row justify-between mb-2">
+            <View className="flex-row justify-between mb-5">
                 <Text>Lunch: {lunchTitle}</Text>
-                <View className="flex-row items-center">
-                    <Text>{lunchCal} kcal</Text>
-                    <View className="flex-row ml-2">
-                        <Icon name="edit" type="antdesign" size={15} />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{lunchTitle}</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Icon name="edit" type="antdesign" size={15} style={{ marginRight: 8 }} />
                         <Icon name="delete" type="material" size={15} />
                     </View>
                 </View>
             </View>
-            <View className="flex-row justify-between mb-2">
+            <View className="flex-row justify-between mb-5">
                 <Text>Dinner: {dinnerTitle}</Text>
-                <View className="flex-row items-center">
-                    <Text>{dinnerCal} kcal</Text>
-                    <View className="flex-row ml-2">
-                        <Icon name="edit" type="antdesign" size={15} />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{dinnerTitle}</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Icon name="edit" type="antdesign" size={15} style={{ marginRight: 8 }} />
                         <Icon name="delete" type="material" size={15} />
                     </View>
                 </View>
@@ -62,9 +64,9 @@ const Day: React.FC<{
 
 const MealPlannerScreenComponent = () => {
     const [items, setItems] = useState<Item[]>([]);
-    const [searchQuery, setSearchQuery] = useState('');
     const [userId, setUserId] = useState<string | null>(null);
     const [currentWeekStart, setCurrentWeekStart] = useState<Date>(startOfWeek(new Date()));
+    const [nextMeals, setNextMeals] = useState<Item[]>([]);
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -84,6 +86,14 @@ const MealPlannerScreenComponent = () => {
             fetchMeals(userId);
         }
     }, [userId, currentWeekStart]);
+
+    useEffect(() => {
+        // Filter meals for today and update nextMeals state
+        const todayMeals = items.filter(item => isToday(item.meal_date));
+
+        console.log(todayMeals);
+        setNextMeals(todayMeals);
+    }, [items]);
 
     const fetchMeals = async (userId: string) => {
         const start = format(currentWeekStart, 'yyyy-MM-dd');
@@ -151,10 +161,11 @@ const MealPlannerScreenComponent = () => {
 
     return (
         <View>
-            <View className="flex-row justify-between p-4">
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 16 }}>
                 <Button title="Previous Week" onPress={handlePrevWeek} />
                 <Button title="Next Week" onPress={handleNextWeek} />
             </View>
+            
             <ScrollView>
                 {weekDates.map((date, index) => {
                     const formattedDate = format(date, 'yyyy-MM-dd');
@@ -175,6 +186,17 @@ const MealPlannerScreenComponent = () => {
                     );
                 })}
             </ScrollView>
+            {/* Render NextMeal component with today's meals
+            {nextMeals.length > 0 && (
+                <NextMeal
+                    date={format(new Date(nextMeals[0].meal_date), 'dd MMM yyyy')}
+                    meal="Today's Meals"
+                    breakfast={nextMeals.find(meal => meal.meal_type === 'Breakfast')?.meal_title || 'No Breakfast'}
+                    lunch={nextMeals.find(meal => meal.meal_type === 'Lunch')?.meal_title || 'No Lunch'}
+                    dinner={nextMeals.find(meal => meal.meal_type === 'Dinner')?.meal_title || 'No Dinner'}
+                    calories={nextMeals.reduce((acc, meal) => acc + meal.meal_calories, 0)}
+                />
+            )} */}
         </View>
     );
 };
