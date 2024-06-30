@@ -154,6 +154,12 @@ const TabsLayout = () => {
                     href: null,
                 }}
             />
+            <Tabs.Screen
+                name="expiring-screen"
+                options={{
+                    href: null,
+                }}
+            />
         </Tabs>
     );
 };

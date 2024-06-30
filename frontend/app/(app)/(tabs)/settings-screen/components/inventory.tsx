@@ -1,68 +1,44 @@
-// import React from 'react';
-// import { Text, View, Button, Image, TouchableOpacity, ScrollView } from "react-native";
-// import { Icon } from 'react-native-elements';
-// import { Link } from 'expo-router';
-// import Button3 from '../../../../components/button3';
-
-// const Inventory = () => {
-//     return (
-//         <View className="flex-1 bg-stone-950">
-//             <View className="p-4">
-//                 <Text className="text-base text-zinc-100">This is inventory page</Text>
-//                 <Filter />
-//             </View>
-//             <Body />
-//         </View>
-//     )
-// }
-
-// const Filter = () => {
-//     return (
-//         <View className="flex flex-row pt-3 pb-3 justify-between">
-//             <View className="flex flex-row rounded-2xl p-2 w-4/5 bg-zinc-200">
-//                 <Icon name="search1" type="antdesign" color="#6b7280" size={16} />
-//                 <Text className="text-zinc-500">  Search Item</Text>
-//             </View>
-//             <Text className="text-yellow-500">Filter</Text>
-//         </View>
-//     );
-// };
-
-// const Body = () => {
-
-//     return (
-//         <View className="flex-1 bg-stone-950">
-//             <Button3 text1="Item" text2="Exipration Date" text3="Quantity" onPress={() => console.log("i'm pressed")} />
-//             <Button3 text1="fish" text2="02/04/2025" text3="100g" onPress={() => console.log("i'm pressed")} />
-//         </View>
-//     )
-// }
-
-// export default Inventory;
-
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, TextInput } from "react-native";
-import { Icon } from 'react-native-elements';
-import { Link } from 'expo-router';
+import { Text, View, ScrollView, TouchableOpacity } from "react-native";
 import { supabase } from '../../../../supabase';
 import Button3 from '../../../../components/button3';
 import Filter from '../../../../components/filter';
-import { Item, Ingredient } from '../../../../types';
+import { Item } from '../../../../types';
+import { Icon } from 'react-native-elements';
+import { useRouter } from 'expo-router';
 
 const Inventory: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [userId, setUserId] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchItems();
+        const fetchUserId = async () => {
+            const { data, error } = await supabase.auth.getSession();
+            if (error) {
+                console.error('Error fetching user session:', error);
+            } else if (data?.session) {
+                setUserId(data.session.user.id);
+            }
+        };
+
+        fetchUserId();
     }, []);
 
-    const fetchItems = async () => {
+    useEffect(() => {
+        if (userId) {
+            console.log(userId);
+            fetchItems(userId);
+        }
+    }, [userId]);
+
+    const fetchItems = async (userId: string) => {
         const { data, error } = await supabase
             .from('item')
             .select(
                 `
                 item_id,
+                item_name,
                 ingredient_id,
                 inventory_id,
                 shopping_list_id,
@@ -70,11 +46,11 @@ const Inventory: React.FC = () => {
                 expiration_date,
                 purchase_date,
                 mfg,
-                ...ingredient!inner(
-                item_name:ingredient_name
-                )
-                `,
-            );
+                user_id
+                `
+            )
+            .eq('user_id', userId); // Filter items based on user_id
+
 
         if (error) {
             console.error('Error fetching items:', error);
@@ -103,8 +79,23 @@ interface BodyProps {
 }
 
 const Body: React.FC<BodyProps> = ({ items }) => {
+    const router = useRouter();
+
     return (
         <View className="flex-1 bg-stone-950">
+            <View className="border-b border-t border-zinc-800">
+                <TouchableOpacity
+                    onPress={() => router.push("./add-item")}
+                    className={"flex flex-row justify-center items-center bg-zinc-700/50 h-10"}
+                >
+                    <View className="pr-2">
+                        <Icon name="add" type="ionicons" color="#71717A" />
+                    </View>
+                    <View>
+                        <Text className="text-base text-white">Add item</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
             <ScrollView>
                 {items.map(item => (
                     <Button3
@@ -112,8 +103,8 @@ const Body: React.FC<BodyProps> = ({ items }) => {
                         text1={item.item_name}
                         text2={new Date(item.expiration_date).toLocaleDateString()}
                         text3={`${item.item_quantity}g`}
-                        // onPress={() => console.log(`Pressed item ${item.item_id}`)}
-                        onPress={() => console.log(`Pressed item ${item.item_id}`)} path=""
+                        onPress={() => console.log(`Pressed item ${item.item_id}`)}
+                        path=""
                     />
                 ))}
             </ScrollView>
