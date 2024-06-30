@@ -5,7 +5,7 @@ import { Link, Redirect, Stack, useNavigation } from 'expo-router';
 
 const UpdateInventory = () => {
     return (
-        <Link href="./(tabs)/settings-screen/components/inventory" asChild>
+        <Link href="/inventory" asChild>
             <TouchableOpacity>
                 <View className="py-1">
                     <View className="flex flex-row justify-between bg-zinc-200 rounded-2xl p-4">
