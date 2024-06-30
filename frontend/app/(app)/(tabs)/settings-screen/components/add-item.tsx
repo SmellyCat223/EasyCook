@@ -2,18 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { format, parse } from 'date-fns';
 import { supabase } from '../../../../supabase';
+
+// Function to parse date strings in dd/MM/yyyy format
+const parseDateString = (value, originalValue) => {
+    const parsedDate = parse(originalValue, 'dd/MM/yyyy', new Date());
+    return parsedDate;
+};
 
 // Validation schema
 const validationSchema = Yup.object().shape({
-    // ingredient_id: Yup.number().required('Ingredient ID is required').positive('Must be a positive number').integer('Must be an integer'),
-    // inventory_id: Yup.number().required('Inventory ID is required').positive('Must be a positive number').integer('Must be an integer'),
-    // shopping_list_id: Yup.number().positive('Must be a positive number').integer('Must be an integer').nullable(),
     item_name: Yup.string().required('Item name is required'),
     item_quantity: Yup.number().required('Item quantity is required').positive('Must be a positive number').integer('Must be an integer'),
-    expiration_date: Yup.date(),
-    purchase_date: Yup.date().nullable(),
-    mfg: Yup.date().nullable(),
+    expiration_date: Yup.date().transform(parseDateString).required('Expiration date is required').typeError('Invalid date format, use dd/MM/yyyy'),
+    purchase_date: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy'),
+    mfg: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy'),
 });
 
 const AddItem = () => {
@@ -38,14 +42,11 @@ const AddItem = () => {
                 .from('item')
                 .insert([
                     {
-                        // ingredient_id: values.ingredient_id,
-                        // inventory_id: values.inventory_id,
-                        // shopping_list_id: values.shopping_list_id,
-                        item_name:values.item_name,
+                        item_name: values.item_name,
                         item_quantity: values.item_quantity,
-                        expiration_date: values.expiration_date,
-                        purchase_date: values.purchase_date,
-                        mfg: values.mfg,
+                        expiration_date: values.expiration_date ? format(parseDateString(null, values.expiration_date), 'yyyy-MM-dd') : null,
+                        purchase_date: values.purchase_date ? format(parseDateString(null, values.purchase_date), 'yyyy-MM-dd') : null,
+                        mfg: values.mfg ? format(parseDateString(null, values.mfg), 'yyyy-MM-dd') : null,
                         user_id: userId
                     },
                 ]);

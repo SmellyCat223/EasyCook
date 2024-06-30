@@ -36,7 +36,7 @@ export type ShoppingList = {
 export type Item = {
     item_id: number;
     item_name: string;
-    ingredient_id: number;
+    ingredient_id?: number;
     inventory_id?: number;
     shopping_list_id?: number; // make it optional
     item_quantity: number;
