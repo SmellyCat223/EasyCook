@@ -58,9 +58,9 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
         }
 
         // Store the username in session or global state
-        console.log('Setting username:', profile.username);
+        // console.log('Setting username:', profile.username);
         setUsername(profile.username);
-        console.log('SignIn - username set:', profile.username);
+        // console.log('SignIn - username set:', profile.username);
 
         // Redirect to the main page after successful login
         router.push('/(tabs)');

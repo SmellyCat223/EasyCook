@@ -28,7 +28,7 @@ import React, { useEffect } from 'react';
 export default function Root() {
   return (
     <UserProvider>
-      <DebugUsername />
+      {/* <DebugUsername /> */}
       <Stack
         screenOptions={{
           headerShown: false,
@@ -47,15 +47,15 @@ export default function Root() {
   );
 }
 
-const DebugUsername = () => {
-  const { username } = useUser();
+// const DebugUsername = () => {
+//   const { username } = useUser();
 
-  useEffect(() => {
-    console.log('Root component - username:', username);
-  }, [username]);
+//   useEffect(() => {
+//     console.log('Root component - username:', username);
+//   }, [username]);
 
-  return null;
-};
+//   return null;
+// };
 
 
 

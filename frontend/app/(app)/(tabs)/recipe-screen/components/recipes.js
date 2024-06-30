@@ -14,7 +14,7 @@ export default function Recipes({ categories, meals }) {
     const [mealPlan, setMealPlan] = useState({});
 
     const addRecipeToMeal = (day, meal, recipe) => {
-        console.log(`Adding recipe to meal plan: Day=${day}, Meal=${meal}, Recipe=`, recipe);
+        // console.log(`Adding recipe to meal plan: Day=${day}, Meal=${meal}, Recipe=`, recipe);
         setMealPlan(prevState => ({
             ...prevState,
             [day]: {
@@ -23,7 +23,7 @@ export default function Recipes({ categories, meals }) {
             }
         }));
     };
-    console.log('Current meal plan state:', mealPlan);
+    // console.log('Current meal plan state:', mealPlan);
 
     return (
         <View style={{ marginHorizontal: wp(4), paddingVertical: hp(2) }}>
@@ -92,9 +92,14 @@ const RecipeCard = ({ item, index, navigation, addRecipeToMeal }) => {
     };
 
     const handleAddRecipe = () => {
-        console.log(`Adding recipe to meal plan: Day=${selectedDay}, Meal=${selectedMeal}, Recipe=`, recipeDetails);
+        // console.log(`Adding recipe to meal plan: Day=${selectedDay}, Meal=${selectedMeal}, Recipe=`, recipeDetails);
         addRecipeToMeal(selectedDay, selectedMeal, recipeDetails);
         toggleModal();
+    };
+
+    let wastage = "1";
+    const showAlert = () => {
+        alert('Feature coming soon!');
     };
 
     return (
@@ -167,7 +172,7 @@ const RecipeCard = ({ item, index, navigation, addRecipeToMeal }) => {
                                     <Picker.Item label="Lunch" value="Lunch" />
                                     <Picker.Item label="Dinner" value="Dinner" />
                                 </Picker>
-                                <TouchableOpacity onPress={handleAddRecipe} style={styles.addButton}>
+                                <TouchableOpacity onPress={showAlert} style={styles.addButton}>
                                     <Text style={{ fontSize: 16}}>Add to Meal Plan</Text>
                                 </TouchableOpacity>
                             </ScrollView>)}
