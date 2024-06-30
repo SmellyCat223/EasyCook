@@ -21,7 +21,6 @@ const ProfilePicture = () => {
 
     useEffect(() => {
         if (userId) {
-            console.log(userId);
             fetchUsername(userId);
         }
     }, [userId]);

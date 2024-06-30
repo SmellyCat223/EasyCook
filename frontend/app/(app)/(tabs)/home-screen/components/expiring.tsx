@@ -40,9 +40,9 @@ const Expiring = () => {
         fetchItems();
     }, []);
 
-    if (loading) {
-        return <ActivityIndicator size="large" color="#0000ff" />;
-    }
+    // if (loading) {
+    //     return <ActivityIndicator size="large" color="#0000ff" />;
+    // }
 
     return (
         <Link href="/expiring-screen" asChild>
