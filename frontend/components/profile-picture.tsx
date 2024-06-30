@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import { Icon } from 'react-native-elements';
-import { supabase } from '../../../../supabase'; // Adjust path as per your project structure
-import { AnyObject } from 'yup';
+import { Text, View, Image } from "react-native";
+import { supabase } from "../app/supabase";
 
-const Header = () => {
+const ProfilePicture = () => {
     const [userId, setUserId] = useState<string | null>(null);
     const [username, setUsername] = useState<string | null>(null);
 
@@ -47,16 +45,19 @@ const Header = () => {
     };
 
     return (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 16 }}>
-            <View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text className="text-zinc-100">Hi {username ? username : 'Guest'} </Text>
-                    <Icon name="waving-hand" type="materialicons" color="#fef08a" size={16} />
-                </View>
-                <Text className="text-zinc-100">Welcome back!</Text>
+        <View className="flex py-4 justify-center items-center">
+            <Image
+                source={{
+                    uri: "https://i.pinimg.com/564x/af/64/49/af6449c9ece35104f7e351c0c6f8c132.jpg",
+                }}
+                style={{ width: 150, height: 150 }}
+                className="rounded-full"
+            />
+            <View className="py-2">
+                <Text className="text-lg text-white">{username ? username : 'Guest'}</Text>
             </View>
         </View>
     );
 };
 
-export default Header;
+export default ProfilePicture;
