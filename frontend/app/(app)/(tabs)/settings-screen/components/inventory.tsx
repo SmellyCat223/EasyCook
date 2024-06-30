@@ -66,6 +66,7 @@ const Inventory: React.FC = () => {
     return (
         <View className="flex-1 bg-stone-950">
             <View className="px-4 py-2">
+                <Text className="text-base text-zinc-100">This is inventory page</Text>
                 <Filter setSearchQuery={setSearchQuery} />
             </View>
             <Body items={filteredItems} />

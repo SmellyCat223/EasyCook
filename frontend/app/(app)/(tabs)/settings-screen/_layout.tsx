@@ -11,7 +11,7 @@ const StackLayOut = () => {
             headerTintColor: "#f4f4f5",
         }}
     >
-      <Stack.Screen 
+      {/* <Stack.Screen 
         name="components/profile"
         options={{
           headerTitle: "Profile",
@@ -23,7 +23,7 @@ const StackLayOut = () => {
           headerTitle: "Inventory",
         }}
       />
-      {/* <Stack.Screen 
+      <Stack.Screen 
         name="components/login"
         options={{
           headerTitle: "Login",
