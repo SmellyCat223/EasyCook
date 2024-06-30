@@ -94,6 +94,12 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
+                name="home-screen/expiring-screen"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
                 name="home-screen/components/group-request"
                 options={{
                     href: null,

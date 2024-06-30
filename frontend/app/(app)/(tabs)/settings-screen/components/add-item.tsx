@@ -36,7 +36,7 @@ const AddItem = () => {
         fetchUserId();
     }, []);
 
-    const handleSubmit = async (values: any) => {
+    const handleSubmit = async (values: any, { resetForm }) => {
         try {
             const { data, error } = await supabase
                 .from('item')
@@ -55,6 +55,7 @@ const AddItem = () => {
                 throw error;
             }
             Alert.alert('Success', 'Item added successfully');
+            resetForm(); // Reset the form after successful submission
         } catch (error: any) {
             console.error('Error adding item:', error.message);
             Alert.alert('Error', error.message);
@@ -135,3 +136,4 @@ const AddItem = () => {
 };
 
 export default AddItem;
+
