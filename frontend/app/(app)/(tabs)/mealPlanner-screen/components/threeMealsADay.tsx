@@ -52,7 +52,7 @@ interface MealPlannerScreenComponentProps {
 }
 
 const MealPlannerScreenComponent: React.FC<MealPlannerScreenComponentProps> = ({ mealPlan }) => {
-    console.log('Meal Planner Component Rendered with Meal Plan:', mealPlan);
+    // console.log('Meal Planner Component Rendered with Meal Plan:', mealPlan);
     return (
         <ScrollView>
             {Object.keys(mealPlan).map((day) => (
