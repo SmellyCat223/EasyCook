@@ -56,6 +56,8 @@
     "react-native-url-polyfill": "^2.0.0",
     "react-native-vector-icons": "^10.1.0",
     "react-native-web": "^0.19.11",
+    "react-native-webview": "^13.10.4",
+    "react-native-youtube-iframe": "^2.3.0",
     "tailwind-rn": "^4.2.0",
     "tailwindcss-react-native": "^1.7.10",
     "twrnc": "^4.2.0",
