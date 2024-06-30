@@ -3,14 +3,27 @@ import { View, Text, Pressable, Modal, StyleSheet, TouchableOpacity, ScrollView,
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MasonryList from '@react-native-seoul/masonry-list';
 import { useNavigation } from '@react-navigation/native';
-import RecipeDetailScreen from './recipe-indi';
 import { CachedImage } from './image';
 import Animated, { FadeInDown, useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
 import { Icon } from 'react-native-elements';
 import YouTubeIframe, { getYoutubeMeta } from 'react-native-youtube-iframe';
+import { Picker } from '@react-native-picker/picker';
 
 export default function Recipes({ categories, meals }) {
     const navigation = useNavigation();
+    const [mealPlan, setMealPlan] = useState({});
+
+    const addRecipeToMeal = (day, meal, recipe) => {
+        console.log(`Adding recipe to meal plan: Day=${day}, Meal=${meal}, Recipe=`, recipe);
+        setMealPlan(prevState => ({
+            ...prevState,
+            [day]: {
+                ...prevState[day],
+                [meal]: recipe
+            }
+        }));
+    };
+    console.log('Current meal plan state:', mealPlan);
 
     return (
         <View style={{ marginHorizontal: wp(4), paddingVertical: hp(2) }}>
@@ -21,7 +34,7 @@ export default function Recipes({ categories, meals }) {
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item, i }) => (
-                        <RecipeCard item={item} index={i} navigation={navigation} />
+                        <RecipeCard item={item} index={i} navigation={navigation} addRecipeToMeal={addRecipeToMeal} />
                     )}
                     onEndReachedThreshold={0.1}
                 />
@@ -30,12 +43,14 @@ export default function Recipes({ categories, meals }) {
     );
 }
 
-const RecipeCard = ({ item, index, navigation }) => {
+const RecipeCard = ({ item, index, navigation, addRecipeToMeal }) => {
     let isEven = index % 2 === 0;
     const [modalVisible, setModalVisible] = useState(false);
     const springValue = useSharedValue(0);
     const [recipeDetails, setRecipeDetails] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [selectedDay, setSelectedDay] = useState("Mon");
+    const [selectedMeal, setSelectedMeal] = useState("Breakfast");
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
@@ -74,6 +89,12 @@ const RecipeCard = ({ item, index, navigation }) => {
             fetchRecipeDetails(item.idMeal);
         }
         springValue.value = modalVisible ? 0 : 1;
+    };
+
+    const handleAddRecipe = () => {
+        console.log(`Adding recipe to meal plan: Day=${selectedDay}, Meal=${selectedMeal}, Recipe=`, recipeDetails);
+        addRecipeToMeal(selectedDay, selectedMeal, recipeDetails);
+        toggleModal();
     };
 
     return (
@@ -130,6 +151,25 @@ const RecipeCard = ({ item, index, navigation }) => {
                                         </View>
                                     </View>
                                 )}
+
+                                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Add to Meal Plan</Text>
+                                <Picker selectedValue={selectedDay} onValueChange={(itemValue) => setSelectedDay(itemValue)}>
+                                    <Picker.Item label="Monday" value="Mon" />
+                                    <Picker.Item label="Tuesday" value="Tues" />
+                                    <Picker.Item label="Wednesday" value="Wed" />
+                                    <Picker.Item label="Thursday" value="Thurs" />
+                                    <Picker.Item label="Friday" value="Fri" />
+                                    <Picker.Item label="Saturday" value="Sat" />
+                                    <Picker.Item label="Sunday" value="Sun" />
+                                </Picker>
+                                <Picker selectedValue={selectedMeal} onValueChange={(itemValue) => setSelectedMeal(itemValue)}>
+                                    <Picker.Item label="Breakfast" value="Breakfast" />
+                                    <Picker.Item label="Lunch" value="Lunch" />
+                                    <Picker.Item label="Dinner" value="Dinner" />
+                                </Picker>
+                                <TouchableOpacity onPress={handleAddRecipe} style={styles.addButton}>
+                                    <Text style={{ fontSize: 16}}>Add to Meal Plan</Text>
+                                </TouchableOpacity>
                             </ScrollView>)}
                     </View>
                 </View>
