@@ -2,14 +2,14 @@ import { Stack } from "expo-router";
 
 const StackLayOut = () => {
   return (
-    <Stack 
-        screenOptions={{
-            headerTitle: "Settings",
-            headerStyle: {
-            backgroundColor: '#0c0a09',
-            },
-            headerTintColor: "#f4f4f5",
-        }}
+    <Stack
+      screenOptions={{
+        headerTitle: "Settings",
+        headerStyle: {
+          backgroundColor: '#0c0a09',
+        },
+        headerTintColor: "#f4f4f5",
+      }}
     >
       {/* <Stack.Screen 
         name="components/profile"
@@ -29,8 +29,8 @@ const StackLayOut = () => {
           headerTitle: "Login",
         }}
       /> */}
-      <Stack.Screen 
-        name="index"
+      <Stack.Screen
+        name="index_settings"
         options={{
           headerTitle: "Settings",
         }}
