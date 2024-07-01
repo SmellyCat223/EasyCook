@@ -4,6 +4,7 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { format, parse } from 'date-fns';
 import { supabase } from '../../../../supabase';
+import { useRouter } from 'expo-router';
 
 // Function to parse date strings in dd/MM/yyyy format
 const parseDateString = (value: any, originalValue: any) => {
@@ -23,6 +24,7 @@ const validationSchema = Yup.object().shape({
 const AddGrocery = () => {
     const [userId, setUserId] = useState<string | null>(null);
     const [shoppingListId, setShoppingListId] = useState<string | null>(null);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -73,6 +75,7 @@ const AddGrocery = () => {
             }
             Alert.alert('Success', 'Item added successfully');
             resetForm(); // Reset the form after successful submission
+            router.back();
         } catch (error: any) {
             console.error('Error adding item:', error.message);
             Alert.alert('Error', error.message);
