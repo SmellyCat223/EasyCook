@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { CachedImage } from './image';
 
 interface CategoriesProps {
     categories: { strCategory: string, strCategoryThumb: string }[];
@@ -26,8 +27,8 @@ export default function Categories({ categories, activeCategory, handleChangeCat
                             style={[styles.categoryItem, isActive && styles.activeCategoryItem]}
                         >
                             <View style={[styles.imageContainer, isActive && styles.activeImageContainer]}>
-                                <Image
-                                    source={{ uri: cat.strCategoryThumb }}
+                                <CachedImage
+                                    uri={cat.strCategoryThumb}
                                     style={[styles.image, { width: hp(6), height: hp(6) }]}
                                 />
                             </View>
@@ -42,7 +43,7 @@ export default function Categories({ categories, activeCategory, handleChangeCat
 
 const styles = StyleSheet.create({
     scrollView: {
-        height: 80, 
+        height: 80,
     },
     contentContainer: {
         paddingHorizontal: 10,
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     activeImageContainer: {
-        backgroundColor: 'white', 
+        backgroundColor: 'white',
     },
     image: {
         borderRadius: 999,
@@ -73,6 +74,6 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     activeText: {
-        color: 'black', 
+        color: 'black',
     },
 });

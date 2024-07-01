@@ -22,7 +22,7 @@ const Index = () => {
 
     return (
         <UserProvider>
-            <View className="flex-1 bg-red-500">
+            <View className="flex-1 bg-stone-950">
                 {session && session.user && <Text>{session.user.id}</Text>}
                 <App />
             </View>

@@ -1,10 +1,10 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { useUser } from '../UserContext';
+import { useUser } from '../app/UserContext';
 import { useRouter } from 'expo-router';
-import { supabase } from '../supabase';
+import { supabase } from '../app/supabase';
 
 interface FormValues {
   email: string;
@@ -25,6 +25,10 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
+
+  const handleForgotPassword = () => {
+    alert("Feature coming soon!");
+  };
 
   const handleSubmit = async (
     values: FormValues,
@@ -54,8 +58,9 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
         }
 
         // Store the username in session or global state
+        // console.log('Setting username:', profile.username);
         setUsername(profile.username);
-        console.log('SignIn - username set:', profile.username);
+        // console.log('SignIn - username set:', profile.username);
 
         // Redirect to the main page after successful login
         router.push('/(tabs)');
@@ -139,9 +144,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
           )}
         </Formik>
         <View className="p-3 items-center space-y-2">
-          <TouchableOpacity
-            onPress={() => console.log("Forgot password")}
-          >
+          <TouchableOpacity onPress={handleForgotPassword}>
             <Text className="text-zinc-700">Forgot password</Text>
           </TouchableOpacity>
         </View>

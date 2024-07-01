@@ -42,9 +42,9 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="grocery"
+                name="grocery-screen"
                 options={{
-                    headerTitle: "Grocery",
+                    headerShown: false,
                     title: "Grocery",
                     tabBarIcon: () => <Icon name="shopping-basket" color="#f3f4f6" />,
                 }}
@@ -64,19 +64,26 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
+                name="home-screen/components/article"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="home-screen/components/expiring"
+                options={{
+                    href: null,
+                }}
+            />
+
+            <Tabs.Screen
+                name="home-screen/components/group-request"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
                 name="home-screen/components/header"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="home-screen/components/search"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="home-screen/components/update-inventory"
                 options={{
                     href: null,
                 }}
@@ -88,19 +95,7 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="home-screen/components/expiring"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="home-screen/components/group-request"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="home-screen/components/article"
+                name="home-screen/components/search"
                 options={{
                     href: null,
                 }}
@@ -112,49 +107,7 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="recipe-screen/components/header"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="settings-screen/components/inventory"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="recipe-screen/components/recipe-indi"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="recipe-screen/components/search-bar"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="recipe-screen/index_recipe"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="recipe-screen/components/recipes"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="recipe-screen/components/categories"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="settings-screen/components/profile"
+                name="home-screen/components/update-inventory"
                 options={{
                     href: null,
                 }}
@@ -173,6 +126,36 @@ const TabsLayout = () => {
             />
             <Tabs.Screen
                 name="mealPlanner-screen/components/threeMealsADay"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="recipe-screen/index_recipe"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="recipe-screen/components/categories"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="recipe-screen/components/recipes"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="recipe-screen/components/search-bar"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="expiring-screen"
                 options={{
                     href: null,
                 }}

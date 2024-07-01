@@ -1,7 +1,7 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
 import { View, Text, Animated } from 'react-native';
-import SignIn from './components/sign-in';
-import SignUp from './components/sign-up';
+import SignIn from '../components/sign-in';
+import SignUp from '../components/sign-up';
 import { Icon } from 'react-native-elements';
 
 const App: FC = () => {
