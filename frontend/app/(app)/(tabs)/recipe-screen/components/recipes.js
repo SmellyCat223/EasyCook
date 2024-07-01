@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, Pressable, Modal, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Pressable, Modal, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Button, Alert } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MasonryList from '@react-native-seoul/masonry-list';
 import { useNavigation } from '@react-navigation/native';
@@ -8,22 +8,26 @@ import Animated, { FadeInDown, useSharedValue, withSpring, useAnimatedStyle } fr
 import { Icon } from 'react-native-elements';
 import YouTubeIframe, { getYoutubeMeta } from 'react-native-youtube-iframe';
 import { Picker } from '@react-native-picker/picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { format, parse } from 'date-fns';
+import { supabase } from '../../../../supabase';
 
 export default function Recipes({ categories, meals }) {
-    const navigation = useNavigation();
     const [mealPlan, setMealPlan] = useState({});
+    const [userId, setUserId] = useState({});
 
-    const addRecipeToMeal = (day, meal, recipe) => {
-        // console.log(`Adding recipe to meal plan: Day=${day}, Meal=${meal}, Recipe=`, recipe);
-        setMealPlan(prevState => ({
-            ...prevState,
-            [day]: {
-                ...prevState[day],
-                [meal]: recipe
+    useEffect(() => {
+        const fetchUserId = async () => {
+            const { data, error } = await supabase.auth.getSession();
+            if (error) {
+                console.error('Error fetching user session:', error);
+            } else if (data?.session) {
+                setUserId(data.session.user.id);
             }
-        }));
-    };
-    // console.log('Current meal plan state:', mealPlan);
+        };
+
+        fetchUserId();
+    }, []);
 
     return (
         <View style={{ marginHorizontal: wp(4), paddingVertical: hp(2) }}>
@@ -34,7 +38,7 @@ export default function Recipes({ categories, meals }) {
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item, i }) => (
-                        <RecipeCard item={item} index={i} navigation={navigation} addRecipeToMeal={addRecipeToMeal} />
+                        <RecipeCard item={item} index={i} userId={userId} />
                     )}
                     onEndReachedThreshold={0.1}
                 />
@@ -43,14 +47,15 @@ export default function Recipes({ categories, meals }) {
     );
 }
 
-const RecipeCard = ({ item, index, navigation, addRecipeToMeal }) => {
+const RecipeCard = ({ item, index, userId }) => {
     let isEven = index % 2 === 0;
     const [modalVisible, setModalVisible] = useState(false);
     const springValue = useSharedValue(0);
     const [recipeDetails, setRecipeDetails] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [selectedDay, setSelectedDay] = useState("Mon");
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedMeal, setSelectedMeal] = useState("Breakfast");
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
@@ -91,15 +96,36 @@ const RecipeCard = ({ item, index, navigation, addRecipeToMeal }) => {
         springValue.value = modalVisible ? 0 : 1;
     };
 
-    const handleAddRecipe = () => {
-        // console.log(`Adding recipe to meal plan: Day=${selectedDay}, Meal=${selectedMeal}, Recipe=`, recipeDetails);
-        addRecipeToMeal(selectedDay, selectedMeal, recipeDetails);
-        toggleModal();
+    const handleAddRecipe = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('meal')
+                .insert([
+                    {
+                        meal_calories: 0,
+                        meal_date: format(selectedDate, 'yyyy-MM-dd'),
+                        meal_type: selectedMeal,
+                        user_id: userId,
+                        meal_title: recipeDetails?.strMeal
+                    }
+                ]);
+
+            if (error) {
+                throw error;
+            }
+            Alert.alert('Success', 'Item added successfully');
+            toggleModal(); // Close the modal after successful submission
+        } catch (error) {
+            console.error('Error adding item:', error.message);
+            Alert.alert('Error', error.message);
+        }
     };
 
-    let wastage = "1";
-    const showAlert = () => {
-        alert('Feature coming soon!');
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShowDatePicker(false);
+        setSelectedDate(currentDate);
     };
 
     return (
@@ -158,23 +184,21 @@ const RecipeCard = ({ item, index, navigation, addRecipeToMeal }) => {
                                 )}
 
                                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Add to Meal Plan</Text>
-                                <Picker selectedValue={selectedDay} onValueChange={(itemValue) => setSelectedDay(itemValue)}>
-                                    <Picker.Item label="Monday" value="Mon" />
-                                    <Picker.Item label="Tuesday" value="Tues" />
-                                    <Picker.Item label="Wednesday" value="Wed" />
-                                    <Picker.Item label="Thursday" value="Thurs" />
-                                    <Picker.Item label="Friday" value="Fri" />
-                                    <Picker.Item label="Saturday" value="Sat" />
-                                    <Picker.Item label="Sunday" value="Sun" />
-                                </Picker>
+                                <Button onPress={() => setShowDatePicker(true)} title="Select Date" />
+                                {showDatePicker && (
+                                    <DateTimePicker
+                                        testID="dateTimePicker"
+                                        value={selectedDate}
+                                        mode="date"
+                                        display="default"
+                                        onChange={onChange}
+                                    />)}
                                 <Picker selectedValue={selectedMeal} onValueChange={(itemValue) => setSelectedMeal(itemValue)}>
                                     <Picker.Item label="Breakfast" value="Breakfast" />
                                     <Picker.Item label="Lunch" value="Lunch" />
                                     <Picker.Item label="Dinner" value="Dinner" />
                                 </Picker>
-                                <TouchableOpacity onPress={showAlert} style={styles.addButton}>
-                                    <Text style={{ fontSize: 16}}>Add to Meal Plan</Text>
-                                </TouchableOpacity>
+                                <Button title="Add Recipe" onPress={handleAddRecipe} />
                             </ScrollView>)}
                     </View>
                 </View>

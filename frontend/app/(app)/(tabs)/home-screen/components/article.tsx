@@ -11,7 +11,7 @@ const Article = () => {
 
     const fetchArticle = async () => {
         const apiKey = '3dba596a18a04418b792ce9981391ae6';
-        const keywords = 'cooking'; // Modify keywords as needed
+        const keywords = 'eat healthy'; // Modify keywords as needed
         const apiUrl = `https://newsapi.org/v2/top-headlines?q=${keywords}&apiKey=${apiKey}`;
 
         try {
