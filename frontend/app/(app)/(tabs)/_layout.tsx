@@ -112,24 +112,18 @@ const TabsLayout = () => {
                     href: null,
                 }}
             />
-            <Tabs.Screen
+            {/* <Tabs.Screen
                 name="mealPlanner-screen/index_mealPlanner"
                 options={{
                     href: null,
                 }}
-            />
-            <Tabs.Screen
-                name="mealPlanner-screen/components/headerDate"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
+            /> */}
+            {/* <Tabs.Screen
                 name="mealPlanner-screen/components/threeMealsADay"
                 options={{
                     href: null,
                 }}
-            />
+            /> */}
             <Tabs.Screen
                 name="recipe-screen/index_recipe"
                 options={{
