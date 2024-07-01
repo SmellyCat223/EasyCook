@@ -34,9 +34,9 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="meal-planner"
+                name="mealPlanner-screen"
                 options={{
-                    headerTitle: "Meal Planner",
+                    headerShown: false,
                     title: "Meal Planner",
                     tabBarIcon: () => <Icon name="calendar-today" color="#f3f4f6" />,
                 }}
