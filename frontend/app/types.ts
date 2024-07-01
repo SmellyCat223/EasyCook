@@ -8,19 +8,19 @@ export type Profile = {
 }
 
 export type IngredientCategory = {
-    ingredient_category_id: number;
+    ingredient_category_id: string;
     ingredient_category_name: string;
 }
 
 export type Ingredient = {
-    ingredient_id: number;
+    ingredient_id: string;
     ingredient_category_id: number;
     ingredient_name: string;
     ingredient_calories: number;
 }
 
 export type Inventory = {
-    inventory_id: number;
+    inventory_id: string;
     user_id: string;
     total_no: number;
     expired_no: number;
@@ -28,13 +28,13 @@ export type Inventory = {
 }
 
 export type ShoppingList = {
-    shopping_list_id: number;
+    shopping_list_id: string;
     user_id: string;
     date_time_generated: string; // use string type for TIMESTAMP
 }
 
 export type Item = {
-    item_id: number;
+    item_id: string;
     item_name: string,
     ingredient_id?: number;
     inventory_id?: number;
@@ -47,7 +47,7 @@ export type Item = {
 }
 
 export type RecipeCategory = {
-    recipe_category_id: number;
+    recipe_category_id: string;
     recipe_category_name: string;
 }
 
