@@ -42,9 +42,9 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="grocery"
+                name="grocery-screen"
                 options={{
-                    headerTitle: "Grocery",
+                    headerShown: false,
                     title: "Grocery",
                     tabBarIcon: () => <Icon name="shopping-basket" color="#f3f4f6" />,
                 }}

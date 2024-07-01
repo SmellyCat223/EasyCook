@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, TouchableOpacity } from "react-native";
+import { Text, View, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { supabase } from '../../../../supabase';
 import Button3 from '../../../../../components/button3';
 import Filter from '../../../../../components/filter';
@@ -10,47 +10,63 @@ import { useRouter } from 'expo-router';
 const Inventory: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [userId, setUserId] = useState<string | null>(null);
+    const [inventoryId, setInventoryId] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchUserId = async () => {
+        const fetchInventoryId = async () => {
             const { data, error } = await supabase.auth.getSession();
             if (error) {
                 console.error('Error fetching user session:', error);
             } else if (data?.session) {
-                setUserId(data.session.user.id);
+                const userId = data.session.user.id;
+                // Fetch inventory id based on user id
+                const { data: inventoryId, error: createError } = await supabase
+                    .from('inventory')
+                    .select('inventory_id')
+                    .eq('user_id', userId)
+                    .single();
+                
+                if (createError) {
+                    console.error('Error fetching inventory:', createError);
+                }
+                
+                if (inventoryId) {
+                    setInventoryId(inventoryId.inventory_id);
+                } else {
+                    console.log('No inventory found for user. Creating new inventory...');
+                    // Create a new inventory for the user
+                    const { data: newInventoryId, error: newcreateError } = await supabase
+                        .from('inventory')
+                        .insert([{ user_id: userId }]);
+
+                    if (newcreateError) {
+                        console.error('Error creating new inventory:', newcreateError);
+                        Alert.alert('Error', 'Failed to create new inventory');
+                        return;
+                    }
+
+                    if (newInventoryId) {
+                        setInventoryId(newInventoryId);
+                        Alert.alert('Success', 'New inventory created');
+                    }
+                }
             }
         };
 
-        fetchUserId();
+        fetchInventoryId();
     }, []);
 
     useEffect(() => {
-        if (userId) {
-            console.log(userId);
-            fetchItems(userId);
+        if (inventoryId) {
+            fetchItems(inventoryId);
         }
-    }, [userId]);
+    }, [inventoryId]);
 
-    const fetchItems = async (userId: string) => {
+    const fetchItems = async (inventoryId: string) => {
         const { data, error } = await supabase
             .from('item')
-            .select(
-                `
-                item_id,
-                item_name,
-                ingredient_id,
-                inventory_id,
-                shopping_list_id,
-                item_quantity,
-                expiration_date,
-                purchase_date,
-                mfg,
-                user_id
-                `
-            )
-            .eq('user_id', userId); // Filter items based on user_id
-
+            .select('*')
+            .eq('item_inventory_id', inventoryId); // Filter items based on inventoryId
 
         if (error) {
             console.error('Error fetching items:', error);

@@ -40,9 +40,9 @@ export type Item = {
     inventory_id?: number;
     shopping_list_id?: number; // make it optional
     item_quantity: number;
-    expiration_date: string; // use string type for DATE
-    purchase_date: string; // use string type for DATE
-    mfg: string; // use string type for DATE
+    expiration_date?: string; // use string type for DATE
+    purchase_date?: string; // use string type for DATE
+    mfg?: string; // use string type for DATE
     user_id: string;
 }
 
