@@ -42,9 +42,9 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="grocery"
+                name="grocery-screen"
                 options={{
-                    headerTitle: "Grocery",
+                    headerShown: false,
                     title: "Grocery",
                     tabBarIcon: () => <Icon name="shopping-basket" color="#f3f4f6" />,
                 }}
@@ -114,6 +114,12 @@ const TabsLayout = () => {
             />
             <Tabs.Screen
                 name="mealPlanner-screen/index_mealPlanner"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="mealPlanner-screen/components/headerDate"
                 options={{
                     href: null,
                 }}
