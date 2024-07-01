@@ -25,11 +25,11 @@
 //                     .select('inventory_id')
 //                     .eq('user_id', userId)
 //                     .single();
-                
+
 //                 if (createError) {
 //                     console.error('Error fetching inventory:', createError);
 //                 }
-                
+
 //                 if (inventoryId) {
 //                     setInventoryId(inventoryId.inventory_id);
 //                 } else {

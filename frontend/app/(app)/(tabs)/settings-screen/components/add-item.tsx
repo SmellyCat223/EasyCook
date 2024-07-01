@@ -103,7 +103,7 @@ const AddItem = () => {
                     item_quantity: '',
                     expiration_date: '',
                     purchase_date: '',
-                    mfg: ''
+                    mfg: '',
                 }}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
@@ -118,6 +118,7 @@ const AddItem = () => {
                             value={values.item_name}
                         />
                         {touched.item_name && errors.item_name && <Text className="text-red-500">{errors.item_name}</Text>}
+
                         <TextInput
                             className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
                             placeholder="Item Quantity"
