@@ -136,7 +136,7 @@ const GroceryBody: React.FC = () => {
             <View className="px-4 py-2">
                 <Filter setSearchQuery={setSearchQuery} />
             </View>
-            <ButtonAdd onPress={() => handlePress("./components/add-grocery")} />
+            <ButtonAdd onPress={() => handlePress("./grocery-screen/components/add-grocery")} />
             <Body items={filteredItems} onCheckboxChange={handleCheckboxChange} />
         </View>
     );

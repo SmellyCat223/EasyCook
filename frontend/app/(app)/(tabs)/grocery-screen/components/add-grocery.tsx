@@ -1,15 +1,8 @@
 import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { parse } from 'date-fns';
 import { supabase } from '../../../../supabase';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-
-// Function to parse date strings in dd/MM/yyyy format
-const parseDateString = (value: any, originalValue: any) => {
-    const parsedDate = parse(originalValue, 'dd/MM/yyyy', new Date());
-    return parsedDate;
-};
 
 // Validation schema
 const validationSchema = Yup.object().shape({
