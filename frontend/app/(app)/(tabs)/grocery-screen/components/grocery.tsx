@@ -12,7 +12,6 @@ import AddGrocery from './add-grocery';
 const GroceryBody: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const router = useRouter();
     const [userId, setUserId] = useState<string | null>(null);
     const [shoppingListId, setShoppingListId] = useState<string | null>(null);
     const [inventoryId, setInventoryId] = useState<string | null>(null);
@@ -103,12 +102,6 @@ const GroceryBody: React.FC = () => {
         }
     };
 
-    const handlePress = (path: string) => {
-        router.push({
-            pathname: path,
-            params: { inventoryId, userId }
-        });
-    };
 
     const handleCheckboxChange = async (item: Item) => {
         const { data, error } = await supabase

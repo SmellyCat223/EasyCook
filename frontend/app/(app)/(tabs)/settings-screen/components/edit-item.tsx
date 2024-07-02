@@ -4,7 +4,6 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { format, parse, isSameDay, isBefore, isValid } from 'date-fns';
 import { supabase } from '../../../../supabase';
-import { useRouter, useLocalSearchParams } from 'expo-router';
 
 const parseDateString = (value: any, originalValue: any) => {
     const parsedDate = parse(originalValue, 'dd/MM/yyyy', new Date());
@@ -24,11 +23,15 @@ const validationSchema = Yup.object().shape({
     mfg: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy').test('is-past-or-today', 'Manufacturing date must be today or in the past', isPastOrToday),
 });
 
-const EditItem = () => {
+interface EditItemProps {
+    itemId: string | null;
+    onClose: () => void;
+}
+
+const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
+
     const [initialValues, setInitialValues] = useState<any | null>(null);
-    const [loading, setLoading] = useState(true);
-    const router = useRouter();
-    const { itemId } = useLocalSearchParams();
+    // const [loading, setLoading] = useState(true);
 
     console.log("ItemId:", itemId);
 
@@ -37,7 +40,7 @@ const EditItem = () => {
             try {
                 if (!itemId) {
                     console.error("No itemId found");
-                    setLoading(false);
+                    // setLoading(false);
                     return; // Ensure itemId is available
                 }
 
@@ -51,7 +54,7 @@ const EditItem = () => {
 
                 if (itemError) {
                     console.error('Error fetching item details:', itemError);
-                    setLoading(false);
+                    // setLoading(false);
                     return;
                 }
 
@@ -66,10 +69,10 @@ const EditItem = () => {
                         mfg: itemData.mfg ? format(parse(itemData.mfg, 'yyyy-MM-dd', new Date()), 'dd/MM/yyyy') : '',
                     });
                 }
-                setLoading(false);
+                // setLoading(false);
             } catch (error) {
                 console.error("Unexpected error fetching item details:", error);
-                setLoading(false);
+                // setLoading(false);
             }
         };
 
@@ -94,90 +97,108 @@ const EditItem = () => {
             }
             Alert.alert('Success', 'Item updated successfully');
             resetForm();
-            router.back();
+            onClose();
         } catch (error: any) {
             console.error('Error updating item:', error.message);
             Alert.alert('Error', error.message);
         }
     };
 
-    if (loading) {
-        return (
-            <View className="flex flex-1 bg-stone-950 p-4 justify-center items-center">
-                <ActivityIndicator size="large" color="#ffffff" />
-                <Text className="text-white mt-4">Loading...</Text>
-            </View>
-        );
-    }
+    // if (loading) {
+    //     return (
+    //         <View className="flex flex-1 bg-stone-950 p-4 justify-center items-center">
+    //             <ActivityIndicator size="large" color="#ffffff" />
+    //             <Text className="text-white mt-4">Loading...</Text>
+    //         </View>
+    //     );
+    // }
 
     return (
-        <View className="flex flex-1 bg-stone-950 p-4">
-            <Text className="text-white mb-4">Edit Item Page</Text>
-            <Formik
-                initialValues={initialValues || {
-                    item_name: '',
-                    item_quantity: '',
-                    expiration_date: '',
-                    purchase_date: '',
-                    mfg: '',
-                }}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-                enableReinitialize
-            >
-                {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                    <View className="space-y-2">
-                        <TextInput
-                            className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
-                            placeholder="Item Name"
-                            onChangeText={handleChange('item_name')}
-                            onBlur={handleBlur('item_name')}
-                            value={values.item_name}
-                        />
-                        {touched.item_name && errors.item_name && <Text className="text-red-500">{errors.item_name}</Text>}
+        <Formik
+            initialValues={initialValues || {
+                item_name: '',
+                item_quantity: '',
+                expiration_date: '',
+                purchase_date: '',
+                mfg: '',
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+            enableReinitialize
+        >
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                <View className="pt-2">
+                    <View className="space-y-2 border-b border-zinc-500/30 pb-4">
+                        <Text className="text-zinc-100 text-xl text-center pb-4">Edit item</Text>
+                        <View className="flex flex-row items-center">
+                            <Text className="text-zinc-100 justify-center w-1/4">Name: </Text>
+                            <TextInput
+                                className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                placeholder="Item Name"
+                                onChangeText={handleChange('item_name')}
+                                onBlur={handleBlur('item_name')}
+                                value={values.item_name}
+                            />
+                        </View>
 
-                        <TextInput
-                            className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
-                            placeholder="Item Quantity"
-                            onChangeText={handleChange('item_quantity')}
-                            onBlur={handleBlur('item_quantity')}
-                            value={values.item_quantity}
-                            keyboardType="numeric"
-                        />
-                        {touched.item_quantity && errors.item_quantity && <Text className="text-red-500">{errors.item_quantity}</Text>}
+                        {touched.item_name && errors.item_name && <Text className="text-red-500 text-center pb-2">   {errors.item_name}</Text>}
 
-                        <TextInput
-                            className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
-                            placeholder="Expiration Date dd/MM/yyyy"
-                            onChangeText={handleChange('expiration_date')}
-                            onBlur={handleBlur('expiration_date')}
-                            value={values.expiration_date}
-                        />
-                        {touched.expiration_date && errors.expiration_date && <Text className="text-red-500">{errors.expiration_date}</Text>}
+                        <View className="flex flex-row items-center">
+                            <Text className="text-zinc-100 justify-center w-1/4">Quantity: </Text>
+                            <TextInput
+                                className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                placeholder="Item Quantity (g)"
+                                onChangeText={handleChange('item_quantity')}
+                                onBlur={handleBlur('item_quantity')}
+                                value={values.item_quantity}
+                            />
+                        </View>
 
-                        <TextInput
-                            className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
-                            placeholder="Purchase Date dd/MM/yyyy"
-                            onChangeText={handleChange('purchase_date')}
-                            onBlur={handleBlur('purchase_date')}
-                            value={values.purchase_date}
-                        />
-                        {touched.purchase_date && errors.purchase_date && <Text className="text-red-500">{errors.purchase_date}</Text>}
+                        {touched.item_quantity && errors.item_quantity && <Text className="text-red-500 text-center pb-2">       {errors.item_quantity}</Text>}
 
-                        <TextInput
-                            className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
-                            placeholder="MFG dd/MM/yyyy"
-                            onChangeText={handleChange('mfg')}
-                            onBlur={handleBlur('mfg')}
-                            value={values.mfg}
-                        />
-                        {touched.mfg && errors.mfg && <Text className="text-red-500">{errors.mfg}</Text>}
+                        <View className="flex flex-row items-center">
+                            <Text className="text-zinc-100 justify-center w-1/4">Exp: </Text>
+                            <TextInput
+                                className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                placeholder="dd/MM/yyyy"
+                                onChangeText={handleChange('expiration_date')}
+                                onBlur={handleBlur('expiration_date')}
+                                value={values.expiration_date}
+                            />
+                        </View>
 
-                        <Button title="Update Item" onPress={handleSubmit as any} />
+                        {touched.expiration_date && errors.expiration_date && <Text className="text-red-500 text-center pb-2">          {errors.expiration_date}</Text>}
+
+                        <View className="flex flex-row items-center">
+                            <Text className="text-zinc-100 justify-center w-1/4">Purchase: </Text>
+                            <TextInput
+                                className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                placeholder="dd/MM/yyyy"
+                                onChangeText={handleChange('purchase_date')}
+                                onBlur={handleBlur('purchase_date')}
+                                value={values.purchase_date}
+                            />
+                        </View>
+
+                        {touched.purchase_date && errors.purchase_date && <Text className="text-red-500 text-center pb-2">  {errors.purchase_date}</Text>}
+
+                        <View className="flex flex-row items-center">
+                            <Text className="text-zinc-100 justify-center w-1/4">MFG: </Text>
+                            <TextInput
+                                className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                placeholder="dd/MM/yyyy"
+                                onChangeText={handleChange('mfg')}
+                                onBlur={handleBlur('mfg')}
+                                value={values.mfg}
+                            />
+                        </View>
+
+                        {touched.mfg && errors.mfg && <Text className="text-red-500 text-center pb-2">          {errors.mfg}</Text>}
                     </View>
-                )}
-            </Formik>
-        </View>
+                    <Button title="Submit" onPress={handleSubmit as any} />
+                </View>
+            )}
+        </Formik>
     );
 };
 
