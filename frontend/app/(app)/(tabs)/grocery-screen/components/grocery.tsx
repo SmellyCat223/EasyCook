@@ -5,7 +5,6 @@ import Filter from '../../../../../components/filter';
 import ButtonAdd from '../../../../../components/button-add';
 import Button4 from '../../../../../components/button4';
 import { Item } from '../../../../types';
-import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import AddGrocery from './add-grocery';
 
@@ -85,7 +84,7 @@ const GroceryBody: React.FC = () => {
             if (shoppingListId) {
                 fetchItems(shoppingListId);
             }
-        }, [shoppingListId])
+        }, [shoppingListId, modalVisible])
     );
 
     const fetchItems = async (shoppingListId: string) => {
