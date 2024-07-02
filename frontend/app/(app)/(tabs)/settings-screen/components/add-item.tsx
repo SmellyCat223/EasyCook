@@ -22,8 +22,8 @@ const validationSchema = Yup.object().shape({
     item_name: Yup.string().required('Item name is required'),
     item_quantity: Yup.number().required('Item quantity is required').positive('Must be a positive number').integer('Must be an integer'),
     expiration_date: Yup.date().transform(parseDateString).required('Expiration date is required').typeError('Invalid date format, use dd/MM/yyyy'),
-    purchase_date: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy').test('is-past-or-today', 'Purchase date must be today or in the past', isPastOrToday),
-    mfg: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy').test('is-past-or-today', 'Manufacturing date must be today or in the past', isPastOrToday),
+    purchase_date: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy').test('is-past-or-today', 'Invalid purchase date', isPastOrToday),
+    mfg: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy').test('is-past-or-today', 'Invalid manufacturing date', isPastOrToday),
 });
 
 interface AddItemProps {
@@ -89,7 +89,7 @@ const AddItem: React.FC<AddItemProps> = ({ inventoryId, userId, onClose }) => {
                             />                                
                         </View>
 
-                        {touched.item_name && errors.item_name && <Text className="text-red-500 text-center pb-2">  {errors.item_name}</Text>}
+                        {touched.item_name && errors.item_name && <Text className="text-red-500 text-center pb-2">   {errors.item_name}</Text>}
 
                         <View className="flex flex-row items-center">
                             <Text className="text-zinc-100 justify-center w-1/4">Quantity: </Text>                               
@@ -102,7 +102,7 @@ const AddItem: React.FC<AddItemProps> = ({ inventoryId, userId, onClose }) => {
                             />                                
                         </View>
 
-                        {touched.item_quantity && errors.item_quantity && <Text className="text-red-500 text-center pb-2">  {errors.item_quantity}</Text>}
+                        {touched.item_quantity && errors.item_quantity && <Text className="text-red-500 text-center pb-2">       {errors.item_quantity}</Text>}
 
                         <View className="flex flex-row items-center">
                             <Text className="text-zinc-100 justify-center w-1/4">Exp: </Text>                               
@@ -115,7 +115,7 @@ const AddItem: React.FC<AddItemProps> = ({ inventoryId, userId, onClose }) => {
                             />                                
                         </View>
 
-                        {touched.expiration_date && errors.expiration_date && <Text className="text-red-500 text-center pb-2">  {errors.expiration_date}</Text>}
+                        {touched.expiration_date && errors.expiration_date && <Text className="text-red-500 text-center pb-2">          {errors.expiration_date}</Text>}
 
                         <View className="flex flex-row items-center">
                             <Text className="text-zinc-100 justify-center w-1/4">Purchase: </Text>                               
@@ -141,7 +141,7 @@ const AddItem: React.FC<AddItemProps> = ({ inventoryId, userId, onClose }) => {
                             />                                
                         </View>
 
-                        {touched.mfg && errors.mfg && <Text className="text-red-500 text-center pb-2">  {errors.mfg}</Text>}
+                        {touched.mfg && errors.mfg && <Text className="text-red-500 text-center pb-2">          {errors.mfg}</Text>}
                     </View>
                     <Button title="Submit" onPress={handleSubmit as any} />
                 </View>
