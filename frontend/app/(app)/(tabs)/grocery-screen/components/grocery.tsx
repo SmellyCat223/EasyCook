@@ -98,7 +98,10 @@ const GroceryBody: React.FC = () => {
     };
 
     const handlePress = (path: string) => {
-        router.push(path);
+        router.push({
+            pathname: path,
+            params: { inventoryId }
+        });
     };
 
     const handleCheckboxChange = async (item: Item) => {

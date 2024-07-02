@@ -4,8 +4,7 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { format, parse, isSameDay, isBefore } from 'date-fns';
 import { supabase } from '../../../../supabase';
-import { useRouter } from 'expo-router';
-
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 // Function to parse date strings in dd/MM/yyyy format
 const parseDateString = (value: any, originalValue: any) => {
@@ -30,41 +29,8 @@ const validationSchema = Yup.object().shape({
 
 const AddItem = () => {
     const [userId, setUserId] = useState<string | null>(null);
-    const [inventoryId, setInventoryId] = useState<string | null>(null);
     const router = useRouter();
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            const { data: userData, error: userError } = await supabase.auth.getSession();
-            if (userError) {
-                console.error('Error fetching user session:', userError);
-                return;
-            }
-            if (userData?.session) {
-                setUserId(userData.session.user.id);
-
-                // Fetch inventory id for the user
-                const { data: inventoryData, error: createError } = await supabase
-                    .from('inventory')
-                    .select('inventory_id')
-                    .eq('user_id', userData.session.user.id)
-                    .single();
-
-                if (createError) {
-                    console.error('Error fetching inventory id:', createError);
-                    return;
-                }
-
-                if (inventoryData) {
-                    setInventoryId(inventoryData.inventory_id);
-                } else {
-                    console.error('No inventory found for user:', userData.session.user.id);
-                }
-            }
-        };
-
-        fetchUserData();
-    }, []);
+    const { inventoryId } = useLocalSearchParams();
 
     const handleSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
         try {
@@ -78,7 +44,7 @@ const AddItem = () => {
                         purchase_date: values.purchase_date ? format(parseDateString(null, values.purchase_date), 'yyyy-MM-dd') : null,
                         mfg: values.mfg ? format(parseDateString(null, values.mfg), 'yyyy-MM-dd') : null,
                         user_id: userId,
-                        item_inventory_id: inventoryId // Set item_inventory_id as the current inventory id
+                        item_inventory_id: inventoryId // Current inventory
                     },
                 ]);
 

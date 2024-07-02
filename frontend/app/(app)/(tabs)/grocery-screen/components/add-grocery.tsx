@@ -4,7 +4,7 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { format, parse } from 'date-fns';
 import { supabase } from '../../../../supabase';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 // Function to parse date strings in dd/MM/yyyy format
 const parseDateString = (value: any, originalValue: any) => {
@@ -16,43 +16,12 @@ const parseDateString = (value: any, originalValue: any) => {
 const validationSchema = Yup.object().shape({
     item_name: Yup.string().required('Item name is required'),
     item_quantity: Yup.number().required('Item quantity is required').positive('Must be a positive number').integer('Must be an integer'),
-    // expiration_date: Yup.date().transform(parseDateString).required('Expiration date is required').typeError('Invalid date format, use dd/MM/yyyy'),
-    // purchase_date: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy'),
-    // mfg: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy'),
 });
 
 const AddGrocery = () => {
     const [userId, setUserId] = useState<string | null>(null);
-    const [shoppingListId, setShoppingListId] = useState<string | null>(null);
+    const { shoppingListId } = useLocalSearchParams();
     const router = useRouter();
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            const { data, error } = await supabase.auth.getSession();
-            if (error) {
-                console.error('Error fetching user session:', error);
-            } else if (data?.session) {
-                setUserId(data.session.user.id);
-                fetchShoppingListId(data.session.user.id);
-            }
-        };
-
-        fetchUserData();
-    }, []);
-
-    const fetchShoppingListId = async (userId: string) => {
-        const { data, error } = await supabase
-            .from('shopping_list')
-            .select('shopping_list_id')
-            .eq('user_id', userId)
-            .single();
-
-        if (error) {
-            console.error('Error fetching shopping list ID:', error);
-        } else if (data) {
-            setShoppingListId(data.shopping_list_id);
-        }
-    };
 
     const handleSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
         try {
@@ -62,11 +31,8 @@ const AddGrocery = () => {
                     {
                         item_name: values.item_name,
                         item_quantity: values.item_quantity,
-                        // expiration_date: values.expiration_date ? format(parseDateString(null, values.expiration_date), 'yyyy-MM-dd') : null,
-                        // purchase_date: values.purchase_date ? format(parseDateString(null, values.purchase_date), 'yyyy-MM-dd') : null,
-                        // mfg: values.mfg ? format(parseDateString(null, values.mfg), 'yyyy-MM-dd') : null,
                         user_id: userId,
-                        item_shopping_list_id: shoppingListId // Include shopping_list_id
+                        item_shopping_list_id: shoppingListId // Current shopping list
                     },
                 ]);
 
