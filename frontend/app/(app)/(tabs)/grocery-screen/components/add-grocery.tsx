@@ -2,7 +2,7 @@ import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { supabase } from '../../../../supabase';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 // Validation schema
 const validationSchema = Yup.object().shape({
@@ -10,10 +10,13 @@ const validationSchema = Yup.object().shape({
     item_quantity: Yup.number().required('Item quantity is required').positive('Must be a positive number').integer('Must be an integer'),
 });
 
-const AddGrocery = () => {
-    const { shoppingListId } = useLocalSearchParams();
-    const { userId } = useLocalSearchParams();
-    const router = useRouter();
+interface AddGroceryProps {
+    shoppingListId: string | null;
+    userId: string | null;
+    onClose: () => void;
+}
+
+const AddGrocery: React.FC<AddGroceryProps> = ({ shoppingListId, userId, onClose }) => {
 
     const handleSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
         try {
@@ -33,7 +36,7 @@ const AddGrocery = () => {
             }
             Alert.alert('Success', 'Item added successfully');
             resetForm(); // Reset the form after successful submission
-            router.back();
+            onClose();
         } catch (error: any) {
             console.error('Error adding item:', error.message);
             Alert.alert('Error', error.message);
@@ -41,8 +44,6 @@ const AddGrocery = () => {
     };
 
     return (
-        <View className="flex flex-1 bg-stone-950 p-4">
-            
             <Formik
                 initialValues={{
                     item_name: '',
@@ -55,32 +56,41 @@ const AddGrocery = () => {
                 onSubmit={handleSubmit}
             >
                 {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                    <View className="space-y-2">
+                    <View className="pt-2">
+                        <View className="space-y-2 border-b border-zinc-500/30 pb-4">
+                            <Text className="text-zinc-100 text-xl text-center pb-4">Add grocery item</Text>
+                            <View className="flex flex-row items-center">
+                                <Text className="text-zinc-100 justify-center w-1/4">Name: </Text>
+                                <TextInput
+                                    className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                    placeholder="Item Name"
+                                    onChangeText={handleChange('item_name')}
+                                    onBlur={handleBlur('item_name')}
+                                    value={values.item_name}
+                                />                                                           
+                            </View>
+                            {touched.item_name && errors.item_name && <Text className="text-red-500 text-center pb-2">  {errors.item_name}</Text>}
 
-                        <TextInput
-                            className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
-                            placeholder="Item Name"
-                            onChangeText={handleChange('item_name')}
-                            onBlur={handleBlur('item_name')}
-                            value={values.item_name}
-                        />
-                        {touched.item_name && errors.item_name && <Text className="text-red-500">{errors.item_name}</Text>}
+                            <View className="flex flex-row items-center">
+                                <Text className="text-zinc-100 justify-center w-1/4">Quantity: </Text>
+                                <TextInput
+                                    className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                    placeholder="Item Quantity (g)"
+                                    onChangeText={handleChange('item_quantity')}
+                                    onBlur={handleBlur('item_quantity')}
+                                    value={values.item_quantity}
+                                    keyboardType="numeric"
+                                />
+                            </View>
+                            {touched.item_quantity && errors.item_quantity && <Text className="text-red-500 text-center pb-2">      {errors.item_quantity}</Text>}                        
 
-                        <TextInput
-                            className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
-                            placeholder="Item Quantity"
-                            onChangeText={handleChange('item_quantity')}
-                            onBlur={handleBlur('item_quantity')}
-                            value={values.item_quantity}
-                            keyboardType="numeric"
-                        />
-                        {touched.item_quantity && errors.item_quantity && <Text className="text-red-500">{errors.item_quantity}</Text>}
-
-                        <Button title="Submit" onPress={handleSubmit as any} />
+                        </View>
+                        <View className="pt-2">
+                            <Button title="Submit" color="#3b82f6" onPress={handleSubmit as any} />
+                        </View>
                     </View>
                 )}
             </Formik>
-        </View>
     );
 };
 

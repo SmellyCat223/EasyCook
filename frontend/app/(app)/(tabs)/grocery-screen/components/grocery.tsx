@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, View, ScrollView, Alert } from "react-native";
-import { Checkbox } from 'react-native-paper';
+import { Text, View, ScrollView, Alert, Modal, TouchableWithoutFeedback } from "react-native";
 import { supabase } from '../../../../supabase';
 import Filter from '../../../../../components/filter';
 import ButtonAdd from '../../../../../components/button-add';
@@ -8,6 +7,7 @@ import Button4 from '../../../../../components/button4';
 import { Item } from '../../../../types';
 import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
+import AddGrocery from './add-grocery';
 
 const GroceryBody: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
@@ -17,6 +17,7 @@ const GroceryBody: React.FC = () => {
     const [shoppingListId, setShoppingListId] = useState<string | null>(null);
     const [inventoryId, setInventoryId] = useState<string | null>(null);
     const [checked, setChecked] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         const fetchShoppingListId = async () => {
@@ -32,9 +33,8 @@ const GroceryBody: React.FC = () => {
                     .select('shopping_list_id')
                     .eq('user_id', userId)
                     .single();
-                console.log(userId);
-                console.log("user ", userId, "has shopping list ", shoppingListData);
 
+                console.log("user ", userId, "has shopping list ", shoppingListData);
 
                 if (createError) {
                     console.error('Error fetching shopping list:', createError);
@@ -136,8 +136,27 @@ const GroceryBody: React.FC = () => {
             <View className="px-4 py-2">
                 <Filter setSearchQuery={setSearchQuery} />
             </View>
-            <ButtonAdd onPress={() => handlePress("./grocery-screen/components/add-grocery")} />
+            <ButtonAdd onPress={() => setModalVisible(true)} />
             <Body items={filteredItems} onCheckboxChange={handleCheckboxChange} />
+
+            <Modal
+                animationType="none"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+                    <View className="flex flex-1 justify-center items-center bg-stone-950/70 bg-opacity-50">
+                        <View className="bg-zinc-800 p-4 rounded-2xl w-5/6">
+                            <AddGrocery
+                                shoppingListId={shoppingListId}
+                                userId={userId}
+                                onClose={() => setModalVisible(false)}
+                            />
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
         </View>
     );
 };
