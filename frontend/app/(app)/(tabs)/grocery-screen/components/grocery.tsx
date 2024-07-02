@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, View, ScrollView, Alert, Modal, TouchableWithoutFeedback } from "react-native";
+import { View, ScrollView, Alert, Modal, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { supabase } from '../../../../supabase';
 import Filter from '../../../../../components/filter';
 import ButtonAdd from '../../../../../components/button-add';
@@ -147,13 +147,15 @@ const GroceryBody: React.FC = () => {
             >
                 <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
                     <View className="flex flex-1 justify-center items-center bg-stone-950/70 bg-opacity-50">
-                        <View className="bg-zinc-800 p-4 rounded-2xl w-5/6">
-                            <AddGrocery
-                                shoppingListId={shoppingListId}
-                                userId={userId}
-                                onClose={() => setModalVisible(false)}
-                            />
-                        </View>
+                        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
+                            <View className="bg-zinc-800 p-4 rounded-2xl w-5/6">
+                                <AddGrocery
+                                    shoppingListId={shoppingListId}
+                                    userId={userId}
+                                    onClose={() => setModalVisible(false)}
+                                />
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
                 </TouchableWithoutFeedback>
             </Modal>

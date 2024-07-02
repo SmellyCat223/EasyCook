@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, View, ScrollView, TouchableOpacity, Alert } from "react-native";
+import { View, ScrollView, Alert, Modal, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { supabase } from '../../../../supabase';
 import Button3 from '../../../../../components/button3';
+import ButtonAdd from '../../../../../components/button-add';
 import Filter from '../../../../../components/filter';
 import { Item } from '../../../../types';
-import { Icon } from 'react-native-elements';
 import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
+import AddItem from './add-item';
 
 const Inventory: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [userId, setUserId] = useState<string | null>(null);
     const [inventoryId, setInventoryId] = useState<string | null>(null);
+    const [modalVisible, setModalVisible] = useState(false);
+
     const router = useRouter();
 
     useEffect(() => {
@@ -21,6 +25,7 @@ const Inventory: React.FC = () => {
                 console.error('Error fetching user session:', error);
             } else if (data?.session) {
                 const userId = data.session.user.id;
+                setUserId(userId);
                 const { data: inventoryData, error: inventoryError } = await supabase
                     .from('inventory')
                     .select('inventory_id')
@@ -102,7 +107,29 @@ const Inventory: React.FC = () => {
             <View className="px-4 py-2">
                 <Filter setSearchQuery={setSearchQuery} />
             </View>
+            <ButtonAdd onPress={() => setModalVisible(true)} />
             <Body items={filteredItems} onAddItem={handleAddItem} onEditItem={handleEditItem} />
+
+            <Modal
+                animationType="none"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+                    <View className="flex flex-1 justify-center items-center bg-stone-950/70 bg-opacity-50">
+                        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
+                            <View className="bg-zinc-800 p-4 rounded-2xl w-5/6">
+                                    <AddItem
+                                        inventoryId={inventoryId}
+                                        userId={userId}
+                                        onClose={() => setModalVisible(false)}
+                                    />
+                            </View>
+                        </TouchableWithoutFeedback>                        
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
         </View>
     );
 };
@@ -117,17 +144,6 @@ const Body: React.FC<BodyProps> = ({ items, onAddItem, onEditItem }) => {
     return (
         <View className="flex-1 bg-stone-950">
             <View className="border-b border-t border-zinc-800">
-                <TouchableOpacity
-                    onPress={onAddItem}
-                    className={"flex flex-row justify-center items-center bg-zinc-700/50 h-10"}
-                >
-                    <View className="pr-2">
-                        <Icon name="add" type="ionicons" color="#71717A" />
-                    </View>
-                    <View>
-                        <Text className="text-base text-white">Add item</Text>
-                    </View>
-                </TouchableOpacity>
             </View>
             <ScrollView>
                 {items.map(item => (
