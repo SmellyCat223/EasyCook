@@ -13,7 +13,7 @@ const GroceryBody: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const router = useRouter();
-    const [userId, setUserId] = useState<string>('');
+    const [userId, setUserId] = useState<string | null>(null);
     const [shoppingListId, setShoppingListId] = useState<string | null>(null);
     const [inventoryId, setInventoryId] = useState<string | null>(null);
     const [checked, setChecked] = useState(false);
@@ -24,31 +24,34 @@ const GroceryBody: React.FC = () => {
             if (error) {
                 console.error('Error fetching user session:', error);
             } else if (data?.session) {
-                const userID = data.session.user.id;
-                setUserId(userID);
-                
-                const { data: shoppingListData, error: shoppingListError } = await supabase
+                const userId = data.session.user.id;
+                setUserId(userId);
+
+                const { data: shoppingListData, error: createError } = await supabase
                     .from('shopping_list')
                     .select('shopping_list_id')
                     .eq('user_id', userId)
                     .single();
+                console.log(userId);
+                console.log("user ", userId, "has shopping list ", shoppingListData);
 
-                if (shoppingListError) {
-                    console.error('Error fetching shopping list:', shoppingListError);
+
+                if (createError) {
+                    console.error('Error fetching shopping list:', createError);
                 }
 
                 if (shoppingListData) {
                     setShoppingListId(shoppingListData.shopping_list_id);
                 } else {
                     console.log('No shopping list found for user. Creating new shopping list...');
-                    const { data: newShoppingListData, error: newShoppingListError } = await supabase
+                    const { data: newShoppingListData, error: newcreateError } = await supabase
                         .from('shopping_list')
                         .insert([{ user_id: userId }])
                         .select('shopping_list_id')
                         .single();
 
-                    if (newShoppingListError) {
-                        console.error('Error creating new shopping list:', newShoppingListError);
+                    if (newcreateError) {
+                        console.error('Error creating new shopping list:', newcreateError);
                         Alert.alert('Error', 'Failed to create new shopping list');
                         return;
                     }

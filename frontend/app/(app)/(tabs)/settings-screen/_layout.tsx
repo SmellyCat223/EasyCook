@@ -17,16 +17,16 @@ const StackLayOut = () => {
           headerTitle: "Profile",
         }}
       /> */}
-      {/* <Stack.Screen 
-        name="components/inventory"
-        options={{
-          headerTitle: "Inventory",
-        }}
-      /> */}
       <Stack.Screen 
         name="index-settings"
         options={{
           headerTitle: "Settings",
+        }}
+      />
+      <Stack.Screen 
+        name="components/inventory"
+        options={{
+          headerTitle: "Inventory",
         }}
       />
     </Stack>
