@@ -325,6 +325,14 @@ const Inventory: React.FC = () => {
             <View className="px-4 py-2">
                 <Filter setSearchQuery={setSearchQuery} />
             </View>
+
+            <Button3
+                        text1="Item Name"
+                        text2="Expiry Date"
+                        text3="Quantity"
+                        onPress={() => console.log("I'm pressed")}
+                        path=""
+                    />
             <ButtonAdd onPress={() => setAddItemModalVisible(true)} />
             <Body items={filteredItems} onEditItem={handleEditItem} onDeleteItem={handleDeleteItem} />
 
