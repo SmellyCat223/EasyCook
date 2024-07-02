@@ -19,8 +19,8 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddGrocery = () => {
-    const [userId, setUserId] = useState<string | null>(null);
     const { shoppingListId } = useLocalSearchParams();
+    const { userId } = useLocalSearchParams();
     const router = useRouter();
 
     const handleSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {

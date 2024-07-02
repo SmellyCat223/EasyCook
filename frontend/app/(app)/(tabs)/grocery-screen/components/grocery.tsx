@@ -11,8 +11,9 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const GroceryBody: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState<string>('');
     const router = useRouter();
+    const [userId, setUserId] = useState<string>('');
     const [shoppingListId, setShoppingListId] = useState<string | null>(null);
     const [inventoryId, setInventoryId] = useState<string | null>(null);
     const [checked, setChecked] = useState(false);
@@ -23,7 +24,9 @@ const GroceryBody: React.FC = () => {
             if (error) {
                 console.error('Error fetching user session:', error);
             } else if (data?.session) {
-                const userId = data.session.user.id;
+                const userID = data.session.user.id;
+                setUserId(userID);
+                
                 const { data: shoppingListData, error: shoppingListError } = await supabase
                     .from('shopping_list')
                     .select('shopping_list_id')
@@ -100,7 +103,7 @@ const GroceryBody: React.FC = () => {
     const handlePress = (path: string) => {
         router.push({
             pathname: path,
-            params: { inventoryId }
+            params: { inventoryId, userId }
         });
     };
 
