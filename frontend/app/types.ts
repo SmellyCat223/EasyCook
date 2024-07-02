@@ -36,9 +36,9 @@ export type ShoppingList = {
 export type Item = {
     item_id: string;
     item_name: string,
-    ingredient_id?: number;
-    inventory_id?: number;
-    shopping_list_id?: number; // make it optional
+    ingredient_id?: string;
+    item_inventory_id?: string;
+    item_shopping_list_id?: string; // make it optional
     item_quantity: number;
     expiration_date?: string; // use string type for DATE
     purchase_date?: string; // use string type for DATE
