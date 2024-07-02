@@ -48,6 +48,7 @@ const ExpiringScreen: React.FC = () => {
                 const { data, error } = await supabase
                     .from('item')
                     .select('*')
+                    .not('expiration_date', 'is', null)
                     .eq('item_inventory_id', inventoryId) // Fetch items based on item_inventory_id
                     .order('expiration_date', { ascending: true });
 

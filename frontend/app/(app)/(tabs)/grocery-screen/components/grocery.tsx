@@ -91,8 +91,8 @@ const GroceryBody: React.FC = () => {
         const { data, error } = await supabase
             .from('item')
             .select('*')
-            .eq('item_shopping_list_id', shoppingListId)
-            .is('item_inventory_id', null);
+            .eq('item_shopping_list_id', shoppingListId);
+            // .is('item_inventory_id', null);
 
         if (error) {
             console.error('Error fetching items:', error);

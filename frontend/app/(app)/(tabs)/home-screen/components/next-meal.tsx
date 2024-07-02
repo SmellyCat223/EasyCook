@@ -77,31 +77,6 @@ const NextMeal = () => {
         calories = nextMeals.reduce((acc, meal) => acc + meal.meal_calories, 0);
     }
 
-    // return (
-    //     <Link href="/meal-planner" asChild>
-    //         <TouchableOpacity>
-    //             <View style={{ paddingVertical: 10 }}>
-    //                 <View style={{ borderRadius: 12, padding: 16, backgroundColor: '#B2F5EA', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.8, shadowRadius: 2, elevation: 5 }}>
-    //                     <View style={{ flexDirection: 'row', paddingBottom: 10, justifyContent: 'space-between' }}>
-    //                         <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 7 }}>{meal}</Text>
-    //                         <Icon name="edit" type="antdesign" size={20} />
-    //                     </View>
-    //                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-    //                         <View style={{ flex: 1 }}>
-    //                             <Text style={{ fontSize: 16 }}>Breakfast: {breakfast}</Text>
-    //                             <Text style={{ fontSize: 16 }}>Lunch: {lunch}</Text>
-    //                             <Text style={{ fontSize: 16 }}>Dinner: {dinner}</Text>
-    //                         </View>
-    //                         <View style={{ backgroundColor: '#EDF2F7', padding: 4, borderRadius: 12 }}>
-    //                             <Text style={{ fontSize: 16 }}>{calories} kcal</Text>
-    //                         </View>
-    //                     </View>
-    //                 </View>
-    //             </View>
-    //         </TouchableOpacity>
-    //     </Link>
-    // );
-
     return (
         <Link href="../../mealPlanner-screen/index_mealPlanner" asChild>
             <TouchableOpacity>

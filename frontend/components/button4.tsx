@@ -23,7 +23,7 @@ const Button4 = ({ text1, text2, pred, onPress1, onPress2 }: Button4Props) => {
             <Checkbox
                 value={isChecked}
                 onValueChange={handleCheckboxPress}
-                color={isChecked ? "#f4f4f5" : undefined}
+                color={isChecked ? "#a1a1aa" : undefined}
             />
             <TouchableOpacity
                 onPress={() => onPress2("")}
