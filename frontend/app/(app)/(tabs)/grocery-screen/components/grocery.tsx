@@ -6,7 +6,7 @@ import ButtonAdd from '../../../../../components/button-add';
 import Button4 from '../../../../../components/button4';
 import { Item } from '../../../../types';
 import { useFocusEffect } from '@react-navigation/native';
-import AddGrocery from './add-grocery';
+import AddItemGrocery from '../../../../../components/add-item-grocery';
 import EditItemGrocery from '../../../../../components/edit-item-grocery';
 
 const GroceryBody: React.FC = () => {
@@ -148,7 +148,7 @@ const GroceryBody: React.FC = () => {
                     <View className="flex flex-1 justify-center items-center bg-stone-950/70 bg-opacity-50">
                         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
                             <View className="bg-zinc-800 p-4 rounded-2xl w-5/6">
-                                <AddGrocery
+                                <AddItemGrocery
                                     shoppingListId={shoppingListId}
                                     userId={userId}
                                     onClose={() => setAddItemModalVisible(false)}
