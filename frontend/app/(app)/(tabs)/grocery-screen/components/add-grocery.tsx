@@ -1,7 +1,8 @@
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { supabase } from '../../../../supabase';
+import { Icon } from 'react-native-elements';
 
 // Validation schema
 const validationSchema = Yup.object().shape({
@@ -43,53 +44,59 @@ const AddGrocery: React.FC<AddGroceryProps> = ({ shoppingListId, userId, onClose
     };
 
     return (
-            <Formik
-                initialValues={{
-                    item_name: '',
-                    item_quantity: '',
-                    expiration_date: '',
-                    purchase_date: '',
-                    mfg: '',
-                }}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-            >
-                {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                    <View className="pt-2">
-                        <View className="space-y-2 border-b border-zinc-500/30 pb-4">
-                            <Text className="text-zinc-100 text-xl text-center pb-4">Add grocery item</Text>
-                            <View className="flex flex-row items-center">
-                                <Text className="text-zinc-100 justify-center w-1/4">Name: </Text>
-                                <TextInput
-                                    className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
-                                    placeholder="Item Name"
-                                    onChangeText={handleChange('item_name')}
-                                    onBlur={handleBlur('item_name')}
-                                    value={values.item_name}
-                                />                                                           
-                            </View>
-                            {touched.item_name && errors.item_name && <Text className="text-red-500 text-center pb-2">  {errors.item_name}</Text>}
-
-                            <View className="flex flex-row items-center">
-                                <Text className="text-zinc-100 justify-center w-1/4">Quantity: </Text>
-                                <TextInput
-                                    className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
-                                    placeholder="Item Quantity (g)"
-                                    onChangeText={handleChange('item_quantity')}
-                                    onBlur={handleBlur('item_quantity')}
-                                    value={values.item_quantity}
-                                    keyboardType="numeric"
-                                />
-                            </View>
-                            {touched.item_quantity && errors.item_quantity && <Text className="text-red-500 text-center pb-2">      {errors.item_quantity}</Text>}                        
-
+        <Formik
+            initialValues={{
+                item_name: '',
+                item_quantity: '',
+                expiration_date: '',
+                purchase_date: '',
+                mfg: '',
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+        >
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                <View className="relative">
+                    <TouchableOpacity
+                        className="absolute top-0 right-0 rounded-full bg-zinc-500 p-1.5 z-20"
+                        onPress={onClose}
+                    >
+                        <Icon name="close" size={16} color="#f4f4f5" />
+                    </TouchableOpacity>
+                    <View className="space-y-2 border-b border-zinc-500/30 py-4 z-10">
+                        <Text className="text-zinc-100 text-xl text-center pb-4">Add grocery item</Text>
+                        <View className="flex flex-row items-center">
+                            <Text className="text-zinc-100 justify-center w-1/4">Name: </Text>
+                            <TextInput
+                                className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                placeholder="Item Name"
+                                onChangeText={handleChange('item_name')}
+                                onBlur={handleBlur('item_name')}
+                                value={values.item_name}
+                            />
                         </View>
-                        <View className="pt-2">
-                            <Button title="Submit" color="#3b82f6" onPress={handleSubmit as any} />
+                        {touched.item_name && errors.item_name && <Text className="text-red-500 text-center pb-2">  {errors.item_name}</Text>}
+
+                        <View className="flex flex-row items-center">
+                            <Text className="text-zinc-100 justify-center w-1/4">Quantity: </Text>
+                            <TextInput
+                                className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                placeholder="Item Quantity (g)"
+                                onChangeText={handleChange('item_quantity')}
+                                onBlur={handleBlur('item_quantity')}
+                                value={values.item_quantity}
+                                keyboardType="numeric"
+                            />
                         </View>
+                        {touched.item_quantity && errors.item_quantity && <Text className="text-red-500 text-center pb-2">      {errors.item_quantity}</Text>}
+
                     </View>
-                )}
-            </Formik>
+                    <View className="pt-2">
+                        <Button title="Submit" color="#3b82f6" onPress={handleSubmit as any} />
+                    </View>
+                </View>
+            )}
+        </Formik>
     );
 };
 

@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { format, parse, isSameDay, isBefore } from 'date-fns';
 import { supabase } from '../../../../supabase';
+import { Icon } from 'react-native-elements';
 
 // Function to parse date strings in dd/MM/yyyy format
 const parseDateString = (value: any, originalValue: any) => {
@@ -63,87 +64,95 @@ const AddItem: React.FC<AddItemProps> = ({ inventoryId, userId, onClose }) => {
     };
 
     return (
-            <Formik
-                initialValues={{
-                    item_name: '',
-                    item_quantity: '',
-                    expiration_date: '',
-                    purchase_date: '',
-                    mfg: '',
-                }}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-            >
-                {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                <View className="pt-2">
-                    <View className="space-y-2 border-b border-zinc-500/30 pb-4">
+        <Formik
+            initialValues={{
+                item_name: '',
+                item_quantity: '',
+                expiration_date: '',
+                purchase_date: '',
+                mfg: '',
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+        >
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                <View className="pt-2 relative">
+                    <TouchableOpacity
+                        className="absolute top-0 right-0 rounded-full bg-zinc-500 p-1.5 z-20"
+                        onPress={onClose}
+                    >
+                        <Icon name="close" size={16} color="#f4f4f5" />
+                    </TouchableOpacity>
+                    <View className="space-y-2 border-b border-zinc-500/30 py-4 z-10">
                         <Text className="text-zinc-100 text-xl text-center pb-4">Add item</Text>
                         <View className="flex flex-row items-center">
-                            <Text className="text-zinc-100 justify-center w-1/4">Name: </Text>                               
+                            <Text className="text-zinc-100 justify-center w-1/4">Name: </Text>
                             <TextInput
                                 className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
                                 placeholder="Item Name"
                                 onChangeText={handleChange('item_name')}
                                 onBlur={handleBlur('item_name')}
                                 value={values.item_name}
-                            />                                
+                            />
                         </View>
 
                         {touched.item_name && errors.item_name && <Text className="text-red-500 text-center pb-2">   {errors.item_name}</Text>}
 
                         <View className="flex flex-row items-center">
-                            <Text className="text-zinc-100 justify-center w-1/4">Quantity: </Text>                               
+                            <Text className="text-zinc-100 justify-center w-1/4">Quantity: </Text>
                             <TextInput
                                 className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
                                 placeholder="Item Quantity (g)"
                                 onChangeText={handleChange('item_quantity')}
                                 onBlur={handleBlur('item_quantity')}
                                 value={values.item_quantity}
-                            />                                
+                            />
                         </View>
 
                         {touched.item_quantity && errors.item_quantity && <Text className="text-red-500 text-center pb-2">       {errors.item_quantity}</Text>}
 
                         <View className="flex flex-row items-center">
-                            <Text className="text-zinc-100 justify-center w-1/4">Exp: </Text>                               
+                            <Text className="text-zinc-100 justify-center w-1/4">Exp: </Text>
                             <TextInput
                                 className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
                                 placeholder="dd/MM/yyyy"
                                 onChangeText={handleChange('expiration_date')}
                                 onBlur={handleBlur('expiration_date')}
                                 value={values.expiration_date}
-                            />                                
+                            />
                         </View>
 
                         {touched.expiration_date && errors.expiration_date && <Text className="text-red-500 text-center pb-2">          {errors.expiration_date}</Text>}
 
                         <View className="flex flex-row items-center">
-                            <Text className="text-zinc-100 justify-center w-1/4">Purchase: </Text>                               
+                            <Text className="text-zinc-100 justify-center w-1/4">Purchase: </Text>
                             <TextInput
                                 className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
                                 placeholder="dd/MM/yyyy"
                                 onChangeText={handleChange('purchase_date')}
                                 onBlur={handleBlur('purchase_date')}
                                 value={values.purchase_date}
-                            />                                
+                            />
                         </View>
 
                         {touched.purchase_date && errors.purchase_date && <Text className="text-red-500 text-center pb-2">  {errors.purchase_date}</Text>}
 
                         <View className="flex flex-row items-center">
-                            <Text className="text-zinc-100 justify-center w-1/4">MFG: </Text>                               
+                            <Text className="text-zinc-100 justify-center w-1/4">MFG: </Text>
                             <TextInput
                                 className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
                                 placeholder="dd/MM/yyyy"
                                 onChangeText={handleChange('mfg')}
                                 onBlur={handleBlur('mfg')}
                                 value={values.mfg}
-                            />                                
+                            />
                         </View>
 
                         {touched.mfg && errors.mfg && <Text className="text-red-500 text-center pb-2">          {errors.mfg}</Text>}
                     </View>
-                    <Button title="Submit" onPress={handleSubmit as any} />
+                    <View className="pt-2">
+                        <Button title="Submit" onPress={handleSubmit as any} />
+                    </View>
                 </View>
             )}
         </Formik>

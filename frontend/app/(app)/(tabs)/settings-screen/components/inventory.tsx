@@ -7,7 +7,7 @@ import Filter from '../../../../../components/filter';
 import { Item } from '../../../../types';
 import { useFocusEffect } from '@react-navigation/native';
 import AddItem from './add-item';
-import EditItem from './edit-item';
+import EditItem from '../../../../../components/edit-item';
 
 const Inventory: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
@@ -102,32 +102,9 @@ const Inventory: React.FC = () => {
         }
     };
 
-    const handleAddItem = () => {
-        setAddItemModalVisible(true);
-    };
-
     const handleEditItem = (itemId: string) => {
         setSelectedItemId(itemId);
         setEditItemModalVisible(true);
-    };
-
-    const handleDeleteItem = async (itemId: string) => {
-        try {
-            const { error } = await supabase
-                .from('item')
-                .delete()
-                .eq('item_id', itemId);
-
-            if (error) {
-                throw error;
-            }
-
-            Alert.alert('Success', 'Item deleted successfully');
-            fetchItems(inventoryId); // Refresh items after deletion
-        } catch (error) {
-            console.error('Error deleting item:', error.message);
-            Alert.alert('Error', error.message);
-        }
     };
 
     const filteredItems = items.filter(item =>
@@ -148,9 +125,8 @@ const Inventory: React.FC = () => {
                         path=""
                     />
             <ButtonAdd onPress={() => setAddItemModalVisible(true)} />
-            <Body items={filteredItems} onEditItem={handleEditItem} onDeleteItem={handleDeleteItem} />
+            <Body items={filteredItems} onEditItem={handleEditItem} />
 
-            {/* Add Item Modal */}
             <Modal
                 animationType="none"
                 transparent={true}
@@ -172,7 +148,6 @@ const Inventory: React.FC = () => {
                 </TouchableWithoutFeedback>
             </Modal>
 
-            {/* Edit Item Modal */}
             <Modal
                 animationType="none"
                 transparent={true}
@@ -209,10 +184,9 @@ const formatDate = (dateString: string) => {
 interface BodyProps {
     items: Item[];
     onEditItem: (itemId: string) => void;
-    onDeleteItem: (itemId: string) => void;
 }
 
-const Body: React.FC<BodyProps> = ({ items, onEditItem, onDeleteItem }) => {
+const Body: React.FC<BodyProps> = ({ items, onEditItem}) => {
     return (
         <View className="flex-1 bg-stone-950">
             <View className="border-b border-t border-zinc-800">

@@ -7,6 +7,7 @@ import Button4 from '../../../../../components/button4';
 import { Item } from '../../../../types';
 import { useFocusEffect } from '@react-navigation/native';
 import AddGrocery from './add-grocery';
+import EditItemGrocery from '../../../../../components/edit-item-grocery';
 
 const GroceryBody: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
@@ -15,7 +16,9 @@ const GroceryBody: React.FC = () => {
     const [shoppingListId, setShoppingListId] = useState<string | null>(null);
     const [inventoryId, setInventoryId] = useState<string | null>(null);
     const [checked, setChecked] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [addItemModalVisible, setAddItemModalVisible] = useState(false);
+    const [editItemModalVisible, setEditItemModalVisible] = useState(false);
+    const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchShoppingListId = async () => {
@@ -84,7 +87,7 @@ const GroceryBody: React.FC = () => {
             if (shoppingListId) {
                 fetchItems(shoppingListId);
             }
-        }, [shoppingListId, modalVisible])
+        }, [shoppingListId, addItemModalVisible, editItemModalVisible])
     );
 
     const fetchItems = async (shoppingListId: string) => {
@@ -101,6 +104,10 @@ const GroceryBody: React.FC = () => {
         }
     };
 
+    const handleEditItem = (itemId: string) => {
+        setSelectedItemId(itemId);
+        setEditItemModalVisible(true);
+    };
 
     const handleCheckboxChange = async (item: Item) => {
         const { data, error } = await supabase
@@ -128,29 +135,52 @@ const GroceryBody: React.FC = () => {
             <View className="px-4 py-2">
                 <Filter setSearchQuery={setSearchQuery} />
             </View>
-            <ButtonAdd onPress={() => setModalVisible(true)} />
-            <Body items={filteredItems} onCheckboxChange={handleCheckboxChange} />
+            <ButtonAdd onPress={() => setAddItemModalVisible(true)} />
+            <Body items={filteredItems} onEditItem={handleEditItem} onCheckboxChange={handleCheckboxChange} />
 
             <Modal
                 animationType="none"
                 transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
+                visible={addItemModalVisible}
+                onRequestClose={() => setAddItemModalVisible(false)}
             >
-                <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+                <TouchableWithoutFeedback onPress={() => setAddItemModalVisible(false)}>
                     <View className="flex flex-1 justify-center items-center bg-stone-950/70 bg-opacity-50">
                         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
                             <View className="bg-zinc-800 p-4 rounded-2xl w-5/6">
                                 <AddGrocery
                                     shoppingListId={shoppingListId}
                                     userId={userId}
-                                    onClose={() => setModalVisible(false)}
+                                    onClose={() => setAddItemModalVisible(false)}
                                 />
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
                 </TouchableWithoutFeedback>
             </Modal>
+
+            <Modal
+                animationType="none"
+                transparent={true}
+                visible={editItemModalVisible}
+                onRequestClose={() => setEditItemModalVisible(false)}
+            >
+                <TouchableWithoutFeedback onPress={() => setEditItemModalVisible(false)}>
+                    <View className="flex flex-1 justify-center items-center bg-stone-950/70 bg-opacity-50">
+                        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                            <View className="bg-zinc-800 p-4 rounded-2xl w-5/6">
+                                {selectedItemId && (
+                                    <EditItemGrocery
+                                        itemId={selectedItemId}
+                                        onClose={() => setEditItemModalVisible(false)}
+                                    />
+                                )}
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
+
         </View>
     );
 };
@@ -158,9 +188,10 @@ const GroceryBody: React.FC = () => {
 interface BodyProps {
     items: Item[];
     onCheckboxChange: (item: Item) => void;
+    onEditItem: (itemId: string) => void;
 }
 
-const Body: React.FC<BodyProps> = ({ items, onCheckboxChange }) => {
+const Body: React.FC<BodyProps> = ({ items, onCheckboxChange, onEditItem }) => {
     return (
         <View className="flex-1 bg-stone-950">
             <ScrollView>
@@ -171,7 +202,7 @@ const Body: React.FC<BodyProps> = ({ items, onCheckboxChange }) => {
                             text2={`${item.item_quantity}g`}
                             pred={item.item_inventory_id}
                             onPress1={() => onCheckboxChange(item)}
-                            onPress2={() => console.log(`Pressed item ${item.item_name}`)}
+                            onPress2={() => onEditItem(item.item_id)}
                         />                        
                     </View>
                 ))}
