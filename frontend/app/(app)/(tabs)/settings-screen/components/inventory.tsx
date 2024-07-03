@@ -6,7 +6,7 @@ import Button3 from '../../../../../components/button3';
 import Filter from '../../../../../components/filter';
 import { Item } from '../../../../types';
 import { useFocusEffect } from '@react-navigation/native';
-import AddItem from './add-item';
+import AddItem from '../../../../../components/add-item';
 import EditItem from '../../../../../components/edit-item';
 
 const Inventory: React.FC = () => {
