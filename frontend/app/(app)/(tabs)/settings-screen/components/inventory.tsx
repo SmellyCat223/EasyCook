@@ -78,7 +78,7 @@ const Inventory: React.FC = () => {
             if (inventoryId) {
                 fetchItems(inventoryId);
             }
-        }, [inventoryId, editItemModalVisible])
+        }, [inventoryId, editItemModalVisible, addItemModalVisible])
     );
 
     const fetchItems = async (inventoryId: string) => {
