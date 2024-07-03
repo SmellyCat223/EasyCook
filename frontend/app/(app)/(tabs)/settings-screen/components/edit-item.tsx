@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { format, parse, isSameDay, isBefore, isValid } from 'date-fns';
 import { supabase } from '../../../../supabase';
+import { Icon } from 'react-native-elements';
 
 const parseDateString = (value: any, originalValue: any) => {
     const parsedDate = parse(originalValue, 'dd/MM/yyyy', new Date());
@@ -17,7 +18,7 @@ const isPastOrToday = (value: any) => {
 
 const validationSchema = Yup.object().shape({
     item_name: Yup.string().required('Item name is required'),
-    item_quantity: Yup.number().required('Item quantity is required').positive('Must be a positive number').integer('Must be an integer'),
+    item_quantity: Yup.number().required('Item quantity is required').min(0, 'Cannot be negative').integer('Must be an integer'),
     expiration_date: Yup.date().transform(parseDateString).required('Expiration date is required').typeError('Invalid date format, use dd/MM/yyyy'),
     purchase_date: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy').test('is-past-or-today', 'Purchase date must be today or in the past', isPastOrToday),
     mfg: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy').test('is-past-or-today', 'Manufacturing date must be today or in the past', isPastOrToday),
@@ -31,7 +32,6 @@ interface EditItemProps {
 const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
 
     const [initialValues, setInitialValues] = useState<any | null>(null);
-    // const [loading, setLoading] = useState(true);
 
     console.log("ItemId:", itemId);
 
@@ -40,7 +40,6 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
             try {
                 if (!itemId) {
                     console.error("No itemId found");
-                    // setLoading(false);
                     return; // Ensure itemId is available
                 }
 
@@ -54,7 +53,6 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
 
                 if (itemError) {
                     console.error('Error fetching item details:', itemError);
-                    // setLoading(false);
                     return;
                 }
 
@@ -69,10 +67,8 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
                         mfg: itemData.mfg ? format(parse(itemData.mfg, 'yyyy-MM-dd', new Date()), 'dd/MM/yyyy') : '',
                     });
                 }
-                // setLoading(false);
             } catch (error) {
                 console.error("Unexpected error fetching item details:", error);
-                // setLoading(false);
             }
         };
 
@@ -104,14 +100,24 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
         }
     };
 
-    // if (loading) {
-    //     return (
-    //         <View className="flex flex-1 bg-stone-950 p-4 justify-center items-center">
-    //             <ActivityIndicator size="large" color="#ffffff" />
-    //             <Text className="text-white mt-4">Loading...</Text>
-    //         </View>
-    //     );
-    // }
+    const handleDelete = async () => {
+        try {
+            const { error } = await supabase
+                .from('item')
+                .delete()
+                .eq('item_id', itemId);
+
+            if (error) {
+                throw error;
+            }
+
+            Alert.alert('Success', 'Item deleted successfully');
+            onClose();
+        } catch (error) {
+            console.error('Error deleting item:', error.message);
+            Alert.alert('Error', error.message);
+        }
+    };
 
     return (
         <Formik
@@ -127,9 +133,16 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
             enableReinitialize
         >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                <View className="pt-2">
-                    <View className="space-y-2 border-b border-zinc-500/30 pb-4">
+                <View className="relative">
+                    <TouchableOpacity
+                        className="absolute top-0 right-0 rounded-full bg-zinc-500 p-1.5 z-20"
+                        onPress={onClose}
+                    >
+                        <Icon name="close" size={16} color="#f4f4f5" />
+                    </TouchableOpacity>
+                    <View className="space-y-2 border-b border-zinc-500/30 py-4 z-10">
                         <Text className="text-zinc-100 text-xl text-center pb-4">Edit item</Text>
+
                         <View className="flex flex-row items-center">
                             <Text className="text-zinc-100 justify-center w-1/4">Name: </Text>
                             <TextInput
@@ -195,7 +208,10 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
 
                         {touched.mfg && errors.mfg && <Text className="text-red-500 text-center pb-2">          {errors.mfg}</Text>}
                     </View>
-                    <Button title="Submit" onPress={handleSubmit as any} />
+                    <View className="flex flex-row justify-around pt-2">
+                        <Button title="Update" onPress={handleSubmit as any} />
+                        <Button title="Delete" color="red" onPress={handleDelete as any} />
+                    </View>
                 </View>
             )}
         </Formik>

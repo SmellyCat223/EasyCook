@@ -86,7 +86,8 @@ const Inventory: React.FC = () => {
             const { data, error } = await supabase
                 .from('item')
                 .select('*')
-                .eq('item_inventory_id', inventoryId);
+                .eq('item_inventory_id', inventoryId)
+                .gt('item_quantity', 0);
 
             if (error) {
                 console.error('Error fetching items:', error);
