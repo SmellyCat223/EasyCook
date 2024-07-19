@@ -34,9 +34,9 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="meal-planner"
+                name="mealPlanner-screen"
                 options={{
-                    headerTitle: "Meal Planner",
+                    headerShown: false,
                     title: "Meal Planner",
                     tabBarIcon: () => <Icon name="calendar-today" color="#f3f4f6" />,
                 }}
@@ -108,24 +108,6 @@ const TabsLayout = () => {
             />
             <Tabs.Screen
                 name="home-screen/components/update-inventory"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="mealPlanner-screen/index_mealPlanner"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="mealPlanner-screen/components/headerDate"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
-                name="mealPlanner-screen/components/threeMealsADay"
                 options={{
                     href: null,
                 }}

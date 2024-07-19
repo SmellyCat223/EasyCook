@@ -10,13 +10,46 @@ const ExpiringScreen: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const [inventoryId, setInventoryId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchInventoryId = async () => {
+            try {
+                const { data, error } = await supabase.auth.getSession();
+                if (error) {
+                    console.error('Error fetching user session:', error);
+                } else if (data?.session) {
+                    const userId = data.session.user.id;
+                    const { data: inventoryData, error: inventoryError } = await supabase
+                        .from('inventory')
+                        .select('inventory_id')
+                        .eq('user_id', userId)
+                        .single();
+
+                    if (inventoryError) {
+                        console.error('Error fetching inventory:', inventoryError);
+                    } else {
+                        setInventoryId(inventoryData.inventory_id);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching inventory:', error);
+            }
+        };
+
+        fetchInventoryId();
+    }, []);
 
     useEffect(() => {
         const fetchItems = async () => {
+            if (!inventoryId) return;
+
             try {
                 const { data, error } = await supabase
                     .from('item')
                     .select('*')
+                    .not('expiration_date', 'is', null)
+                    .eq('item_inventory_id', inventoryId) // Fetch items based on item_inventory_id
                     .order('expiration_date', { ascending: true });
 
                 if (error) {
@@ -39,7 +72,7 @@ const ExpiringScreen: React.FC = () => {
         };
 
         fetchItems();
-    }, []);
+    }, [inventoryId]);
 
     if (loading) {
         return <ActivityIndicator size="large" color="#0000ff" />;
@@ -64,6 +97,7 @@ interface BodyProps {
 }
 
 const Body: React.FC<BodyProps> = ({ items }) => {
+    
     return (
         <View className="flex-1 bg-stone-950">
             <ScrollView>
@@ -87,6 +121,5 @@ const Body: React.FC<BodyProps> = ({ items }) => {
         </View>
     );
 };
-
 
 export default ExpiringScreen;

@@ -78,22 +78,24 @@ const NextMeal = () => {
     }
 
     return (
-        <Link href="/meal-planner" asChild>
+        <Link href="../../mealPlanner-screen/index_mealPlanner" asChild>
             <TouchableOpacity>
-                <View style={{ paddingVertical: 10 }}>
-                    <View style={{ borderRadius: 12, padding: 16, backgroundColor: '#B2F5EA', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.8, shadowRadius: 2, elevation: 5 }}>
-                        <View style={{ flexDirection: 'row', paddingBottom: 10, justifyContent: 'space-between' }}>
-                            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 7 }}>{meal}</Text>
-                            <Icon name="edit" type="antdesign" size={20} />
+                <View className="py-1">
+                    <View className="rounded-2xl p-4 bg-yellow-100">
+                        <View className="flex flex-row justify-between">
+                            <Icon name="calendar" type="antdesign" size={18} />
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={{ flex: 1 }}>
-                                <Text style={{ fontSize: 16 }}>Breakfast: {breakfast}</Text>
-                                <Text style={{ fontSize: 16 }}>Lunch: {lunch}</Text>
-                                <Text style={{ fontSize: 16 }}>Dinner: {dinner}</Text>
+                        <View className="pt-2">
+                            <View className="flex flex-row justify-between pt-4">
+                                <Text>{meal}</Text>
+                                <View className="flex p-2 rounded-full bg-white">
+                                    <Text>{calories}kcal</Text>
+                                </View>
                             </View>
-                            <View style={{ backgroundColor: '#EDF2F7', padding: 4, borderRadius: 12 }}>
-                                <Text style={{ fontSize: 16 }}>{calories} kcal</Text>
+                            <View className="flex justify-between">
+                                <Text className="text-lg">Breakfast: {breakfast}</Text>
+                                <Text className="text-lg">Lunch: {lunch}</Text>
+                                <Text className="text-lg">Dinner: {dinner}</Text>
                             </View>
                         </View>
                     </View>

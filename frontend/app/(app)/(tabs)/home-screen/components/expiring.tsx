@@ -9,15 +9,49 @@ import { Link } from 'expo-router';
 const Expiring = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [loading, setLoading] = useState(true);
+    const [inventoryId, setInventoryId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchInventoryId = async () => {
+            try {
+                const { data, error } = await supabase.auth.getSession();
+                if (error) {
+                    console.error('Error fetching user session:', error);
+                } else if (data?.session) {
+                    const userId = data.session.user.id;
+                    const { data: inventoryData, error: inventoryError } = await supabase
+                        .from('inventory')
+                        .select('inventory_id')
+                        .eq('user_id', userId)
+                        .single();
+
+                    if (inventoryError) {
+                        console.error('Error fetching inventory:', inventoryError);
+                    } else {
+                        setInventoryId(inventoryData.inventory_id);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching inventory:', error);
+            }
+        };
+
+        fetchInventoryId();
+    }, []);
 
     useEffect(() => {
         const fetchItems = async () => {
+            if (!inventoryId) return;
+
             try {
                 const { data, error } = await supabase
                     .from('item')
                     .select('*')
-                    .order('expiration_date', { ascending: true });
-
+                    .eq('item_inventory_id', inventoryId) // Fetch items based on item_inventory_id
+                    .not('expiration_date', 'is', null)
+                    .order('expiration_date', { ascending: true })
+                    .limit(7);
+                console.log(data);
                 if (error) {
                     console.error('Error fetching items:', error);
                 } else {
@@ -38,7 +72,7 @@ const Expiring = () => {
         };
 
         fetchItems();
-    }, []);
+    }, [inventoryId]);
 
     // if (loading) {
     //     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -69,24 +103,18 @@ const Expiring = () => {
                                 const unit = daysUntilExpiration > 1 ? "days" : "day";
 
                                 return (
-                                    <View key={item.item_name} className="flex flex-row justify-between">
+                                    <View key={item.item_id} className="flex flex-row justify-between">
                                         <Text className="text-xl">{item.item_name}</Text>
                                         <Text className="text-xl">{daysUntilExpiration} {unit}</Text>
                                     </View>
                                 );
-
                             })}
-                            {/* <TouchableOpacity
-                                onPress={() => router.push("../expiring-screen.tsx")}
-                            >
-                                <Text className="text-zinc-500">More...</Text>
-                            </TouchableOpacity> */}
                         </View>
+                        <Text className="text-gray-700">More...</Text>
                     </View>
                 </View>
             </TouchableOpacity>
         </Link>
-
     );
 };
 

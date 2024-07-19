@@ -1,8 +1,0 @@
-npm install express @types/express --legacy-peer-deps;
-npm install dotenv --legacy-peer-deps;
-npm i @types/cors --save-dev --legacy-peer-deps;
-npm install @types/morgan --save-dev --legacy-peer-deps;
-
-npm install pg @types/pg --save-dev --legacy-peer-deps;
-
-npm install --save-dev @types/bcryptjs --legacy-peer-deps;

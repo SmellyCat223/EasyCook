@@ -10,7 +10,7 @@ const ButtonAdd: React.FC<ButtonAddProps> = ({ onPress }: ButtonAddProps) => {
         <View className="border-b border-t border-zinc-800">
             <TouchableOpacity
                 onPress={onPress}
-                className={"flex flex-row justify-center items-center bg-zinc-700/50 h-10"}
+                className={"flex flex-row justify-center items-center bg-zinc-800/50 h-10"}
             >
                 <View className="pr-2">
                     <Icon name="add" type="ionicons" color="#71717A" />
