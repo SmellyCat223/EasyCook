@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Button, ActivityIndicator } from "react-native";
+import { Text, View, ScrollView, Button, Alert, Modal, TextInput } from "react-native";
 import { Icon } from 'react-native-elements';
 import { supabase } from '../../../../supabase';
 import { format, addDays, startOfWeek, endOfWeek, isToday, parseISO } from 'date-fns';
 import NextMeal from '../../home-screen/components/next-meal';
+import EditItem from '../../../../../components/edit-item';
 
 interface Item {
     meal_calories: number;
@@ -11,6 +12,7 @@ interface Item {
     meal_type: string;
     user_id: string;
     meal_title: string;
+    meal_id: string;
 }
 
 const Day: React.FC<{
@@ -22,10 +24,25 @@ const Day: React.FC<{
     lunchCal: number;
     dinnerTitle: string;
     dinnerCal: number;
-    // onDelete: () => void;
-}> = ({ day, date, bfastTitle, bfastCal, lunchTitle, lunchCal, dinnerTitle, dinnerCal }) => {
-    const showAlert = () => {
-        alert('Feature coming soon!');
+    onEdit: (meal: Item) => void;
+    onDelete: (mealId: string) => void;
+    items: Item[];
+}> = ({ day, date, bfastTitle, bfastCal, lunchTitle, lunchCal, dinnerTitle, dinnerCal, onEdit, onDelete, items }) => {
+    const handleDelete = (mealId: string) => {
+        Alert.alert(
+            "Delete Meal",
+            "Are you sure you want to delete this meal?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "OK",
+                    onPress: () => onDelete(mealId)
+                }
+            ]
+        );
     };
 
     return (
@@ -33,7 +50,7 @@ const Day: React.FC<{
             <View style={{ marginBottom: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
                 <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{day} {date}</Text>
             </View>
-            <View className="flex-row justify-between mb-5">
+            {/* <View className="flex-row justify-between mb-5">
                 <Text>Breakfast: {bfastTitle}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{bfastTitle}</Text>
@@ -62,7 +79,28 @@ const Day: React.FC<{
                         <Icon name="delete" type="material" size={15} onPress={showAlert} />
                     </View>
                 </View>
-            </View>
+            </View> */}
+            {['Breakfast', 'Lunch', 'Dinner'].map((mealType, index) => {
+                const mealTitle = mealType === 'Breakfast' ? bfastTitle : mealType === 'Lunch' ? lunchTitle : dinnerTitle;
+                const mealCal = mealType === 'Breakfast' ? bfastCal : mealType === 'Lunch' ? lunchCal : dinnerCal;
+                const meal = items.find(item => item.meal_date === date && item.meal_type.toLowerCase() === mealType.toLowerCase());
+                console.log('Meal found:', meal);
+
+
+                return (
+                    <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+                        <Text>{mealType}: {mealTitle}</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{mealTitle}</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Icon name="edit" type="antdesign" size={15} style={{ marginRight: 8 }} onPress={() => onEdit({ meal_calories: mealCal, meal_date: date, meal_type: mealType, user_id: '', meal_title: mealTitle, meal_id: meal?.meal_id || '' })} />
+                                <Icon name="delete" type="material" size={15} onPress={() => handleDelete(meal?.meal_id || '')} />
+                            </View>
+                        </View>
+                    </View>
+                );
+            })}
+
         </View>
     );
 };
@@ -72,33 +110,9 @@ const MealPlannerScreenComponent = () => {
     const [userId, setUserId] = useState<string | null>(null);
     const [currentWeekStart, setCurrentWeekStart] = useState<Date>(startOfWeek(new Date()));
     const [nextMeals, setNextMeals] = useState<Item[]>([]);
-
-    useEffect(() => {
-        const fetchUserId = async () => {
-            const { data, error } = await supabase.auth.getSession();
-            if (error) {
-                console.error('Error fetching user session:', error);
-            } else if (data?.session) {
-                setUserId(data.session.user.id);
-            }
-        };
-
-        fetchUserId();
-    }, []);
-
-    useEffect(() => {
-        if (userId) {
-            fetchMeals(userId);
-        }
-    }, [userId, currentWeekStart]);
-
-    useEffect(() => {
-        // Filter meals for today and update nextMeals state
-        const todayMeals = items.filter(item => isToday(item.meal_date));
-
-        console.log(todayMeals);
-        setNextMeals(todayMeals);
-    }, [items]);
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [currentMeal, setCurrentMeal] = useState<Item | null>(null);
+    const [loading, setLoading] = useState(true);
 
     const fetchMeals = async (userId: string) => {
         const start = format(currentWeekStart, 'yyyy-MM-dd');
@@ -121,29 +135,85 @@ const MealPlannerScreenComponent = () => {
         if (error) {
             console.error('Error fetching items:', error);
         } else if (data) {
-            // console.log('Fetched items:', data);
+            console.log('Fetched meals:', data);
             setItems(data);
         }
     };
 
-    // const deleteMeal = async (mealId: string) => {
-    //     const { error } = await supabase
-    //         .from('meal')
-    //         .delete()
-    //         .eq('meal_id', mealId);
-    
-    //     if (error) {
-    //         console.error('Error deleting meal:', error);
-    //     } else {
-    //         // Re-fetch meals after deletion
-    //         fetchMeals(userId);
-    //     }
-    // };
-    
-    // const handleDeleteMeal = (mealId: string) => {
-    //     deleteMeal(mealId);
-    // };
-    
+    useEffect(() => {
+        const fetchUserId = async () => {
+            const { data, error } = await supabase.auth.getSession();
+            if (error) {
+                console.error('Error fetching user session:', error);
+            } else if (data?.session) {
+                setUserId(data.session.user.id);
+            }
+        };
+
+        fetchUserId();
+    }, []);
+
+    // Fetch meals when userId or currentWeekStart changes
+    useEffect(() => {
+        if (userId) {
+            fetchMeals(userId);
+        }
+    }, [userId, currentWeekStart]);
+
+    // Handle loading state
+    useEffect(() => {
+        if (!loading) {
+            const todayMeals = items.filter(item => isToday(item.meal_date));
+            console.log(todayMeals);
+            setNextMeals(todayMeals);
+        }
+    }, [items, loading]);
+
+
+
+    const handleDeleteMeal = async (mealId: string) => {
+        if (!mealId) {
+            console.error('Invalid meal ID', mealId);
+            return;
+        }
+
+        const { error } = await supabase
+            .from('meal')
+            .delete()
+            .eq('meal_id', mealId);
+
+        if (error) {
+            console.error('Error deleting meal:', error);
+        } else {
+            fetchMeals(userId!);
+        }
+    };
+
+    const handleEditMeal = (meal: Item) => {
+        setCurrentMeal(meal);
+        setEditModalVisible(true);
+    };
+
+    const handleSaveEdit = async () => {
+        if (currentMeal) {
+            const { error } = await supabase
+                .from('meal')
+                .update({
+                    meal_title: currentMeal.meal_title,
+                    meal_calories: currentMeal.meal_calories
+                })
+                .eq('meal_id', currentMeal.meal_id);
+
+            if (error) {
+                console.error('Error updating meal:', error);
+            } else {
+                fetchMeals(userId!);
+                setEditModalVisible(false);
+                setCurrentMeal(null);
+            }
+        }
+    };
+
 
     const generateWeekDates = (start: Date) => {
         return Array.from({ length: 7 }).map((_, index) => addDays(start, index));
@@ -175,11 +245,11 @@ const MealPlannerScreenComponent = () => {
         return {
             date,
             bfastTitle: breakfast?.meal_title || '',
-            bfastCal: typeof breakfast?.meal_calories === 'number' ? breakfast.meal_calories : parseInt(breakfast?.meal_calories || '0'),
+            bfastCal: breakfast?.meal_calories || 0,
             lunchTitle: lunch?.meal_title || '',
-            lunchCal: typeof lunch?.meal_calories === 'number' ? lunch.meal_calories : parseInt(lunch?.meal_calories || '0'),
+            lunchCal: lunch?.meal_calories || 0,
             dinnerTitle: dinner?.meal_title || '',
-            dinnerCal: typeof dinner?.meal_calories === 'number' ? dinner.meal_calories : parseInt(dinner?.meal_calories || '0'),
+            dinnerCal: dinner?.meal_calories || 0,
         };
     };
 
@@ -190,7 +260,7 @@ const MealPlannerScreenComponent = () => {
                 <Button title="Previous Week" onPress={handlePrevWeek} />
                 <Button title="Next Week" onPress={handleNextWeek} />
             </View>
-            
+
             <ScrollView>
                 {weekDates.map((date, index) => {
                     const formattedDate = format(date, 'yyyy-MM-dd');
@@ -207,7 +277,9 @@ const MealPlannerScreenComponent = () => {
                             lunchCal={lunchCal}
                             dinnerTitle={dinnerTitle}
                             dinnerCal={dinnerCal}
-                            // onDelete={() => handleDeleteMeal(mealId)}
+                            onEdit={handleEditMeal}
+                            onDelete={handleDeleteMeal}
+                            items = {items}
                         />
                     );
                 })}
@@ -223,6 +295,29 @@ const MealPlannerScreenComponent = () => {
                     calories={nextMeals.reduce((acc, meal) => acc + meal.meal_calories, 0)}
                 />
             )} */}
+
+            {/* <Modal visible={editModalVisible} animationType="slide">
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text>Edit Meal</Text>
+                    {currentMeal && (
+                        <>
+                            <TextInput
+                                value={currentMeal.meal_title}
+                                onChangeText={(text) => setCurrentMeal({ ...currentMeal, meal_title: text })}
+                                placeholder="Meal Title"
+                            />
+                            <TextInput
+                                value={currentMeal.meal_calories.toString()}
+                                onChangeText={(text) => setCurrentMeal({ ...currentMeal, meal_calories: parseInt(text) })}
+                                placeholder="Calories"
+                                keyboardType="numeric"
+                            />
+                            <Button title="Save" onPress={handleSaveEdit} />
+                            <Button title="Cancel" onPress={() => setEditModalVisible(false)} />
+                        </>
+                    )}
+                </View>
+            </Modal> */}
         </View>
     );
 };

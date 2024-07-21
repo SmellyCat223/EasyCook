@@ -3,10 +3,12 @@ import { View } from "react-native";
 import { useRouter } from 'expo-router';
 import Button2 from '../../../../components/button-settings';
 import ProfilePicture from '../../../../components/profile-picture';
+import { useUser } from '../../../UserContext';
 
 
 const Settings = () => {
     const router = useRouter();
+    const { username } = useUser();
 
     const handlePress = (path: string) => {
         router.push(path);
@@ -14,7 +16,7 @@ const Settings = () => {
 
     return (
         <View className="flex-1 bg-stone-950">
-            <ProfilePicture />
+            <ProfilePicture username={username} />
             <View className="py-4">
                 <Button2 text="Go to my profile" icon1="account-circle" icon2="chevron-right" onPress={handlePress} path="../settings-screen/components/profile" />
                 <Button2 text="Go to inventory" icon1="inventory" icon2="chevron-right" onPress={handlePress} path="../settings-screen/components/inventory" />
