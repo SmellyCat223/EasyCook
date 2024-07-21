@@ -31,6 +31,7 @@
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "expo": "~51.0.17",
+    "expo-checkbox": "~3.0.0",
     "expo-constants": "~16.0.2",
     "expo-dev-client": "~4.0.19",
     "expo-font": "~12.0.5",
@@ -50,6 +51,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.2",
+    "react-native-camera": "^4.2.1",
+    "react-native-camera-kit": "^13.0.0",
+    "react-native-date-picker": "^5.0.4",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-paper": "^5.12.3",
@@ -65,8 +69,7 @@
     "tailwind-rn": "^4.2.0",
     "tailwindcss-react-native": "^1.7.10",
     "twrnc": "^4.2.0",
-    "yup": "^1.4.0",
-    "expo-checkbox": "~3.0.0"
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
