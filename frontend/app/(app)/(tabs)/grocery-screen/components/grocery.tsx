@@ -15,7 +15,7 @@ const GroceryBody: React.FC = () => {
     const [userId, setUserId] = useState<string | null>(null);
     const [shoppingListId, setShoppingListId] = useState<string | null>(null);
     const [inventoryId, setInventoryId] = useState<string | null>(null);
-    const [checked, setChecked] = useState(false);
+    const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
     const [addItemModalVisible, setAddItemModalVisible] = useState(false);
     const [editItemModalVisible, setEditItemModalVisible] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
@@ -87,7 +87,7 @@ const GroceryBody: React.FC = () => {
             if (shoppingListId) {
                 fetchItems(shoppingListId);
             }
-        }, [shoppingListId, addItemModalVisible, editItemModalVisible])
+        }, [shoppingListId, checkedItems, addItemModalVisible, editItemModalVisible])
     );
 
     const fetchItems = async (shoppingListId: string) => {
@@ -95,12 +95,14 @@ const GroceryBody: React.FC = () => {
             .from('item')
             .select('*')
             .eq('item_shopping_list_id', shoppingListId);
-            // .is('item_inventory_id', null);
 
         if (error) {
             console.error('Error fetching items:', error);
         } else if (data) {
             setItems(data);
+            // Update checked items state
+            const checked = new Set(data.filter(item => item.item_inventory_id).map(item => item.item_id));
+            setCheckedItems(checked);
         }
     };
 
@@ -110,19 +112,29 @@ const GroceryBody: React.FC = () => {
     };
 
     const handleCheckboxChange = async (item: Item) => {
+        const newCheckedItems = new Set(checkedItems);
+
+        if (newCheckedItems.has(item.item_id)) {
+            newCheckedItems.delete(item.item_id);
+        } else {
+            newCheckedItems.add(item.item_id);
+        }
+
+        setCheckedItems(newCheckedItems);
+
         const { data, error } = await supabase
             .from('item')
             .update({ 
-                item_inventory_id: inventoryId,
-                purchase_date: new Date()
+                item_inventory_id: newCheckedItems.has(item.item_id) ? inventoryId : null,
+                purchase_date: newCheckedItems.has(item.item_id) ? new Date() : null
             })
             .eq('item_id', item.item_id);
+
         if (error) {
             console.error('Error updating item:', error);
         } else {
-            // Remove the item from the local state
-            setItems(prevItems => prevItems.filter(i => i.item_id !== item.item_id));
-            setChecked(!checked);
+            // Update local state
+            fetchItems(shoppingListId!); // Refetch items to update local state
         }
     };
 
@@ -136,7 +148,12 @@ const GroceryBody: React.FC = () => {
                 <Filter setSearchQuery={setSearchQuery} />
             </View>
             <ButtonAdd onPress={() => setAddItemModalVisible(true)} />
-            <Body items={filteredItems} onEditItem={handleEditItem} onCheckboxChange={handleCheckboxChange} />
+            <Body
+                items={filteredItems}
+                onEditItem={handleEditItem}
+                onCheckboxChange={handleCheckboxChange}
+                checkedItems={checkedItems}
+            />
 
             <Modal
                 animationType="none"
@@ -180,7 +197,6 @@ const GroceryBody: React.FC = () => {
                     </View>
                 </TouchableWithoutFeedback>
             </Modal>
-
         </View>
     );
 };
@@ -189,9 +205,10 @@ interface BodyProps {
     items: Item[];
     onCheckboxChange: (item: Item) => void;
     onEditItem: (itemId: string) => void;
+    checkedItems: Set<string>;
 }
 
-const Body: React.FC<BodyProps> = ({ items, onCheckboxChange, onEditItem }) => {
+const Body: React.FC<BodyProps> = ({ items, onCheckboxChange, onEditItem, checkedItems }) => {
     return (
         <View className="flex-1 bg-stone-950">
             <ScrollView>
@@ -201,6 +218,7 @@ const Body: React.FC<BodyProps> = ({ items, onCheckboxChange, onEditItem }) => {
                             text1={item.item_name}
                             text2={`${item.item_quantity}g`}
                             pred={item.item_inventory_id}
+                            isChecked={checkedItems.has(item.item_id)}
                             onPress1={() => onCheckboxChange(item)}
                             onPress2={() => onEditItem(item.item_id)}
                         />                        

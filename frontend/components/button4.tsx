@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Checkbox from 'expo-checkbox';
 import { TouchableOpacity, Text, View } from "react-native";
 
@@ -6,16 +6,15 @@ type Button4Props = {
     text1: string;
     text2: string;
     pred: string | undefined;
+    isChecked: boolean; // New prop for checkbox state
     onPress1: () => void;
     onPress2: (path: string) => void;
 };
 
-const Button4 = ({ text1, text2, pred, onPress1, onPress2 }: Button4Props) => {
-    const [isChecked, setIsChecked] = useState(!!pred);
-
+const Button4 = ({ text1, text2, pred, isChecked, onPress1, onPress2 }: Button4Props) => {
+    // Handle the checkbox press event
     const handleCheckboxPress = () => {
-        setIsChecked(!isChecked);
-        onPress1();
+        onPress1(); // Notify parent of checkbox change
     };
 
     return (
@@ -43,4 +42,3 @@ const Button4 = ({ text1, text2, pred, onPress1, onPress2 }: Button4Props) => {
 };
 
 export default Button4;
-
