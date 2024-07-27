@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, Alert, Modal, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, ScrollView, Alert, Modal, TouchableWithoutFeedback, Keyboard, Button } from "react-native";
 import { supabase } from '../../../../supabase';
 import Filter from '../../../../../components/filter';
-import ButtonAdd from '../../../../../components/button-add';
 import Button4 from '../../../../../components/button4';
 import { Item } from '../../../../types';
 import { useFocusEffect } from '@react-navigation/native';
@@ -38,8 +37,6 @@ const GroceryBody: React.FC = () => {
                     .eq('user_id', userId)
                     .single();
 
-                console.log("user ", userId, "has shopping list ", shoppingListData);
-
                 if (createError) {
                     console.error('Error fetching shopping list:', createError);
                 }
@@ -65,6 +62,7 @@ const GroceryBody: React.FC = () => {
                         Alert.alert('Success', 'New shopping list created');
                     }
                 }
+
                 // Fetch inventory ID
                 const { data: inventoryData, error: inventoryError } = await supabase
                     .from('inventory')
@@ -97,11 +95,15 @@ const GroceryBody: React.FC = () => {
         const { data, error } = await supabase
             .from('item')
             .select('*')
+            .is('item_inventory_id', null)
             .eq('item_shopping_list_id', shoppingListId);
 
         if (error) {
             console.error('Error fetching items:', error);
         } else if (data) {
+            // Log data for debugging
+            console.log('Fetched items:', data);
+
             setItems(data);
             const checked = new Set(data.filter(item => item.item_inventory_id).map(item => item.item_id));
             setCheckedItems(checked);
@@ -123,19 +125,53 @@ const GroceryBody: React.FC = () => {
         }
 
         setCheckedItems(newCheckedItems);
+    };
 
-        const { data, error } = await supabase
-            .from('item')
-            .update({ 
-                item_inventory_id: newCheckedItems.has(item.item_id) ? inventoryId : null,
-                purchase_date: newCheckedItems.has(item.item_id) ? new Date() : null
-            })
-            .eq('item_id', item.item_id);
+    const handleClearAll = async () => {
+        try {
+            // Update item_inventory_id for checked items
+            const checkedItemIds = Array.from(checkedItems);
+            console.log(checkedItemIds);
+            if (checkedItemIds.length > 0) {
+                const { error: updateError } = await supabase
+                    .from('item')
+                    .update({
+                        item_inventory_id: inventoryId,
+                        purchase_date: new Date()
+                    })
+                    .in('item_id', checkedItemIds);
 
-        if (error) {
-            console.error('Error updating item:', error);
-        } else {
+                if (updateError) {
+                    console.error('Error updating checked items:', updateError);
+                    Alert.alert('Error', 'Failed to update checked items');
+                    return;
+                }
+            }
+
+            // Delete all unchecked items from the database
+            const uncheckedItems = items.filter(item => !checkedItems.has(item.item_id));
+            if (uncheckedItems.length > 0) {
+                const { error: deleteError } = await supabase
+                    .from('item')
+                    .delete()
+                    .in('item_id', uncheckedItems.map(item => item.item_id));
+
+                if (deleteError) {
+                    console.error('Error deleting unchecked items:', deleteError);
+                    Alert.alert('Error', 'Failed to delete unchecked items');
+                    return;
+                }
+            }
+
+            // Update the local state to remove checked and unchecked items
+            const newItems = items.filter(item => checkedItems.has(item.item_id));
+            setItems(newItems);
+            setCheckedItems(new Set(newItems.map(item => item.item_id)));
+            // Increment changeCounter to trigger the debounced fetch
             setChangeCounter(prevCounter => prevCounter + 1);
+        } catch (error) {
+            console.error('Error in handleClearAll:', error);
+            Alert.alert('Error', 'Failed to clear all items');
         }
     };
 
@@ -148,14 +184,16 @@ const GroceryBody: React.FC = () => {
             <View className="px-4 py-2">
                 <Filter setSearchQuery={setSearchQuery} />
             </View>
-            <ButtonAdd onPress={() => setAddItemModalVisible(true)} />
+            <View className="flex flex-row justify-evenly py-2">
+                <Button title="Clear All" onPress={handleClearAll} color="red" />
+                <Button title="Add Item" onPress={() => setAddItemModalVisible(true)} color="#3b82f6" />
+            </View>
             <Body
                 items={filteredItems}
                 onEditItem={handleEditItem}
                 onCheckboxChange={handleCheckboxChange}
                 checkedItems={checkedItems}
             />
-
             <Modal
                 animationType="none"
                 transparent={true}
@@ -164,7 +202,7 @@ const GroceryBody: React.FC = () => {
             >
                 <TouchableWithoutFeedback onPress={() => setAddItemModalVisible(false)}>
                     <View className="flex flex-1 justify-center items-center bg-stone-950/70 bg-opacity-50">
-                        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
+                        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
                             <View className="bg-zinc-800 p-4 rounded-2xl w-5/6">
                                 <AddItemGrocery
                                     shoppingListId={shoppingListId}
@@ -190,15 +228,13 @@ const GroceryBody: React.FC = () => {
                     <View className="flex flex-1 justify-center items-center bg-stone-950/70 bg-opacity-50">
                         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
                             <View className="bg-zinc-800 p-4 rounded-2xl w-5/6">
-                                {selectedItemId && (
-                                    <EditItemGrocery
-                                        itemId={selectedItemId}
-                                        onClose={() => {
-                                            setEditItemModalVisible(false);
-                                            setChangeCounter(prevCounter => prevCounter + 1);
-                                        }}
-                                    />
-                                )}
+                                <EditItemGrocery
+                                    itemId={selectedItemId}
+                                    onClose={() => {
+                                        setEditItemModalVisible(false);
+                                        setChangeCounter(prevCounter => prevCounter + 1);
+                                    }}
+                                />
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
@@ -207,6 +243,7 @@ const GroceryBody: React.FC = () => {
         </View>
     );
 };
+
 
 interface BodyProps {
     items: Item[];
@@ -230,6 +267,7 @@ const Body: React.FC<BodyProps> = ({ items, onCheckboxChange, onEditItem, checke
                             onPress2={() => onEditItem(item.item_id)}
                         />                        
                     </View>
+                    // Clear all button
                 ))}
             </ScrollView>
         </View>
