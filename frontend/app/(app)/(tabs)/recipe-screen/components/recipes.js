@@ -25,7 +25,6 @@ export default function Recipes({ categories, meals }) {
                 setUserId(data.session.user.id);
             }
         };
-
         fetchUserId();
     }, []);
 
@@ -98,7 +97,7 @@ const RecipeCard = ({ item, index, userId }) => {
 
     const handleAddRecipe = async () => {
         try {
-            const { data, error } = await supabase
+            const { data: mealData, error: mealError } = await supabase
                 .from('meal')
                 .insert([
                     {
@@ -108,11 +107,29 @@ const RecipeCard = ({ item, index, userId }) => {
                         user_id: userId,
                         meal_title: recipeDetails?.strMeal
                     }
-                ]);
+                ])
+                .select('meal_id');
 
-            if (error) {
-                throw error;
+            if (mealError) {
+                throw mealError;
             }
+
+            const ingredients = getIngredients(recipeDetails);
+
+            const ingredientData = ingredients.map(ingredient => ({
+                meal_id: mealData[0].meal_id,
+                ingredient_name: ingredient.name,
+                portion_no: ingredient.portion
+            }));
+
+            const { error: ingredientError } = await supabase
+                .from('meal_ingredient')
+                .insert(ingredientData);
+
+            if (ingredientError) {
+                throw ingredientError;
+            }
+
             Alert.alert('Success', 'Item added successfully');
             toggleModal(); // Close the modal after successful submission
         } catch (error) {
@@ -120,6 +137,8 @@ const RecipeCard = ({ item, index, userId }) => {
             Alert.alert('Error', error.message);
         }
     };
+
+    const ingredients = getIngredients(recipeDetails);
 
 
     const onChange = (event, selectedDate) => {
@@ -166,7 +185,15 @@ const RecipeCard = ({ item, index, userId }) => {
                                 <Text style={{ fontSize: hp(2) }} className='font-medium flex-1 text-neutral-500'>{recipeDetails?.strArea || item.Area}</Text>
 
                                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Ingredients:</Text>
-                                <View style={{ marginLeft: 10 }}>{getIngredients(recipeDetails)}</View>
+                                {/* <View style={{ marginLeft: 10 }}>{getIngredients(recipeDetails)}</View> */}
+                                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Ingredients:</Text>
+                                <View style={{ marginLeft: 10 }}>
+                                    {getIngredients(recipeDetails).map((ingredient, index) => (
+                                        <Text key={`ingredient-${index}`} style={{ marginBottom: 4 }}>
+                                            {`${ingredient.portion} ${ingredient.name}`}
+                                        </Text>
+                                    ))}
+                                </View>
 
                                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Instructions:</Text>
                                 <Text style={{ marginBottom: 16 }}>{recipeDetails?.strInstructions || ''}</Text>
@@ -235,12 +262,17 @@ const getIngredients = (recipeDetails) => {
     if (!recipeDetails) return null;
     let ingredients = [];
     for (let i = 1; i <= 20; i++) {
-        if (recipeDetails[`strIngredient${i}`]) {
-            ingredients.push(
-                <Text key={`ingredient-${i}`} style={{ marginBottom: 4 }}>
-                    {`${recipeDetails[`strMeasure${i}`]} ${recipeDetails[`strIngredient${i}`]}`}
-                </Text>
-            );
+        const ingredientName = recipeDetails[`strIngredient${i}`];
+        const ingredientMeasure = recipeDetails[`strMeasure${i}`];
+
+        if (ingredientName) {
+            ingredients.push({
+                // <Text key={`ingredient-${i}`} style={{ marginBottom: 4 }}>
+                //     {`${ingredientMeasure} ${ingredientName}`}
+                // </Text>
+                name: ingredientName.trim(),
+                portion: ingredientMeasure.trim()
+            });
         } else {
             break;
         }

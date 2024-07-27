@@ -112,12 +112,12 @@ const TabsLayout = () => {
                     href: null,
                 }}
             />
-            <Tabs.Screen
+            {/* <Tabs.Screen
                 name="recipe-screen/image"
                 options={{
                     href: null,
                 }}
-            />
+            /> */}
             <Tabs.Screen
                 name="recipe-screen/index_recipe"
                 options={{
