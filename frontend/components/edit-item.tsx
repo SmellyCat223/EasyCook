@@ -175,6 +175,7 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
                                 onChangeText={handleChange('item_quantity')}
                                 onBlur={handleBlur('item_quantity')}
                                 value={values.item_quantity}
+                                keyboardType="numeric"
                             />
                         </View>
 

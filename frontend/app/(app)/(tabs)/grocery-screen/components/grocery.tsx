@@ -8,6 +8,7 @@ import { Item } from '../../../../types';
 import { useFocusEffect } from '@react-navigation/native';
 import AddItemGrocery from '../../../../../components/add-item-grocery';
 import EditItemGrocery from '../../../../../components/edit-item-grocery';
+import useDebounce from '../../../../../components/useDebounce';
 
 const GroceryBody: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
@@ -19,6 +20,8 @@ const GroceryBody: React.FC = () => {
     const [addItemModalVisible, setAddItemModalVisible] = useState(false);
     const [editItemModalVisible, setEditItemModalVisible] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+    const [changeCounter, setChangeCounter] = useState(0);
+    const debouncedChangeCounter = useDebounce(changeCounter, 500); // Debounce for 500ms
 
     useEffect(() => {
         const fetchShoppingListId = async () => {
@@ -84,10 +87,10 @@ const GroceryBody: React.FC = () => {
 
     useFocusEffect(
         useCallback(() => {
-            if (shoppingListId) {
+            if (shoppingListId && debouncedChangeCounter >= 0) {
                 fetchItems(shoppingListId);
             }
-        }, [shoppingListId, checkedItems, addItemModalVisible, editItemModalVisible])
+        }, [shoppingListId, debouncedChangeCounter])
     );
 
     const fetchItems = async (shoppingListId: string) => {
@@ -100,7 +103,6 @@ const GroceryBody: React.FC = () => {
             console.error('Error fetching items:', error);
         } else if (data) {
             setItems(data);
-            // Update checked items state
             const checked = new Set(data.filter(item => item.item_inventory_id).map(item => item.item_id));
             setCheckedItems(checked);
         }
@@ -133,8 +135,7 @@ const GroceryBody: React.FC = () => {
         if (error) {
             console.error('Error updating item:', error);
         } else {
-            // Update local state
-            fetchItems(shoppingListId!); // Refetch items to update local state
+            setChangeCounter(prevCounter => prevCounter + 1);
         }
     };
 
@@ -168,7 +169,10 @@ const GroceryBody: React.FC = () => {
                                 <AddItemGrocery
                                     shoppingListId={shoppingListId}
                                     userId={userId}
-                                    onClose={() => setAddItemModalVisible(false)}
+                                    onClose={() => {
+                                        setAddItemModalVisible(false);
+                                        setChangeCounter(prevCounter => prevCounter + 1);
+                                    }}
                                 />
                             </View>
                         </TouchableWithoutFeedback>
@@ -189,7 +193,10 @@ const GroceryBody: React.FC = () => {
                                 {selectedItemId && (
                                     <EditItemGrocery
                                         itemId={selectedItemId}
-                                        onClose={() => setEditItemModalVisible(false)}
+                                        onClose={() => {
+                                            setEditItemModalVisible(false);
+                                            setChangeCounter(prevCounter => prevCounter + 1);
+                                        }}
                                     />
                                 )}
                             </View>

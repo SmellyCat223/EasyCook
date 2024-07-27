@@ -20,7 +20,7 @@ const EditItemGrocery: React.FC<EditItemProps> = ({ itemId, onClose }) => {
 
     const [initialValues, setInitialValues] = useState<any | null>(null);
 
-    console.log("ItemId:", itemId);
+    // console.log("ItemId:", itemId);
 
     useEffect(() => {
         const fetchItemDetails = async () => {
@@ -102,7 +102,7 @@ const EditItemGrocery: React.FC<EditItemProps> = ({ itemId, onClose }) => {
             Alert.alert('Error', error.message);
         }
     };
-
+    
     return (
         <Formik
             initialValues={initialValues || {
@@ -148,6 +148,7 @@ const EditItemGrocery: React.FC<EditItemProps> = ({ itemId, onClose }) => {
                                 onChangeText={handleChange('item_quantity')}
                                 onBlur={handleBlur('item_quantity')}
                                 value={values.item_quantity}
+                                keyboardType="numeric"
                             />
                         </View>
 
