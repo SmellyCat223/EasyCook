@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, Alert, Modal, TouchableWithoutFeedback, Keyboard, Button } from "react-native";
+import { View, Alert, Modal, TouchableWithoutFeedback, Keyboard, Button } from "react-native";
+import GroceryBody from './grocery-body';
 import { supabase } from '../../../../supabase';
 import Filter from '../../../../../components/filter';
-import Button4 from '../../../../../components/button4';
 import { Item } from '../../../../types';
 import { useFocusEffect } from '@react-navigation/native';
 import AddItemGrocery from '../../../../../components/add-item-grocery';
 import EditItemGrocery from '../../../../../components/edit-item-grocery';
 import useDebounce from '../../../../../components/useDebounce';
 
-const GroceryBody: React.FC = () => {
+const Grocery: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [userId, setUserId] = useState<string | null>(null);
@@ -188,7 +188,7 @@ const GroceryBody: React.FC = () => {
                 <Button title="Clear All" onPress={handleClearAll} color="red" />
                 <Button title="Add Item" onPress={() => setAddItemModalVisible(true)} color="#3b82f6" />
             </View>
-            <Body
+            <GroceryBody
                 items={filteredItems}
                 onEditItem={handleEditItem}
                 onCheckboxChange={handleCheckboxChange}
@@ -244,34 +244,4 @@ const GroceryBody: React.FC = () => {
     );
 };
 
-
-interface BodyProps {
-    items: Item[];
-    onCheckboxChange: (item: Item) => void;
-    onEditItem: (itemId: string) => void;
-    checkedItems: Set<string>;
-}
-
-const Body: React.FC<BodyProps> = ({ items, onCheckboxChange, onEditItem, checkedItems }) => {
-    return (
-        <View className="flex-1 bg-stone-950">
-            <ScrollView>
-                {items.map(item => (
-                    <View key={item.item_id}>
-                        <Button4
-                            text1={item.item_name}
-                            text2={`${item.item_quantity}g`}
-                            pred={item.item_inventory_id}
-                            isChecked={checkedItems.has(item.item_id)}
-                            onPress1={() => onCheckboxChange(item)}
-                            onPress2={() => onEditItem(item.item_id)}
-                        />                        
-                    </View>
-                    // Clear all button
-                ))}
-            </ScrollView>
-        </View>
-    );
-};
-
-export default GroceryBody;
+export default Grocery;
