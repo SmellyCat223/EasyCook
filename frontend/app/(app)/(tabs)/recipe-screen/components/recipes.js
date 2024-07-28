@@ -152,6 +152,25 @@ const RecipeCard = ({ item, index, userId }) => {
     const handleAddRecipe = async () => {
         setLoading(true);
         try {
+            // Check if a meal already exists for the selected date and meal type for the user
+            const { data: existingMealData, error: existingMealError } = await supabase
+                .from('meal')
+                .select('*')
+                .eq('meal_date', format(selectedDate, 'yyyy-MM-dd'))
+                .eq('meal_type', selectedMeal)
+                .eq('user_id', userId);
+
+            if (existingMealError) {
+                throw existingMealError;
+            }
+
+            if (existingMealData.length > 0) {
+                // If a meal already exists, alert the user and stop the process
+                Alert.alert('Alert', 'You have already planned a meal for this date and meal type. Please choose another or delete in the MealPlanner Screen first.');
+                setLoading(false);
+                return;
+            }
+
             // Check if recipe category exists in recipe_category table
             const { data: categoryData, error: categoryError } = await supabase
                 .from('recipe_category')
