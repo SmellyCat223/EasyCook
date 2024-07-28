@@ -11,14 +11,13 @@ const Article = () => {
 
     const fetchArticle = async () => {
         const apiKey = '3dba596a18a04418b792ce9981391ae6';
-        const keywords = 'eat healthy'; // Modify keywords as needed
+        const keywords = 'food'; // Modify keywords as needed
         const apiUrl = `https://newsapi.org/v2/top-headlines?q=${keywords}&apiKey=${apiKey}`;
 
         try {
             const response = await axios.get(apiUrl);
             if (response.data.articles && response.data.articles.length > 0) {
                 const firstArticle = response.data.articles[0];
-                // Truncate description to 75 characters
                 if (firstArticle.description && firstArticle.description.length > 75) {
                     firstArticle.description = firstArticle.description.substring(0, 75) + '... Read More';
                 }
