@@ -161,11 +161,10 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
                     returnKeyType="done"
                   />
                 </View>
-                <View className="p-6 items-center">
-                  <View className="items-center space-y-2 mb-2">
-                    <Text className="text-zinc-700">{registrationMessage}</Text>
-                  </View>
+                <View className="items-center space-y-2 mb-2">
+                  <Text className="text-zinc-700">{registrationMessage}</Text>
                 </View>
+
                 <TouchableOpacity
                   onPress={() => props.handleSubmit()}
                   className="w-full items-center bg-green-500 p-3 rounded-full text-white"

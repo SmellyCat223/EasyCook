@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useUser } from '../app/UserContext';
@@ -26,9 +26,9 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
     password: Yup.string().required('Password is required'),
   });
 
-  const handleForgotPassword = () => {
-    alert("Feature coming soon!");
-  };
+  // const handleForgotPassword = () => {
+  //   alert("Feature coming soon!");
+  // };
 
   const handleSubmit = async (
     values: FormValues,
@@ -143,11 +143,11 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
             </View>
           )}
         </Formik>
-        <View className="p-3 items-center space-y-2">
+        {/* <View className="p-3 items-center space-y-2">
           <TouchableOpacity onPress={handleForgotPassword}>
             <Text className="text-zinc-700">Forgot password</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </View>
   );
