@@ -11,22 +11,22 @@ const StackLayOut = () => {
         headerTintColor: "#f4f4f5",
       }}
     >
-      {/* <Stack.Screen 
-        name="components/profile"
-        options={{
-          headerTitle: "Profile",
-        }}
-      /> */}
-      {/* <Stack.Screen 
-        name="components/inventory"
-        options={{
-          headerTitle: "Inventory",
-        }}
-      /> */}
       <Stack.Screen 
         name="index-settings"
         options={{
           headerTitle: "Settings",
+        }}
+      />
+      <Stack.Screen 
+        name="components/profile"
+        options={{
+          headerTitle: "Profile",
+        }}
+      />
+      <Stack.Screen 
+        name="components/inventory"
+        options={{
+          headerTitle: "Inventory",
         }}
       />
     </Stack>

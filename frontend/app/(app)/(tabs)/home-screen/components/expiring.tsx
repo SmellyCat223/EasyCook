@@ -49,8 +49,9 @@ const Expiring = () => {
                     .select('*')
                     .eq('item_inventory_id', inventoryId) // Fetch items based on item_inventory_id
                     .not('expiration_date', 'is', null)
-                    .order('expiration_date', { ascending: true });
-
+                    .order('expiration_date', { ascending: true })
+                    .limit(7);
+                console.log(data);
                 if (error) {
                     console.error('Error fetching items:', error);
                 } else {
@@ -61,7 +62,7 @@ const Expiring = () => {
                         return daysUntilExpiration > 0 && daysUntilExpiration <= 7;
                     });
 
-                    setItems(expiringItems.slice(0, 3));
+                    setItems(expiringItems);
                 }
             } catch (error) {
                 console.error('Error fetching items:', error);

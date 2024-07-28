@@ -41,7 +41,7 @@ const Article = () => {
     };
 
     return (
-        <TouchableOpacity onPress={openArticle}>
+        <TouchableOpacity onPress={openArticle} className="py-1">
             <ImageBackground
                 source={article ? { uri: article.urlToImage } : null}
                 style={{

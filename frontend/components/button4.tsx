@@ -1,32 +1,95 @@
+// import React, { useState } from 'react';
+// import Checkbox from 'expo-checkbox';
+// import { TouchableOpacity, Text, View } from "react-native";
+
+// type Button4Props = {
+//     text1: string;
+//     text2: string;
+//     pred: string | undefined;
+//     onPress1: () => void;
+//     onPress2: (path: string) => void;
+// };
+
+// const Button4 = ({ text1, text2, pred, onPress1, onPress2 }: Button4Props) => {
+//     const [isChecked, setIsChecked] = useState(!!pred);
+
+//     const handleCheckboxPress = () => {
+//         setIsChecked(!isChecked);
+//         onPress1();
+//     };
+
+//     return (
+//         <View className="flex flex-row items-center border-b border-t border-zinc-800 bg-zinc-800/70 pl-4">
+//             <Checkbox
+//                 value={isChecked}
+//                 onValueChange={handleCheckboxPress}
+//                 color={isChecked ? "#a1a1aa" : undefined}
+//             />
+//             <TouchableOpacity
+//                 onPress={() => onPress2("")}
+//                 className="flex flex-1 justify-center h-10"
+//             >
+//                 <View className="flex flex-row justify-between px-2">
+//                     <View className="flex flex-row w-4/5">
+//                         <Text className="text-base text-white">   {text1}</Text>
+//                     </View>
+//                     <View className="text-left pr-4">
+//                         <Text className="text-base text-white">{text2}</Text>
+//                     </View>
+//                 </View>
+//             </TouchableOpacity>
+//         </View>
+//     );
+// };
+
+// export default Button4;
+
+import React, { useState, useEffect } from 'react';
+import Checkbox from 'expo-checkbox';
 import { TouchableOpacity, Text, View } from "react-native";
-import { Icon } from 'react-native-elements';
 
 type Button4Props = {
     text1: string;
     text2: string;
-    icon1: string;
-    onPress: (path: string) => void;
-    path: string; // Add path as a prop
+    pred: string | undefined;
+    isChecked: boolean;
+    onPress1: () => void;
+    onPress2: () => void;
 };
-const Button4 = ({ text1, text2, icon1, onPress, path }: Button4Props) => {
+
+const Button4 = ({ text1, text2, pred, isChecked, onPress1, onPress2 }: Button4Props) => {
+    const [localChecked, setLocalChecked] = useState(isChecked);
+
+    useEffect(() => {
+        setLocalChecked(isChecked);
+    }, [isChecked]);
+
+    const handleCheckboxPress = () => {
+        setLocalChecked(!localChecked);
+        onPress1();
+    };
 
     return (
-        <View className="border-b border-t border-zinc-800">
+        <View className="flex flex-row items-center border-b border-t border-zinc-800 bg-zinc-800/70 pl-4">
+            <Checkbox
+                value={localChecked}
+                onValueChange={handleCheckboxPress}
+                color={localChecked ? "#a1a1aa" : undefined}
+            />
             <TouchableOpacity
-                onPress={() => onPress(path)}
-                // onPress={(path: string) => onPress(path)}
-                className={`flex justify-center bg-zinc-800/70 h-10`}
+                onPress={onPress2}
+                className="flex flex-1 justify-center h-10"
             >
                 <View className="flex flex-row justify-between px-2">
                     <View className="flex flex-row w-4/5">
-                        <Icon name={icon1} color="#f3f4f6" />
                         <Text className="text-base text-white">   {text1}</Text>
                     </View>
-                    <Text className="text-base text-white">{text2}</Text>
+                    <View className="text-left pr-4">
+                        <Text className="text-base text-white">{text2}</Text>
+                    </View>
                 </View>
             </TouchableOpacity>
         </View>
-
     );
 };
 

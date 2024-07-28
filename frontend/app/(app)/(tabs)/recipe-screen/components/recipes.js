@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, Modal, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Button, Alert } from 'react-native';
+import { View, Text, Pressable, Modal, TouchableOpacity, ScrollView, ActivityIndicator, Button, Alert } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MasonryList from '@react-native-seoul/masonry-list';
-import { useNavigation } from '@react-navigation/native';
 import { CachedImage } from './image';
 import Animated, { FadeInDown, useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
 import { Icon } from 'react-native-elements';
-import YouTubeIframe, { getYoutubeMeta } from 'react-native-youtube-iframe';
+import YouTubeIframe from 'react-native-youtube-iframe';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { format, parse } from 'date-fns';
+import { format } from 'date-fns';
+import Fraction from 'fraction.js';
 import { supabase } from '../../../../supabase';
 
 export default function Recipes({ categories, meals }) {
@@ -30,7 +30,7 @@ export default function Recipes({ categories, meals }) {
     }, []);
 
     return (
-        <View style={{ marginHorizontal: wp(4), paddingVertical: hp(2) }}>
+        <View className="mx-4 py-2">
             {categories.length === 0 || meals.length === 0 ? null : (
                 <MasonryList
                     data={meals}
@@ -48,7 +48,6 @@ export default function Recipes({ categories, meals }) {
 }
 
 const RecipeCard = ({ item, index, userId }) => {
-    let isEven = index % 2 === 0;
     const [modalVisible, setModalVisible] = useState(false);
     const springValue = useSharedValue(0);
     const [recipeDetails, setRecipeDetails] = useState(null);
@@ -90,15 +89,214 @@ const RecipeCard = ({ item, index, userId }) => {
     const toggleModal = () => {
         setModalVisible(!modalVisible);
         if (!modalVisible && !recipeDetails) {
-            // Fetch recipe details only when modal is opening and details are not yet fetched
             fetchRecipeDetails(item.idMeal);
         }
         springValue.value = modalVisible ? 0 : 1;
     };
 
+    // Conversion map for Unicode fractions to decimal
+    const unicodeFractions = {
+        '¼': 0.25,
+        '½': 0.5,
+        '¾': 0.75,
+        '⅐': 1 / 7,
+        '⅑': 1 / 9,
+        '⅒': 1 / 10,
+        '⅓': 1 / 3,
+        '⅔': 2 / 3,
+        '⅕': 1 / 5,
+        '⅖': 2 / 5,
+        '⅗': 3 / 5,
+        '⅘': 4 / 5,
+        '⅙': 1 / 6,
+        '⅚': 5 / 6,
+        '⅛': 1 / 8,
+        '⅜': 3 / 8,
+        '⅝': 5 / 8,
+        '⅞': 7 / 8
+    };
+
+    function parseMeasure(measure) {
+        // Regular expression to match whole numbers, fractions (including Unicode fractions), and units
+        const regex = /^(\d+)?\s*([\u00BC-\u00BE\u2150-\u215E\u2189\d+\/\d+])?\s*(.*)$/;
+        const match = measure.match(regex);
+        console.log(match);
+        if (match) {
+            const wholeNumber = match[1];
+            const fraction = match[2];
+            const unit = match[3].trim();
+
+            let quantity = '';
+
+            if (wholeNumber) {
+                quantity += wholeNumber;
+            }
+
+            if (fraction) {
+                quantity += unicodeFractions[fraction] || parseFloat(fraction);
+            }
+
+            return {
+                quantity: quantity || '0',
+                unit: unit || null
+            };
+        } else {
+            // If no match, return nulls or handle it as needed
+            return {
+                quantity: null,
+                unit: measure.trim() || null
+            };
+        }
+    }
+
     const handleAddRecipe = async () => {
         try {
-            const { data, error } = await supabase
+            // Check if recipe category exists in recipe_category table
+            const { data: categoryData, error: categoryError } = await supabase
+                .from('recipe_category')
+                .select('recipe_category_id')
+                .eq('recipe_category_name', recipeDetails?.strCategory);
+
+            if (categoryError) {
+                throw categoryError;
+            }
+
+            let categoryId;
+            if (categoryData.length === 0) {
+                // If category doesn't exist, insert it into recipe_category table
+                const { data: insertCategoryData, error: insertCategoryError } = await supabase
+                    .from('recipe_category')
+                    .insert([{ recipe_category_name: recipeDetails?.strCategory }])
+                    .select();
+
+                if (insertCategoryError) {
+                    throw insertCategoryError;
+                }
+                categoryId = insertCategoryData[0].recipe_category_id;
+            } else {
+                // If category exists, use the existing category_id
+                categoryId = categoryData[0].recipe_category_id;
+            }
+
+            // Check if recipe exists in recipe table
+            const { data: recipeData, error: recipeError } = await supabase
+                .from('recipe')
+                .select('recipe_id')
+                .eq('recipe_name', recipeDetails?.strMeal);
+
+            if (recipeError) {
+                throw recipeError;
+            }
+
+            let recipeId;
+            if (recipeData.length === 0) {
+                // If recipe doesn't exist, insert it into recipe table
+                const { data: insertRecipeData, error: insertRecipeError } = await supabase
+                    .from('recipe')
+                    .insert([{
+                        recipe_name: recipeDetails?.strMeal,
+                        user_id: userId,
+                        recipe_category_id: categoryId,
+                        recipe_picture: recipeDetails?.strMealThumb,
+                        recipe_instruction: recipeDetails?.strInstructions,
+                        recipe_area: recipeDetails?.strArea
+                    }])
+                    .select();
+
+                if (insertRecipeError) {
+                    throw insertRecipeError;
+                }
+                recipeId = insertRecipeData[0].recipe_id;
+            } else {
+                recipeId = recipeData[0].recipe_id;
+            }
+
+            // Extract all ingredients in the recipe
+            const ingredients = [];
+            for (let i = 1; i <= 20; i++) {
+                const ingredientName = recipeDetails[`strIngredient${i}`];
+                const measure = recipeDetails[`strMeasure${i}`];
+
+                if (ingredientName && measure) {
+                    const parsed = parseMeasure(measure);
+                    ingredients.push({
+                        name: ingredientName,
+                        quantity: parsed.quantity,
+                        unit: parsed.unit
+                    });
+                } else if (ingredientName) {
+                    ingredients.push({
+                        name: ingredientName,
+                        quantity: null,
+                        unit: null
+                    });
+                } else {
+                    break;
+                }
+            }
+
+            for (let ingredient of ingredients) {
+                // Check if ingredient exist in ingredient table
+                const { data: ingredientData, error: ingredientError } = await supabase
+                    .from('ingredient')
+                    .select('ingredient_id')
+                    .eq('ingredient_name', ingredient.name);
+
+                if (ingredientError) {
+                    throw ingredientError;
+                }
+
+                let ingredientId;
+                if (ingredientData.length === 0) {
+                    // If ingredient doesn't exist, insert it into ingredient table
+                    const { data: insertIngredientData, error: insertIngredientError } = await supabase
+                        .from('ingredient')
+                        .insert([{ ingredient_name: ingredient.name }])
+                        .select();
+
+                    if (insertIngredientError) {
+                        throw insertIngredientError;
+                    }
+                    ingredientId = insertIngredientData[0].ingredient_id;
+                } else {
+                    ingredientId = ingredientData[0].ingredient_id;
+                }
+
+
+                // Check if the pair of recipe and ingredient already exists in recipe_ingredient table
+                const { data: recipeIngredientData, error: recipeIngredientError } = await supabase
+                    .from('recipe_ingredient')
+                    .select('recipe_ingredient_id')
+                    .eq('recipe_id', recipeId)
+                    .eq('ingredient_id', ingredientId);
+
+                if (recipeIngredientError) {
+                    throw recipeIngredientError;
+                }
+
+                // Insert into recipe_ingredient table only if the pair does not exist
+                if (recipeIngredientData.length === 0) {
+                    const { data: recipeIngredientInsertData, error: recipeIngredientInsertError } = await supabase
+                        .from('recipe_ingredient')
+                        .insert([{
+                            recipe_id: recipeId,
+                            ingredient_id: ingredientId,
+                            ingredient_quantity: ingredient.quantity,
+                            measurement_unit: ingredient.unit
+                        }]);
+
+                    if (recipeIngredientInsertError) {
+                        throw recipeIngredientInsertError;
+                    }
+
+                    console.log('Successfully added ingredient to recipe_ingredient table:', ingredient.quantity);
+                } else {
+                    console.log('Ingredient already exists in recipe_ingredient table:', ingredient.name);
+                }
+            }
+
+            // Insert the selected meal into meal table
+            const { data: mealData, error: mealError } = await supabase
                 .from('meal')
                 .insert([
                     {
@@ -110,17 +308,17 @@ const RecipeCard = ({ item, index, userId }) => {
                     }
                 ]);
 
-            if (error) {
-                throw error;
+            if (mealError) {
+                throw mealError;
             }
+
             Alert.alert('Success', 'Item added successfully');
-            toggleModal(); // Close the modal after successful submission
+            toggleModal();
         } catch (error) {
             console.error('Error adding item:', error.message);
             Alert.alert('Error', error.message);
         }
     };
-
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -131,15 +329,14 @@ const RecipeCard = ({ item, index, userId }) => {
     return (
         <Animated.View entering={FadeInDown.delay(index * 100).duration(600).springify().damping(12)}>
             <TouchableOpacity
-                style={{ width: '100%', paddingLeft: index % 2 === 0 ? 0 : 8, paddingRight: index % 2 === 0 ? 8 : 0 }}
+                className={`w-full ${index % 2 === 0 ? 'pr-2' : 'pl-2'}`}
                 onPress={toggleModal}
             >
                 <CachedImage
                     uri={item.strMealThumb}
-                    style={{ width: '100%', height: index % 3 === 0 ? hp(25) : hp(35), borderRadius: 35 }}
-                    className="bg-black/5"
+                    className={`w-full ${index % 3 === 0 ? 'h-64' : 'h-96'} rounded-3xl bg-black/5`}
                 />
-                <Text style={{ fontSize: hp(1.5), marginBottom: 20 }} className="font-semibold ml-2 text-neutral-400">
+                <Text className="text-sm mb-5 font-semibold ml-2 text-neutral-400">
                     {item.strMeal.length > 20 ? `${item.strMeal.slice(0, 20)}...` : item.strMeal}
                 </Text>
             </TouchableOpacity>
@@ -149,31 +346,31 @@ const RecipeCard = ({ item, index, userId }) => {
                 transparent={true}
                 onRequestClose={toggleModal}
             >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
+                <View className="mt-14 flex-1 justify-center items-center bg-black/50">
+                    <View className="bg-white rounded-2xl p-4 w-11/12 max-h-4/5">
+                        <TouchableOpacity onPress={toggleModal} className="absolute top-2 right-2 p-2 z-10">
                             <Icon name="closecircle" type="antdesign" color="#6b7280" size={30} />
                         </TouchableOpacity>
                         {loading ? (
-                            <ActivityIndicator size="large" classname='mt-16' />
+                            <ActivityIndicator size="large" className="mt-16" />
                         ) : (
-                            <ScrollView className='px-4 flex space-y-2'>
+                            <ScrollView className="px-4 space-y-2">
                                 <CachedImage
                                     uri={recipeDetails?.strMealThumb || item.strMealThumb}
-                                    style={{ width: wp(60), height: hp(25), borderRadius: 20, marginBottom: 12 }}
+                                    className="w-60 h-64 rounded-2xl mb-3"
                                 />
-                                <Text style={{ fontSize: hp(3) }} className='font-bold flex-1 text-neutral-700'>{recipeDetails?.strMeal || item.strMeal}</Text>
-                                <Text style={{ fontSize: hp(2) }} className='font-medium flex-1 text-neutral-500'>{recipeDetails?.strArea || item.Area}</Text>
+                                <Text className="text-3xl font-bold flex-1 text-neutral-700">{recipeDetails?.strMeal || item.strMeal}</Text>
+                                <Text className="text-xl font-medium flex-1 text-neutral-500">{recipeDetails?.strArea || item.Area}</Text>
 
-                                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Ingredients:</Text>
-                                <View style={{ marginLeft: 10 }}>{getIngredients(recipeDetails)}</View>
+                                <Text className="font-bold text-lg">Ingredients:</Text>
+                                <View className="ml-2">{getIngredients(recipeDetails)}</View>
 
-                                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Instructions:</Text>
-                                <Text style={{ marginBottom: 16 }}>{recipeDetails?.strInstructions || ''}</Text>
+                                <Text className="font-bold text-lg">Instructions:</Text>
+                                <Text className="mb-4">{recipeDetails?.strInstructions || ''}</Text>
 
                                 {recipeDetails?.strYoutube && (
                                     <View className="space-y-4">
-                                        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Recipe Video:</Text>
+                                        <Text className="font-bold text-lg">Recipe Video:</Text>
                                         <View>
                                             <YouTubeIframe
                                                 videoID={getYoutubeVideoId(recipeDetails.strYoutube)}
@@ -183,7 +380,7 @@ const RecipeCard = ({ item, index, userId }) => {
                                     </View>
                                 )}
 
-                                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Add to Meal Plan</Text>
+                                <Text className="font-bold text-lg">Add to Meal Plan</Text>
                                 <Button onPress={() => setShowDatePicker(true)} title="Select Date" />
                                 {showDatePicker && (
                                     <DateTimePicker
@@ -207,37 +404,13 @@ const RecipeCard = ({ item, index, userId }) => {
     );
 };
 
-const styles = StyleSheet.create({
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 10,
-        width: '85%',
-        maxHeight: '80%',
-    },
-    closeButton: {
-        position: 'absolute',
-        top: hp(1),
-        right: wp(2),
-        padding: 10,
-        zIndex: 1, // Ensure the close button is on top of the modal content
-    },
-});
-
-// Helper function to format ingredients list
 const getIngredients = (recipeDetails) => {
     if (!recipeDetails) return null;
     let ingredients = [];
     for (let i = 1; i <= 20; i++) {
         if (recipeDetails[`strIngredient${i}`]) {
             ingredients.push(
-                <Text key={`ingredient-${i}`} style={{ marginBottom: 4 }}>
+                <Text key={`ingredient-${i}`} className="mb-1">
                     {`${recipeDetails[`strMeasure${i}`]} ${recipeDetails[`strIngredient${i}`]}`}
                 </Text>
             );
