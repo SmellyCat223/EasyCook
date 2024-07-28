@@ -1,5 +1,5 @@
-import { FC, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { FC, useState, useRef } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { supabase } from '../app/supabase';
@@ -23,6 +23,11 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
+
+  // Create refs for each TextInput
+  const emailInputRef = useRef<TextInput>(null);
+  const phoneInputRef = useRef<TextInput>(null);
+  const passwordInputRef = useRef<TextInput>(null);
 
   const handleSubmit = async (
     values: FormValues,
@@ -70,7 +75,10 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
   };
 
   return (
-    <View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <View className="items-center">
         <View className="flex-row justify-between p-4 w-4/5 items-center">
           <View className="p-2 items-center">
@@ -104,6 +112,8 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
                     onChangeText={props.handleChange('username')}
                     onBlur={props.handleBlur('username')}
                     value={props.values.username}
+                    returnKeyType="next"
+                    onSubmitEditing={() => emailInputRef.current?.focus()}
                   />
                 </View>
 
@@ -116,10 +126,13 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
                     onChangeText={props.handleChange('email')}
                     onBlur={props.handleBlur('email')}
                     value={props.values.email}
+                    ref={emailInputRef}
+                    returnKeyType="next"
+                    onSubmitEditing={() => phoneInputRef.current?.focus()}
                   />
                 </View>
 
-                <View className="mb-3">
+                {/* <View className="mb-3">
                   <TextInput
                     className="bg-zinc-900 border border-stone-700 text-white rounded-full p-3 opacity-70"
                     id="phone"
@@ -128,8 +141,11 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
                     onChangeText={props.handleChange('phone')}
                     onBlur={props.handleBlur('phone')}
                     value={props.values.phone}
+                    ref={phoneInputRef}
+                    returnKeyType="next"
+                    onSubmitEditing={() => passwordInputRef.current?.focus()}
                   />
-                </View>
+                </View> */}
 
                 <View className="mb-3">
                   <TextInput
@@ -141,6 +157,8 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
                     onChangeText={props.handleChange('password')}
                     onBlur={props.handleBlur('password')}
                     value={props.values.password}
+                    ref={passwordInputRef}
+                    returnKeyType="done"
                   />
                 </View>
                 <View className="p-6 items-center">
@@ -159,7 +177,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
           )}
         </Formik>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
