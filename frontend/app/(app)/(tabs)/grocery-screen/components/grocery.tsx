@@ -128,51 +128,63 @@ const Grocery: React.FC = () => {
     };
 
     const handleClearAll = async () => {
-        try {
-            // Update item_inventory_id for checked items
-            const checkedItemIds = Array.from(checkedItems);
-            console.log(checkedItemIds);
-            if (checkedItemIds.length > 0) {
-                const { error: updateError } = await supabase
-                    .from('item')
-                    .update({
-                        item_inventory_id: inventoryId,
-                        purchase_date: new Date()
-                    })
-                    .in('item_id', checkedItemIds);
+        Alert.alert(
+            'Alert',
+            'All checked items will be added to the inventory, and all unchecked items will be deleted. Do you want to proceed?',
+            [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'OK',
+                    onPress: async () => {
+                        try {
+                            // Update item_inventory_id for checked items
+                            const checkedItemIds = Array.from(checkedItems);
+                            console.log(checkedItemIds);
+                            if (checkedItemIds.length > 0) {
+                                const { error: updateError } = await supabase
+                                    .from('item')
+                                    .update({
+                                        item_inventory_id: inventoryId,
+                                        purchase_date: new Date()
+                                    })
+                                    .in('item_id', checkedItemIds);
 
-                if (updateError) {
-                    console.error('Error updating checked items:', updateError);
-                    Alert.alert('Error', 'Failed to update checked items');
-                    return;
+                                if (updateError) {
+                                    console.error('Error updating checked items:', updateError);
+                                    Alert.alert('Error', 'Failed to update checked items');
+                                    return;
+                                }
+                            }
+
+                            // Delete all unchecked items from the database
+                            const uncheckedItems = items.filter(item => !checkedItems.has(item.item_id));
+                            if (uncheckedItems.length > 0) {
+                                const { error: deleteError } = await supabase
+                                    .from('item')
+                                    .delete()
+                                    .in('item_id', uncheckedItems.map(item => item.item_id));
+
+                                if (deleteError) {
+                                    console.error('Error deleting unchecked items:', deleteError);
+                                    Alert.alert('Error', 'Failed to delete unchecked items');
+                                    return;
+                                }
+                            }
+
+                            // Update the local state to remove checked and unchecked items
+                            const newItems = items.filter(item => checkedItems.has(item.item_id));
+                            setItems(newItems);
+                            setCheckedItems(new Set(newItems.map(item => item.item_id)));
+                            // Increment changeCounter to trigger the debounced fetch
+                            setChangeCounter(prevCounter => prevCounter + 1);
+                        } catch (error) {
+                            console.error('Error in handleClearAll:', error);
+                            Alert.alert('Error', 'Failed to clear all items');
+                        }
+                    }
                 }
-            }
-
-            // Delete all unchecked items from the database
-            const uncheckedItems = items.filter(item => !checkedItems.has(item.item_id));
-            if (uncheckedItems.length > 0) {
-                const { error: deleteError } = await supabase
-                    .from('item')
-                    .delete()
-                    .in('item_id', uncheckedItems.map(item => item.item_id));
-
-                if (deleteError) {
-                    console.error('Error deleting unchecked items:', deleteError);
-                    Alert.alert('Error', 'Failed to delete unchecked items');
-                    return;
-                }
-            }
-
-            // Update the local state to remove checked and unchecked items
-            const newItems = items.filter(item => checkedItems.has(item.item_id));
-            setItems(newItems);
-            setCheckedItems(new Set(newItems.map(item => item.item_id)));
-            // Increment changeCounter to trigger the debounced fetch
-            setChangeCounter(prevCounter => prevCounter + 1);
-        } catch (error) {
-            console.error('Error in handleClearAll:', error);
-            Alert.alert('Error', 'Failed to clear all items');
-        }
+            ]
+        );
     };
 
     const filteredItems = items.filter(item =>

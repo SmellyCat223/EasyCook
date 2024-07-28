@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, TextInput } from "react-native";
+import React, { useState } from 'react';
+import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 type FilterProps = {
@@ -7,19 +7,35 @@ type FilterProps = {
 };
 
 const Filter: React.FC<FilterProps> = ({ setSearchQuery }: FilterProps) => {
+    const [inputValue, setInputValue] = useState('');
+
+    const handleClearInput = () => {
+        setInputValue('');
+        setSearchQuery('');
+    };
+
+    const handleTextChange = (text: string) => {
+        setInputValue(text);
+        setSearchQuery(text);
+    };
 
     return (
-        <View className="flex flex-row py-2 justify-between">
-            <View className="flex flex-row rounded-2xl p-2 w-60 bg-zinc-200">
-                <Icon name="search1" type="antdesign" color="#6b7280" size={16} />
+        <View className="p-0">
+            <View className="flex-row items-center bg-white rounded-full p-2">
+                <Icon name="search" size={24} color="#9CA3AF" style={{ marginRight: 3 }} />
                 <TextInput
-                    className="text-zinc-500 ml-2"
+                    className="text-zinc-500 ml-2 flex-1"
                     placeholder="Search Item"
                     placeholderTextColor="#44403c"
-                    onChangeText={(text: string) => setSearchQuery(text)}
+                    value={inputValue}
+                    onChangeText={handleTextChange}
                 />
+                {inputValue.length > 0 && (
+                    <TouchableOpacity onPress={handleClearInput}>
+                        <Icon name="close" size={24} color="#9CA3AF" />
+                    </TouchableOpacity>
+                )}
             </View>
-            <Icon name="filter" type="antdesign" color="#e4e4e7" />
         </View>
     );
 };
