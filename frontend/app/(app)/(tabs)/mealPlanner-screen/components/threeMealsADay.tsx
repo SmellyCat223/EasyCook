@@ -105,7 +105,6 @@ const MealPlannerScreenComponent = () => {
     const [userId, setUserId] = useState<string | null>(null);
     const [currentWeekStart, setCurrentWeekStart] = useState<Date>(startOfWeek(new Date()));
     const [nextMeals, setNextMeals] = useState<Item[]>([]);
-
     const [loading, setLoading] = useState(true);
 
 
@@ -154,7 +153,6 @@ const MealPlannerScreenComponent = () => {
         if (error) {
             console.error('Error fetching items:', error);
         } else if (data) {
-            // console.log('Fetched items:', data);
             setItems(data);
         }
     };

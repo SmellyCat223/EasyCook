@@ -150,6 +150,7 @@ const RecipeCard = ({ item, index, userId }) => {
     }
 
     const handleAddRecipe = async () => {
+        setLoading(true);
         try {
             // Check if recipe category exists in recipe_category table
             const { data: categoryData, error: categoryError } = await supabase
@@ -312,11 +313,13 @@ const RecipeCard = ({ item, index, userId }) => {
                 throw mealError;
             }
 
-            Alert.alert('Success', 'Item added successfully');
+            Alert.alert('Success', 'Meal added successfully');
             toggleModal();
         } catch (error) {
-            console.error('Error adding item:', error.message);
+            console.error('Error adding meal:', error.message);
             Alert.alert('Error', error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -329,12 +332,13 @@ const RecipeCard = ({ item, index, userId }) => {
     return (
         <Animated.View entering={FadeInDown.delay(index * 100).duration(600).springify().damping(12)}>
             <TouchableOpacity
-                className={`w-full ${index % 2 === 0 ? 'pr-2' : 'pl-2'}`}
+                style={{ width: '100%', paddingLeft: index % 2 === 0 ? 0 : 8, paddingRight: index % 2 === 0 ? 8 : 0 }}
                 onPress={toggleModal}
             >
                 <CachedImage
                     uri={item.strMealThumb}
-                    className={`w-full ${index % 3 === 0 ? 'h-64' : 'h-96'} rounded-3xl bg-black/5`}
+                    style={{ width: '100%', height: index % 3 === 0 ? hp(25) : hp(35), borderRadius: 35 }}
+                    className="bg-black/5"
                 />
                 <Text className="text-sm mb-5 font-semibold ml-2 text-neutral-400">
                     {item.strMeal.length > 20 ? `${item.strMeal.slice(0, 20)}...` : item.strMeal}
@@ -346,7 +350,7 @@ const RecipeCard = ({ item, index, userId }) => {
                 transparent={true}
                 onRequestClose={toggleModal}
             >
-                <View className="mt-14 flex-1 justify-center items-center bg-black/50">
+                <View className="mt-14 mb-10 flex-1 justify-center items-center bg-black/50">
                     <View className="bg-white rounded-2xl p-4 w-11/12 max-h-4/5">
                         <TouchableOpacity onPress={toggleModal} className="absolute top-2 right-2 p-2 z-10">
                             <Icon name="closecircle" type="antdesign" color="#6b7280" size={30} />
@@ -395,7 +399,8 @@ const RecipeCard = ({ item, index, userId }) => {
                                     <Picker.Item label="Lunch" value="Lunch" />
                                     <Picker.Item label="Dinner" value="Dinner" />
                                 </Picker>
-                                <Button title="Add Recipe" onPress={handleAddRecipe} />
+                                <Button title={loading ? "Adding Recipe..." : "Add Recipe"} onPress={handleAddRecipe} disabled={loading} />
+                                {/* <Button title="Add Recipe" onPress={handleAddRecipe} /> */}
                             </ScrollView>)}
                     </View>
                 </View>
@@ -420,3 +425,4 @@ const getIngredients = (recipeDetails) => {
     }
     return ingredients;
 };
+

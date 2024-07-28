@@ -59,17 +59,15 @@ const RecipeScreen = () => {
 
     return (
         <View className="flex-1 pt-1 bg-stone-950">
-            <ScrollView className="flex-grow">
-                {/* <View className="px-4 pb-6 bg-stone-950"> */}
-                <Search onSearch={searchRecipes} />
-                <View>
-                    {categories.length > 0 && <Categories categories={categories} activeCategory={activeCategory} handleChangeCategory={handleChangeCategory} />}
-                </View>
 
+            <Search onSearch={searchRecipes} />
+            <View>
+                {categories.length > 0 && <Categories categories={categories} activeCategory={activeCategory} handleChangeCategory={handleChangeCategory} />}
+            </View>
+            <ScrollView className="flex-grow">
                 <View>
                     <Recipes meals={meals} categories={categories} />
                 </View>
-                {/* </View> */}
             </ScrollView >
         </View >
     );

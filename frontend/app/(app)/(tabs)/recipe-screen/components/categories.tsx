@@ -29,7 +29,7 @@ export default function Categories({ categories, activeCategory, handleChangeCat
                             <View style={[styles.imageContainer, isActive && styles.activeImageContainer]}>
                                 <CachedImage
                                     uri={cat.strCategoryThumb}
-                                    style={[styles.image, { width: hp(6), height: hp(6) }]}
+                                    style={[styles.image, { opacity: isActive ? 1 : 0.5, width: hp(6), height: hp(6) }]}
                                 />
                             </View>
                             <Text style={[styles.text, isActive && styles.activeText]}>{cat.strCategory}</Text>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'black', // Default background color
     },
     activeCategoryItem: {
-        backgroundColor: 'white', // Active background color
+        backgroundColor: 'transparent', // Active background color
     },
     imageContainer: {
         borderRadius: 50,
@@ -71,9 +71,9 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 12,
-        color: 'white',
+        color: 'dimgrey',
     },
     activeText: {
-        color: 'black',
+        color: 'white'
     },
 });
