@@ -95,13 +95,37 @@ const GroceryBody: React.FC = () => {
             .from('item')
             .select('*')
             .eq('item_shopping_list_id', shoppingListId);
-            // .is('item_inventory_id', null);
+        // .is('item_inventory_id', null);
 
         if (error) {
             console.error('Error fetching items:', error);
         } else if (data) {
             setItems(data);
         }
+
+        // Fetch items from the 'meal_ingredient' table
+        const { data: ingredientData, error: ingredientError } = await supabase
+            .from('meal_ingredient')
+            .select('*')
+            .eq('user_id', userId)
+
+        if (ingredientError) {
+            console.error('Error fetching meal ingredients:', ingredientError);
+        }
+
+        // Combine data from both tables
+        const combinedData = [
+            ...(data || []),
+            ...(ingredientData?.map(ingredient => ({
+                item_id: ingredient.meal_id,
+                item_name: ingredient.ingredient_name,
+                item_quantity: ingredient.portion_size,
+                item_inventory_id: null, // Set as null or adjust based on your app logic
+            })) || []),
+        ];
+
+        // Set the combined data to state
+        setItems(combinedData);
     };
 
     const handleEditItem = (itemId: string) => {
@@ -112,7 +136,7 @@ const GroceryBody: React.FC = () => {
     const handleCheckboxChange = async (item: Item) => {
         const { data, error } = await supabase
             .from('item')
-            .update({ 
+            .update({
                 item_inventory_id: inventoryId,
                 purchase_date: new Date()
             })
@@ -146,7 +170,7 @@ const GroceryBody: React.FC = () => {
             >
                 <TouchableWithoutFeedback onPress={() => setAddItemModalVisible(false)}>
                     <View className="flex flex-1 justify-center items-center bg-stone-950/70 bg-opacity-50">
-                        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
+                        <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
                             <View className="bg-zinc-800 p-4 rounded-2xl w-5/6">
                                 <AddItemGrocery
                                     shoppingListId={shoppingListId}
@@ -203,7 +227,7 @@ const Body: React.FC<BodyProps> = ({ items, onCheckboxChange, onEditItem }) => {
                             pred={item.item_inventory_id}
                             onPress1={() => onCheckboxChange(item)}
                             onPress2={() => onEditItem(item.item_id)}
-                        />                        
+                        />
                     </View>
                 ))}
             </ScrollView>

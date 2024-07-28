@@ -97,7 +97,8 @@ const RecipeCard = ({ item, index, userId }) => {
 
     const handleAddRecipe = async () => {
         try {
-            const { data: mealData, error: mealError } = await supabase
+
+            const { data: mealData, error } = await supabase
                 .from('meal')
                 .insert([
                     {
@@ -108,10 +109,10 @@ const RecipeCard = ({ item, index, userId }) => {
                         meal_title: recipeDetails?.strMeal
                     }
                 ])
-                .select('meal_id');
+                .select('meal_id')
 
-            if (mealError) {
-                throw mealError;
+            if (error) {
+                throw error;
             }
 
             const ingredients = getIngredients(recipeDetails);
@@ -119,12 +120,12 @@ const RecipeCard = ({ item, index, userId }) => {
             const ingredientData = ingredients.map(ingredient => ({
                 meal_id: mealData[0].meal_id,
                 ingredient_name: ingredient.name,
-                portion_no: ingredient.portion
+                portion_size: ingredient.portion
             }));
 
             const { error: ingredientError } = await supabase
                 .from('meal_ingredient')
-                .insert(ingredientData);
+                .insert([ingredientData, { user_id: userId }]);
 
             if (ingredientError) {
                 throw ingredientError;
@@ -185,15 +186,16 @@ const RecipeCard = ({ item, index, userId }) => {
                                 <Text style={{ fontSize: hp(2) }} className='font-medium flex-1 text-neutral-500'>{recipeDetails?.strArea || item.Area}</Text>
 
                                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Ingredients:</Text>
-                                {/* <View style={{ marginLeft: 10 }}>{getIngredients(recipeDetails)}</View> */}
-                                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Ingredients:</Text>
+                                <View style={{ marginLeft: 10 }}>{getIngredients(recipeDetails).name}</View>
+                                {/* <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Ingredients:</Text>
+
                                 <View style={{ marginLeft: 10 }}>
                                     {getIngredients(recipeDetails).map((ingredient, index) => (
                                         <Text key={`ingredient-${index}`} style={{ marginBottom: 4 }}>
                                             {`${ingredient.portion} ${ingredient.name}`}
                                         </Text>
                                     ))}
-                                </View>
+                                </View> */}
 
                                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Instructions:</Text>
                                 <Text style={{ marginBottom: 16 }}>{recipeDetails?.strInstructions || ''}</Text>
@@ -259,7 +261,7 @@ const styles = StyleSheet.create({
 
 // Helper function to format ingredients list
 const getIngredients = (recipeDetails) => {
-    if (!recipeDetails) return null;
+    if (!recipeDetails) return [];
     let ingredients = [];
     for (let i = 1; i <= 20; i++) {
         const ingredientName = recipeDetails[`strIngredient${i}`];
@@ -279,6 +281,23 @@ const getIngredients = (recipeDetails) => {
     }
     return ingredients;
 };
+
+// const getIngredients = (recipeDetails) => {
+//     if (!recipeDetails) return null;
+//     let ingredients = [];
+//     for (let i = 1; i <= 20; i++) {
+//         if (recipeDetails[`strIngredient${i}`]) {
+//             ingredients.push(
+//                 <Text key={`ingredient-${i}`} className="mb-1">
+//                     {`${recipeDetails[`strMeasure${i}`]} ${recipeDetails[`strIngredient${i}`]}`}
+//                 </Text>
+//             );
+//         } else {
+//             break;
+//         }
+//     }
+//     return ingredients;
+// };
 
 // import React, { useState, useEffect } from 'react';
 // import { View, Text, Pressable, Modal, TouchableOpacity, ScrollView, ActivityIndicator, Button, Alert } from 'react-native';
