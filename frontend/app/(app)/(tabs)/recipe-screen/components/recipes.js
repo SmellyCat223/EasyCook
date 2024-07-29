@@ -304,7 +304,8 @@ const RecipeCard = ({ item, index, userId }) => {
                         meal_date: format(selectedDate, 'yyyy-MM-dd'),
                         meal_type: selectedMeal,
                         user_id: userId,
-                        meal_title: recipeDetails?.strMeal
+                        meal_title: recipeDetails?.strMeal,
+                        meal_recipe_id: recipeId
                     }
                 ]);
 

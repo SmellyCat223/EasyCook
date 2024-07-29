@@ -16,7 +16,7 @@ export type Ingredient = {
     ingredient_id: string;
     ingredient_category_id: number;
     ingredient_name: string;
-    ingredient_calories: number;
+    ingredient_calories?: number;
 }
 
 export type Inventory = {
@@ -52,9 +52,9 @@ export type RecipeCategory = {
 }
 
 export type Recipe = {
-    recipe_id: number;
+    recipe_id: string;
     user_id: string;
-    recipe_category_id: number;
+    recipe_category_id: string;
     recipe_name: string;
     recipe_picture: string;
     recipe_description: string;
@@ -62,8 +62,9 @@ export type Recipe = {
 }
 
 export type RecipeIngredient = {
-    recipe_id: number;
-    ingredient_id: number;
+    recipe_ingredient_id: string;
+    recipe_id: string;
+    ingredient_id: string;
     ingredient_quantity: number;
     measurement_unit: string;
 }
@@ -71,9 +72,11 @@ export type RecipeIngredient = {
 export type Meal = {
     meal_id: number;
     user_id: string;
+    meal_title: string;
     meal_date: string; // use string type for DATE
     meal_type: string;
     meal_calories: number;
+    meal_recipe_id: string;
 }
 
 export type MealIngredient = {

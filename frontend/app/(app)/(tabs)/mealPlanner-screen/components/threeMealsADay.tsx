@@ -4,6 +4,7 @@ import { Icon } from 'react-native-elements';
 import { supabase } from '../../../../supabase';
 import { format, addDays, startOfWeek, endOfWeek, isToday, parseISO } from 'date-fns';
 import NextMeal from '../../home-screen/components/next-meal';
+import AutogenerateGrocery from './autogenerate-grocery';
 
 interface Item {
     meal_calories: number;
@@ -190,7 +191,7 @@ const MealPlannerScreenComponent = () => {
                 <Button title="Previous Week" onPress={handlePrevWeek} />
                 <Button title="Next Week" onPress={handleNextWeek} />
             </View>
-            
+            <AutogenerateGrocery />
             <ScrollView>
                 {weekDates.map((date, index) => {
                     const formattedDate = format(date, 'yyyy-MM-dd');
