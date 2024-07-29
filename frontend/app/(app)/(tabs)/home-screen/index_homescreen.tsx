@@ -22,9 +22,9 @@ const Home = () => {
                     <UpdateInventory />
                     <NextMeal />
                     <Expiring />
-                    <GroupReq />
+                    {/* <GroupReq /> */}
                     <Article />
-                    <Stats />
+                    {/* <Stats /> */}
                 </View>
             </ScrollView>
         </View>
