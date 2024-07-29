@@ -102,7 +102,7 @@ const Grocery: React.FC = () => {
             console.error('Error fetching items:', error);
         } else if (data) {
             // Log data for debugging
-            console.log('Fetched items:', data);
+            // console.log('Fetched items:', data);
 
             setItems(data);
             const checked = new Set(data.filter(item => item.item_inventory_id).map(item => item.item_id));

@@ -18,7 +18,7 @@ const GroceryBody: React.FC<GroceryBodyProps> = ({ items, onCheckboxChange, onEd
                     <View key={item.item_id}>
                         <Button4
                             text1={item.item_name}
-                            text2={`${item.item_quantity}g`}
+                            text2={`${item.item_quantity} ${item.measurement_unit || ''}`} // Handle null measurement unit
                             pred={item.item_inventory_id}
                             isChecked={checkedItems.has(item.item_id)}
                             onPress1={() => onCheckboxChange(item)}

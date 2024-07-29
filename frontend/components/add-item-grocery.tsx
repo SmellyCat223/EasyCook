@@ -26,6 +26,7 @@ const AddItemGrocery: React.FC<AddGroceryProps> = ({ shoppingListId, userId, onC
                     {
                         item_name: values.item_name,
                         item_quantity: values.item_quantity,
+                        measurement_unit: values.measurement_unit,
                         user_id: userId,
                         item_shopping_list_id: shoppingListId // Current shopping list
                     },
@@ -48,6 +49,7 @@ const AddItemGrocery: React.FC<AddGroceryProps> = ({ shoppingListId, userId, onC
             initialValues={{
                 item_name: '',
                 item_quantity: '',
+                measurement_unit: '',
                 expiration_date: '',
                 purchase_date: '',
                 mfg: '',
@@ -81,7 +83,7 @@ const AddItemGrocery: React.FC<AddGroceryProps> = ({ shoppingListId, userId, onC
                             <Text className="text-zinc-100 justify-center w-1/4">Quantity: </Text>
                             <TextInput
                                 className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
-                                placeholder="Item Quantity (g)"
+                                placeholder="Item Quantity"
                                 onChangeText={handleChange('item_quantity')}
                                 onBlur={handleBlur('item_quantity')}
                                 value={values.item_quantity}
@@ -90,6 +92,17 @@ const AddItemGrocery: React.FC<AddGroceryProps> = ({ shoppingListId, userId, onC
                         </View>
                         {touched.item_quantity && errors.item_quantity && <Text className="text-red-500 text-center pb-2">      {errors.item_quantity}</Text>}
 
+                        <View className="flex flex-row items-center">
+                            <Text className="text-zinc-100 justify-center w-1/4">Unit: </Text>
+                            <TextInput
+                                className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                placeholder="Measurement Unit"
+                                onChangeText={handleChange('measurement_unit')}
+                                onBlur={handleBlur('imeasurement_unit')}
+                                value={values.measurement_unit}
+                            />
+                        </View>
+                        {touched.measurement_unit && errors.measurement_unit && <Text className="text-red-500 text-center pb-2">      {errors.measurement_unit}</Text>}
                     </View>
                     <View className="pt-2">
                         <Button title="Submit" color="#3b82f6" onPress={handleSubmit as any} />

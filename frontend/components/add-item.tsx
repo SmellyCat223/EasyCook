@@ -23,6 +23,7 @@ const isPastOrToday = (value: any) => {
 const validationSchema = Yup.object().shape({
     item_name: Yup.string().required('Item name is required'),
     item_quantity: Yup.number().required('Item quantity is required').positive('Must be a positive number').integer('Must be an integer'),
+    // measurement_unit: Yup.required('Measurement unit is required'),
     expiration_date: Yup.date().transform(parseDateString).required('Expiration date is required').typeError('Invalid date format, use dd/MM/yyyy'),
     purchase_date: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy').test('is-past-or-today', 'Invalid purchase date', isPastOrToday),
     mfg: Yup.date().nullable().transform(parseDateString).typeError('Invalid date format, use dd/MM/yyyy').test('is-past-or-today', 'Invalid manufacturing date', isPastOrToday),
@@ -57,6 +58,7 @@ const AddItem: React.FC<AddItemProps> = ({ inventoryId, userId, onClose }) => {
                     {
                         item_name: values.item_name,
                         item_quantity: values.item_quantity,
+                        measurement_unit: values.measurement_unit,
                         expiration_date: values.expiration_date ? format(parseDateString(null, values.expiration_date), 'yyyy-MM-dd') : null,
                         purchase_date: values.purchase_date ? format(parseDateString(null, values.purchase_date), 'yyyy-MM-dd') : null,
                         mfg: values.mfg ? format(parseDateString(null, values.mfg), 'yyyy-MM-dd') : null,
@@ -112,6 +114,7 @@ const AddItem: React.FC<AddItemProps> = ({ inventoryId, userId, onClose }) => {
                 initialValues={{
                     item_name: '',
                     item_quantity: '',
+                    measurement_unit: '',
                     expiration_date: '',
                     purchase_date: '',
                     mfg: '',
@@ -161,6 +164,18 @@ const AddItem: React.FC<AddItemProps> = ({ inventoryId, userId, onClose }) => {
                             </View>
 
                             {touched.item_quantity && errors.item_quantity && <Text className="text-red-500 text-center pb-2">       {errors.item_quantity}</Text>}
+
+                            <View className="flex flex-row items-center">
+                            <Text className="text-zinc-100 justify-center w-1/4">Unit: </Text>
+                            <TextInput
+                                className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                placeholder="Measurement Unit"
+                                onChangeText={handleChange('measurement_unit')}
+                                onBlur={handleBlur('imeasurement_unit')}
+                                value={values.measurement_unit}
+                            />
+                        </View>
+                        {touched.measurement_unit && errors.measurement_unit && <Text className="text-red-500 text-center pb-2">      {errors.measurement_unit}</Text>}
 
                             <View className="flex flex-row items-center">
                                 <Text className="text-zinc-100 justify-center w-1/4">Purchase: </Text>

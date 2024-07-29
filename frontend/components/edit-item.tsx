@@ -73,6 +73,7 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
                     setInitialValues({
                         item_name: itemData.item_name,
                         item_quantity: itemData.item_quantity.toString(),
+                        measurement_unit: itemData.measurement_unit,
                         expiration_date: itemData.expiration_date ? format(parse(itemData.expiration_date, 'yyyy-MM-dd', new Date()), 'dd/MM/yyyy') : '',
                         purchase_date: itemData.purchase_date ? format(parse(itemData.purchase_date, 'yyyy-MM-dd', new Date()), 'dd/MM/yyyy') : '',
                         mfg: itemData.mfg ? format(parse(itemData.mfg, 'yyyy-MM-dd', new Date()), 'dd/MM/yyyy') : '',
@@ -135,6 +136,7 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
             initialValues={initialValues || {
                 item_name: '',
                 item_quantity: '',
+                measurement_unit: '',
                 expiration_date: '',
                 purchase_date: '',
                 mfg: '',
@@ -180,6 +182,19 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
                         </View>
 
                         {touched.item_quantity && errors.item_quantity && <Text className="text-red-500 text-center pb-2">       {errors.item_quantity}</Text>}
+
+                        <View className="flex flex-row items-center">
+                            <Text className="text-zinc-100 justify-center w-1/4">Unit: </Text>
+                            <TextInput
+                                className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
+                                placeholder="Measurement Unit"
+                                onChangeText={handleChange('measurement_unit')}
+                                onBlur={handleBlur('imeasurement_unit')}
+                                value={values.measurement_unit}
+                            />
+                        </View>
+                        
+                        {touched.measurement_unit && errors.measurement_unit && <Text className="text-red-500 text-center pb-2">      {errors.measurement_unit}</Text>}
 
                         <View className="flex flex-row items-center">
                             <Text className="text-zinc-100 justify-center w-1/4">Purchase: </Text>
