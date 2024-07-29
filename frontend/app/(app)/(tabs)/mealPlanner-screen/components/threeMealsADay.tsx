@@ -191,7 +191,6 @@ const MealPlannerScreenComponent = () => {
                 <Button title="Previous Week" onPress={handlePrevWeek} />
                 <Button title="Next Week" onPress={handleNextWeek} />
             </View>
-            <AutogenerateGrocery />
             <ScrollView>
                 {weekDates.map((date, index) => {
                     const formattedDate = format(date, 'yyyy-MM-dd');
@@ -213,6 +212,7 @@ const MealPlannerScreenComponent = () => {
                     );
                 })}
             </ScrollView>
+            <AutogenerateGrocery />
             {/* Render NextMeal component with today's meals
             {nextMeals.length > 0 && (
                 <NextMeal
