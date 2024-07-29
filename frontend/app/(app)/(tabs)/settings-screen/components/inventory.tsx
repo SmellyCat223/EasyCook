@@ -196,7 +196,7 @@ const Body: React.FC<BodyProps> = ({ items, onEditItem}) => {
                         key={item.item_id}
                         text1={item.item_name}
                         text2={formatDate(item.expiration_date)}
-                        text3={`${item.item_quantity}g`}
+                        text3={`${item.item_quantity} ${item.measurement_unit || ''}`} // Handle null measurement unit
                         onPress={() => onEditItem(item.item_id)}
                         path=""
                     />

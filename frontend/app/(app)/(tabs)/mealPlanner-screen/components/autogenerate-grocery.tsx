@@ -358,7 +358,7 @@ const AutogenerateGrocery: React.FC = () => {
                 const { data: itemsData, error: itemsError } = await supabase
                     .from('item')
                     .select('*')
-                    .gte('expiration_date', new Date().toISOString())
+                    .gte('expiration_date', new Date().toISOString() || null)
                     .in('item_name', ingredientNames);
                 if (itemsError) throw itemsError;
                 setItems(itemsData);

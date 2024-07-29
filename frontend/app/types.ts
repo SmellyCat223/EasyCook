@@ -40,6 +40,7 @@ export type Item = {
     item_inventory_id?: string;
     item_shopping_list_id?: string; // make it optional
     item_quantity: number;
+    measurement_unit?: string;
     expiration_date?: string; // use string type for DATE
     purchase_date?: string; // use string type for DATE
     mfg?: string; // use string type for DATE
