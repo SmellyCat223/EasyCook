@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "EasyCook",
-    "slug": "EasyCook",
+    "slug": "easycook-orbital",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/images/logo2.png",
       "resizeMode": "cover",
-      "backgroundColor": "black"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true,
@@ -40,8 +40,15 @@
         "origin": false
       },
       "eas": {
-        "projectId": "2f724d1d-70b2-4dfd-a179-dfb39806d16d"
+        "projectId": "25e24c8e-9e9f-402f-8c5c-3d3961f8b5cd"
       }
+    },
+    "owner": "easycook_dev",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/25e24c8e-9e9f-402f-8c5c-3d3961f8b5cd"
     }
   }
 }
