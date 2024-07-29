@@ -41,7 +41,6 @@ const Inventory: React.FC = () => {
 
                 if (inventoryError) {
                     console.error('Error fetching inventory:', inventoryError);
-                    return;
                 }
 
                 if (inventoryData) {
