@@ -417,6 +417,7 @@ const AutogenerateGrocery: React.FC = () => {
                                 ingredient_id: ingredient.ingredient_id,
                                 item_shopping_list_id: shoppingListId,
                                 item_quantity: requiredQuantity,
+                                measurement_unit: recipeIngredient.measurement_unit,
                                 user_id: userId
                             }]);
 

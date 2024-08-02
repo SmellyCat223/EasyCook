@@ -97,6 +97,7 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
                     expiration_date: values.expiration_date ? format(parseDateString(null, values.expiration_date), 'yyyy-MM-dd') : null,
                     purchase_date: values.purchase_date ? format(parseDateString(null, values.purchase_date), 'yyyy-MM-dd') : null,
                     mfg: values.mfg ? format(parseDateString(null, values.mfg), 'yyyy-MM-dd') : null,
+                    measurement_unit: values.measurement_unit
                 })
                 .eq('item_id', itemId);
 
@@ -189,7 +190,7 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
                                 className="flex flex-1 bg-zinc-900 border border-zinc-700 text-white rounded-lg p-3 opacity-70"
                                 placeholder="Measurement Unit"
                                 onChangeText={handleChange('measurement_unit')}
-                                onBlur={handleBlur('imeasurement_unit')}
+                                onBlur={handleBlur('measurement_unit')}
                                 value={values.measurement_unit}
                             />
                         </View>

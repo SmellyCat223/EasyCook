@@ -172,13 +172,31 @@ const Inventory: React.FC = () => {
     );
 };
 
-const formatDate = (dateString: string) => {
+// const formatDate = (dateString: string) => {
+//     const date = new Date(dateString);
+//     const day = date.getDate().toString().padStart(2, '0'); // Get day and pad with leading zero if needed
+//     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Get month (+1 because months are zero-indexed) and pad with leading zero if needed
+//     const year = date.getFullYear();
+//     return `${day}/${month}/${year}`;
+// };
+
+const formatDate = (dateString: string | null) => {
+    if (!dateString) {
+        return ''; // or return a placeholder like 'N/A'
+    }
+
     const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0'); // Get day and pad with leading zero if needed
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Get month (+1 because months are zero-indexed) and pad with leading zero if needed
+    // Check if the date is invalid
+    if (isNaN(date.getTime())) {
+        return ''; // or return a placeholder like 'Invalid Date'
+    }
+
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
 };
+
 
 interface BodyProps {
     items: Item[];
@@ -195,7 +213,7 @@ const Body: React.FC<BodyProps> = ({ items, onEditItem}) => {
                     <Button3
                         key={item.item_id}
                         text1={item.item_name}
-                        text2={formatDate(item.expiration_date)}
+                        text2={formatDate(item.expiration_date) || '-'}
                         text3={`${item.item_quantity} ${item.measurement_unit || ''}`} // Handle null measurement unit
                         onPress={() => onEditItem(item.item_id)}
                         path=""

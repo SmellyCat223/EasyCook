@@ -50,7 +50,7 @@ const Expiring = () => {
                     .eq('item_inventory_id', inventoryId) // Fetch items based on item_inventory_id
                     .not('expiration_date', 'is', null)
                     .order('expiration_date', { ascending: true })
-                    .limit(7);
+                    .limit(10);
                 console.log(data);
                 if (error) {
                     console.error('Error fetching items:', error);

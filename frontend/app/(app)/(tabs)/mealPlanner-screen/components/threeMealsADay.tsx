@@ -91,7 +91,7 @@ const MealPlannerScreenComponent = () => {
         if (userId) {
             fetchMeals(userId);
         }
-    }, [userId, currentWeekStart]);
+    }, [userId, currentWeekStart, items]);
 
     useEffect(() => {
         // Filter meals for today and update nextMeals state
