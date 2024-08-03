@@ -31,7 +31,7 @@
 //                 Alert.alert('Error', error.message);
 //             }
 //         };
-        
+
 //         fetchUserId();
 //     }, []);
 
@@ -255,7 +255,7 @@
 // export default AutogenerateGrocery;
 
 import React, { useState, useEffect } from 'react';
-import { View, Alert, Button } from "react-native";
+import { View, Alert, Button, ActivityIndicator } from "react-native";
 import { supabase } from '../../../../supabase';
 import { Item, Recipe, Meal, Ingredient, RecipeIngredient } from '../../../../types'; // Ensure these types are correctly defined
 
@@ -270,6 +270,7 @@ const AutogenerateGrocery: React.FC = () => {
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [items, setItems] = useState<Item[]>([]);
     const [isDataFetched, setIsDataFetched] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -392,6 +393,7 @@ const AutogenerateGrocery: React.FC = () => {
     };
 
     const handlePress = async () => {
+        setLoading(true);
         try {
             if (!userId || !shoppingListId || !isDataFetched) {
                 throw new Error('User ID, Shopping List ID, or data not set');
@@ -432,12 +434,18 @@ const AutogenerateGrocery: React.FC = () => {
         } catch (error) {
             console.error('Error in handlePress:', error);
             Alert.alert('Error', error.message);
+        } finally {
+            setLoading(false); // Hide activity indicator
         }
     };
 
     return (
         <View>
-            <Button title="Autogenerate Grocery List" onPress={handlePress} />
+            {loading ? (
+                <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+                <Button title="Autogenerate Grocery List" onPress={handlePress} />
+            )}
         </View>
     );
 };
