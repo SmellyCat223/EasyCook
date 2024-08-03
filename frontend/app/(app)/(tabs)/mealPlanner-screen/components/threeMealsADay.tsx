@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Button, ActivityIndicator } from "react-native";
+import { Text, View, ScrollView, Button, Alert } from "react-native";
 import { Icon } from 'react-native-elements';
 import { supabase } from '../../../../supabase';
 import { format, addDays, startOfWeek, endOfWeek, isToday, parseISO } from 'date-fns';
-import NextMeal from '../../home-screen/components/next-meal';
 import AutogenerateGrocery from './autogenerate-grocery';
+import { Link } from 'expo-router';
 
 interface Item {
     meal_calories: number;
@@ -12,6 +12,7 @@ interface Item {
     meal_type: string;
     user_id: string;
     meal_title: string;
+    meal_id: string;
 }
 
 const Day: React.FC<{
@@ -23,18 +24,32 @@ const Day: React.FC<{
     lunchCal: number;
     dinnerTitle: string;
     dinnerCal: number;
-    // onDelete: () => void;
-}> = ({ day, date, bfastTitle, bfastCal, lunchTitle, lunchCal, dinnerTitle, dinnerCal }) => {
-    const showAlert = () => {
-        alert('Feature coming soon!');
+    onEdit: (meal: Item) => void;
+    onDelete: (mealId: string) => void;
+    items: Item[];
+}> = ({ day, date, bfastTitle, bfastCal, lunchTitle, lunchCal, dinnerTitle, dinnerCal, onEdit, onDelete, items }) => {
+    // const showAlert = () => {
+    //     alert('Feature coming soon!');
+    // };
+
+    const handleDelete = (mealId: string) => {
+        Alert.alert(
+            "Delete Meal",
+            "Are you sure you want to delete this meal?",
+            [
+                { text: "Cancel", style: "cancel" },
+                { text: "OK", onPress: () => onDelete(mealId) }
+            ]
+        );
     };
+
 
     return (
         <View style={{ margin: 10, padding: 16, backgroundColor: '#B2F5EA', borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.8, shadowRadius: 2, elevation: 5 }}>
             <View style={{ marginBottom: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
                 <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{day} {date}</Text>
             </View>
-            <View className="flex-row justify-between mb-5">
+            {/* <View className="flex-row justify-between mb-5">
                 <Text>Breakfast: {bfastTitle}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{bfastTitle}</Text>
@@ -63,7 +78,29 @@ const Day: React.FC<{
                         <Icon name="delete" type="material" size={15} onPress={showAlert} />
                     </View>
                 </View>
-            </View>
+            </View> */}
+            {['Breakfast', 'Lunch', 'Dinner'].map((mealType, index) => {
+                const mealTitle = mealType === 'Breakfast' ? bfastTitle : mealType === 'Lunch' ? lunchTitle : dinnerTitle;
+                const mealCal = mealType === 'Breakfast' ? bfastCal : mealType === 'Lunch' ? lunchCal : dinnerCal;
+                const meal = items.find(item => item.meal_date === date && item.meal_type.toLowerCase() === mealType.toLowerCase());
+
+                return (
+                    <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+                        <Text>{mealType}: {mealTitle || "No meal chosen yet."}</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            {meal ? (
+                                <>
+                                    <Icon name="delete" type="material" size={15} onPress={() => handleDelete(meal.meal_id)} />
+                                </>
+                            ) : (
+                                <Link href="../../recipe-screen/index_recipe" asChild>
+                                    <Icon name="add" type="material" size={15} />
+                                </Link>
+                            )}
+                        </View>
+                    </View>
+                );
+            })}
         </View>
     );
 };
@@ -73,6 +110,7 @@ const MealPlannerScreenComponent = () => {
     const [userId, setUserId] = useState<string | null>(null);
     const [currentWeekStart, setCurrentWeekStart] = useState<Date>(startOfWeek(new Date()));
     const [nextMeals, setNextMeals] = useState<Item[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -93,13 +131,19 @@ const MealPlannerScreenComponent = () => {
         }
     }, [userId, currentWeekStart, items]);
 
-    useEffect(() => {
-        // Filter meals for today and update nextMeals state
-        const todayMeals = items.filter(item => isToday(item.meal_date));
+    // useEffect(() => {
+    //     // Filter meals for today and update nextMeals state
+    //     const todayMeals = items.filter(item => isToday(item.meal_date));
 
-        console.log(todayMeals);
-        setNextMeals(todayMeals);
-    }, [items]);
+    //     console.log(todayMeals);
+    //     setNextMeals(todayMeals);
+    // }, [items]);
+    useEffect(() => {
+        if (!loading) {
+            const todayMeals = items.filter(item => isToday(item.meal_date));
+            setNextMeals(todayMeals);
+        }
+    }, [items, loading]);
 
     const fetchMeals = async (userId: string) => {
         const start = format(currentWeekStart, 'yyyy-MM-dd');
@@ -127,24 +171,24 @@ const MealPlannerScreenComponent = () => {
         }
     };
 
-    // const deleteMeal = async (mealId: string) => {
-    //     const { error } = await supabase
-    //         .from('meal')
-    //         .delete()
-    //         .eq('meal_id', mealId);
-    
-    //     if (error) {
-    //         console.error('Error deleting meal:', error);
-    //     } else {
-    //         // Re-fetch meals after deletion
-    //         fetchMeals(userId);
-    //     }
-    // };
-    
-    // const handleDeleteMeal = (mealId: string) => {
-    //     deleteMeal(mealId);
-    // };
-    
+    const handleDeleteMeal = async (mealId: string) => {
+        if (!mealId) {
+            console.error('Invalid meal ID', mealId);
+            return;
+        }
+
+        const { error } = await supabase
+            .from('meal')
+            .delete()
+            .eq('meal_id', mealId);
+
+        if (error) {
+            console.error('Error deleting meal:', error);
+        } else {
+            fetchMeals(userId!);
+        }
+    };
+
 
     const generateWeekDates = (start: Date) => {
         return Array.from({ length: 7 }).map((_, index) => addDays(start, index));
@@ -163,27 +207,20 @@ const MealPlannerScreenComponent = () => {
     const formatMealsForDay = (date: string) => {
         const formattedDate = format(new Date(date), 'yyyy-MM-dd');
         const mealsForDay = items.filter(item => item.meal_date === formattedDate);
-        // console.log('Meals for day:', mealsForDay); 
 
         const breakfast = mealsForDay.find(meal => meal.meal_type.toLowerCase() === 'breakfast');
-        // console.log('Breakfast for day:', breakfast);
-
         const lunch = mealsForDay.find(meal => meal.meal_type.toLowerCase() === 'lunch');
-        // console.log('Lunch for day:', lunch);
-
         const dinner = mealsForDay.find(meal => meal.meal_type.toLowerCase() === 'dinner');
-        // console.log('Dinner for day:', dinner);
         return {
             date,
             bfastTitle: breakfast?.meal_title || '',
-            bfastCal: typeof breakfast?.meal_calories === 'number' ? breakfast.meal_calories : parseInt(breakfast?.meal_calories || '0'),
+            bfastCal: breakfast?.meal_calories || 0,
             lunchTitle: lunch?.meal_title || '',
-            lunchCal: typeof lunch?.meal_calories === 'number' ? lunch.meal_calories : parseInt(lunch?.meal_calories || '0'),
+            lunchCal: lunch?.meal_calories || 0,
             dinnerTitle: dinner?.meal_title || '',
-            dinnerCal: typeof dinner?.meal_calories === 'number' ? dinner.meal_calories : parseInt(dinner?.meal_calories || '0'),
+            dinnerCal: dinner?.meal_calories || 0,
         };
     };
-
 
     return (
         <View>
@@ -207,23 +244,13 @@ const MealPlannerScreenComponent = () => {
                             lunchCal={lunchCal}
                             dinnerTitle={dinnerTitle}
                             dinnerCal={dinnerCal}
-                            // onDelete={() => handleDeleteMeal(mealId)}
+                            onDelete={handleDeleteMeal}
+                            items={items}
                         />
                     );
                 })}
             </ScrollView>
             <AutogenerateGrocery />
-            {/* Render NextMeal component with today's meals
-            {nextMeals.length > 0 && (
-                <NextMeal
-                    date={format(new Date(nextMeals[0].meal_date), 'dd MMM yyyy')}
-                    meal="Today's Meals"
-                    breakfast={nextMeals.find(meal => meal.meal_type === 'Breakfast')?.meal_title || 'No Breakfast'}
-                    lunch={nextMeals.find(meal => meal.meal_type === 'Lunch')?.meal_title || 'No Lunch'}
-                    dinner={nextMeals.find(meal => meal.meal_type === 'Dinner')?.meal_title || 'No Dinner'}
-                    calories={nextMeals.reduce((acc, meal) => acc + meal.meal_calories, 0)}
-                />
-            )} */}
         </View>
     );
 };
