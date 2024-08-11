@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { Icon } from 'react-native-elements';
 import { Link } from 'expo-router';
 import { format, isToday, parseISO } from 'date-fns';
@@ -38,7 +38,6 @@ const NextMeal = () => {
     }, [userId]);
 
     useEffect(() => {
-        // Filter meals for today and update nextMeals state
         const todayMeals = items.filter(item => isToday(parseISO(item.meal_date)));
         setNextMeals(todayMeals);
     }, [items]);
@@ -62,36 +61,41 @@ const NextMeal = () => {
         }
     };
 
+    const refreshMeals = () => {
+        if (userId) {
+            fetchMeals(userId);
+        }
+    };
+
     let meal = "Today's Meals";
     let breakfast = "No Breakfast";
     let lunch = "No Lunch";
     let dinner = "No Dinner";
-    let calories = 0;
 
     // Update values if meals for today are fetched
     if (nextMeals.length > 0) {
         breakfast = nextMeals.find(meal => meal.meal_type === 'Breakfast')?.meal_title || "No Breakfast";
         lunch = nextMeals.find(meal => meal.meal_type === 'Lunch')?.meal_title || "No Lunch";
         dinner = nextMeals.find(meal => meal.meal_type === 'Dinner')?.meal_title || "No Dinner";
-        calories = nextMeals.reduce((acc, meal) => acc + meal.meal_calories, 0);
     }
 
     return (
         <Link href="../../mealPlanner-screen/index_mealPlanner" asChild>
             <TouchableOpacity>
-                <View className="py-1">
-                    <View className="rounded-2xl p-4 bg-yellow-100">
-                        <View className="flex flex-row justify-between">
-                            <Icon name="calendar" type="antdesign" size={18} />
+                <View style={styles.container}>
+                    <View style={styles.card}>
+                        <View style={styles.header}>
+                            <Icon name="calendar" type="antdesign" size={25} color="#4A4A4A" />
+                            <TouchableOpacity onPress={refreshMeals} style={styles.refreshButton}>
+                                <Icon name="refresh" type="material" size={25} color="#4A4A4A" />
+                            </TouchableOpacity>
                         </View>
-                        <View className="pt-2">
-                            <View className="flex flex-row justify-between pt-4">
-                                <Text>{meal}</Text>
-                            </View>
-                            <View className="flex justify-between">
-                                <Text className="text-lg">Breakfast: {breakfast}</Text>
-                                <Text className="text-lg">Lunch: {lunch}</Text>
-                                <Text className="text-lg">Dinner: {dinner}</Text>
+                        <View style={styles.content}>
+                            <Text style={styles.mealText}>{meal}</Text>
+                            <View style={styles.mealDetails}>
+                                <Text style={styles.mealDetail}>Breakfast: {breakfast}</Text>
+                                <Text style={styles.mealDetail}>Lunch: {lunch}</Text>
+                                <Text style={styles.mealDetail}>Dinner: {dinner}</Text>
                             </View>
                         </View>
                     </View>
@@ -100,5 +104,48 @@ const NextMeal = () => {
         </Link>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        paddingVertical: 4,
+        paddingHorizontal: 0,
+    },
+    card: {
+        borderRadius: 16,
+        padding: 16,
+        backgroundColor: '#F9FAEB',
+        elevation: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    refreshButton: {
+        padding: 8,
+        borderRadius: 50,
+        backgroundColor: '#F0F0F0',
+    },
+    content: {
+        paddingTop: 8,
+    },
+    mealText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    mealDetails: {
+        flexDirection: 'column',
+        marginTop: 8,
+    },
+    mealDetail: {
+        fontSize: 16,
+        color: '#666',
+    },
+});
 
 export default NextMeal;

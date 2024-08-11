@@ -59,7 +59,7 @@ const Day: React.FC<{
             }}
         >
             <LinearGradient
-                colors={['#F4C3C2', '#F9FAEB']}
+                colors={['#F5D5A1', '#F9FAEB']}
                 style={{ margin: 10, padding: 16, borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.8, shadowRadius: 2, elevation: 5 }}
             >
                 <View style={{ marginBottom: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
@@ -123,6 +123,15 @@ const MealPlannerScreenComponent = () => {
             setNextMeals(todayMeals);
         }
     }, [items, loading]);
+
+    const refreshMeals = async () => {
+        if (userId) {
+            setLoading(true);
+            await fetchMeals(userId); // Fetch meals again
+            setLoading(false);
+        }
+    };
+
 
     const fetchMeals = async (userId: string) => {
         const start = format(currentWeekStart, 'yyyy-MM-dd');
@@ -202,20 +211,20 @@ const MealPlannerScreenComponent = () => {
 
     return (
         <View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 16 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 7 }}>
                 <TouchableOpacity
                     onPress={handlePrevWeek}
                     style={{
                         width: 40,
                         height: 40,
                         borderRadius: 20,
-                        backgroundColor: '#F4C3C2',
+                        backgroundColor: '#F5D5A1',
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}
                 >
                     <Text style={{
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: 'bold',
                         color: '#000000',
                     }}>
@@ -225,19 +234,33 @@ const MealPlannerScreenComponent = () => {
                 <View >
                     <AutogenerateGrocery />
                 </View>
+                    <TouchableOpacity
+                        onPress={refreshMeals}
+                        style={{
+                            width: 40,
+                            height: 40,
+                            padding: 10,
+                            borderRadius: 25,
+                            backgroundColor: '#F9FAEB',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Icon name="refresh" type="material" size={20} color="#000" />
+                    </TouchableOpacity>
                 <TouchableOpacity
                     onPress={handleNextWeek}
                     style={{
                         width: 40,
                         height: 40,
                         borderRadius: 20,
-                        backgroundColor: '#F4C3C2',
+                        backgroundColor: '#F5D5A1',
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}
                 >
                     <Text style={{
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: 'bold',
                         color: '#000000',
                     }}>
@@ -267,6 +290,7 @@ const MealPlannerScreenComponent = () => {
                     );
                 })}
             </ScrollView>
+
         </View>
     );
 };

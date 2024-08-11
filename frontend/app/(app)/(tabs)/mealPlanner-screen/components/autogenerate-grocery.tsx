@@ -184,12 +184,12 @@ const AutogenerateGrocery: React.FC = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View >
             {loading ? (
-                <ActivityIndicator size="large" color="#F4C3C2" />
+                <ActivityIndicator size="large" color="#F5D5A1" />
             ) : (
                 <TouchableOpacity style={styles.button} onPress={handlePress}>
-                    <Text style={styles.buttonText}>Create Grocery List</Text>
+                    <Text style={styles.buttonText}>Generate Grocery List</Text>
                 </TouchableOpacity>
             )}
         </View>
@@ -197,23 +197,11 @@ const AutogenerateGrocery: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-
-    },
     button: {
-        backgroundColor: '#F8E5E5',
-        paddingVertical: 14,
-        paddingHorizontal: 24,
-        borderRadius: 8,
-        elevation: 4,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-        alignItems: 'center',
+        backgroundColor: '#F9FAEB',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 20,
     },
     buttonText: {
         color: '#000000',
