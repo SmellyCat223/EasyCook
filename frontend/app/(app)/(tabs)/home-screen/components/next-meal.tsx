@@ -4,11 +4,10 @@ import { Icon } from 'react-native-elements';
 import { Link } from 'expo-router';
 import { format, isToday, parseISO } from 'date-fns';
 import { supabase } from '../../../../supabase';
-import MealPlannerScreen from '../../mealPlanner-screen/index_mealPlanner';
 
 interface Item {
     meal_calories: number;
-    meal_date: string; // Will be formatted to a string for display
+    meal_date: string;
     meal_type: string;
     user_id: string;
     meal_title: string;
@@ -88,9 +87,6 @@ const NextMeal = () => {
                         <View className="pt-2">
                             <View className="flex flex-row justify-between pt-4">
                                 <Text>{meal}</Text>
-                                <View className="flex p-2 rounded-full bg-white">
-                                    <Text>{calories}kcal</Text>
-                                </View>
                             </View>
                             <View className="flex justify-between">
                                 <Text className="text-lg">Breakfast: {breakfast}</Text>

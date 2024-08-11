@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Button, Alert, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useRef } from 'react';
+import { Animated, Text, View, ScrollView, Button, Alert, TouchableOpacity } from "react-native";
 import { Icon } from 'react-native-elements';
 import { supabase } from '../../../../supabase';
 import { format, addDays, startOfWeek, endOfWeek, isToday } from 'date-fns';
@@ -40,37 +40,54 @@ const Day: React.FC<{
         );
     };
 
+    const translateY = useRef(new Animated.Value(100)).current; // Initial value is off-screen
+
+    useEffect(() => {
+        Animated.timing(translateY, {
+            toValue: 0, // Final position
+            duration: 500, // Duration of the animation
+            useNativeDriver: true, // Use native driver for performance
+        }).start();
+    }, []);
+
 
     return (
-        <LinearGradient
-            colors={['#F4C3C2', '#DCC6A0']}
-            style={{ margin: 10, padding: 16, borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.8, shadowRadius: 2, elevation: 5 }}
+        <Animated.View
+            style={{
+                elevation: 5,
+                transform: [{ translateY }], // Apply the slide-up animation
+            }}
         >
-            <View style={{ marginBottom: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{day} {date}</Text>
-            </View>
-            {['Breakfast', 'Lunch', 'Dinner'].map((mealType, index) => {
-                const mealTitle = mealType === 'Breakfast' ? bfastTitle : mealType === 'Lunch' ? lunchTitle : dinnerTitle;
-                const mealCal = mealType === 'Breakfast' ? bfastCal : mealType === 'Lunch' ? lunchCal : dinnerCal;
-                const meal = items.find(item => item.meal_date === date && item.meal_type.toLowerCase() === mealType.toLowerCase());
+            <LinearGradient
+                colors={['#F4C3C2', '#F9FAEB']}
+                style={{ margin: 10, padding: 16, borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.8, shadowRadius: 2, elevation: 5 }}
+            >
+                <View style={{ marginBottom: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{day} {date}</Text>
+                </View>
+                {['Breakfast', 'Lunch', 'Dinner'].map((mealType, index) => {
+                    const mealTitle = mealType === 'Breakfast' ? bfastTitle : mealType === 'Lunch' ? lunchTitle : dinnerTitle;
+                    const mealCal = mealType === 'Breakfast' ? bfastCal : mealType === 'Lunch' ? lunchCal : dinnerCal;
+                    const meal = items.find(item => item.meal_date === date && item.meal_type.toLowerCase() === mealType.toLowerCase());
 
-                const router = useRouter();
-                return (
-                    <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-                        <Text>{mealType}: {mealTitle || "No meal chosen yet."}</Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            {meal ? (
-                                <>
-                                    <Icon name="delete" type="material" size={15} onPress={() => handleDelete(meal.meal_id)} />
-                                </>
-                            ) : (
-                                <Icon name="add" size={15} onPress={() => router.push('/(tabs)/recipe')} />
-                            )}
+                    const router = useRouter();
+                    return (
+                        <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+                            <Text>{mealType}: {mealTitle || "No meal chosen yet."}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                {meal ? (
+                                    <>
+                                        <Icon name="delete" type="material" size={15} onPress={() => handleDelete(meal.meal_id)} />
+                                    </>
+                                ) : (
+                                    <Icon name="add" size={15} onPress={() => router.push('/(tabs)/recipe')} />
+                                )}
+                            </View>
                         </View>
-                    </View>
-                );
-            })}
-        </LinearGradient>
+                    );
+                })}
+            </LinearGradient>
+        </Animated.View >
     );
 };
 

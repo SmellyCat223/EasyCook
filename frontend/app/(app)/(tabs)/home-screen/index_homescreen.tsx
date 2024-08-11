@@ -12,6 +12,7 @@ import { useUser } from '../../../UserContext';
 
 const Home = () => {
     const { username } = useUser();
+    
 
     return (
         <View className="flex-1 pt-10 bg-stone-950">
@@ -22,9 +23,7 @@ const Home = () => {
                     <UpdateInventory />
                     <NextMeal />
                     <Expiring />
-                    {/* <GroupReq /> */}
                     <Article />
-                    {/* <Stats /> */}
                 </View>
             </ScrollView>
         </View>
