@@ -17,18 +17,6 @@ const StackLayOut = () => {
           headerTitle: "Grocery",
         }}
       />
-      {/* <Stack.Screen 
-        name="grocery"
-        options={{
-          headerTitle: "Grocery",
-        }}
-      />
-      <Stack.Screen 
-        name="add-grocery"
-        options={{
-          headerTitle: "Add Grocery Item",
-        }}
-      /> */}
     </Stack>
   );
 };

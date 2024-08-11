@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Button, Alert } from "react-native";
+import { Text, View, ScrollView, Button, Alert, TouchableOpacity } from "react-native";
 import { Icon } from 'react-native-elements';
 import { supabase } from '../../../../supabase';
 import { format, addDays, startOfWeek, endOfWeek, isToday } from 'date-fns';
 import AutogenerateGrocery from './autogenerate-grocery';
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 interface Item {
     meal_calories: number;
-    meal_date: string; // Will be formatted to a string for display
+    meal_date: string;
     meal_type: string;
     user_id: string;
     meal_title: string;
@@ -27,9 +28,6 @@ const Day: React.FC<{
     onDelete: (mealId: string) => void;
     items: Item[];
 }> = ({ day, date, bfastTitle, bfastCal, lunchTitle, lunchCal, dinnerTitle, dinnerCal, onEdit, onDelete, items }) => {
-    // const showAlert = () => {
-    //     alert('Feature coming soon!');
-    // };
 
     const handleDelete = (mealId: string) => {
         Alert.alert(
@@ -44,40 +42,13 @@ const Day: React.FC<{
 
 
     return (
-        <View style={{ margin: 10, padding: 16, backgroundColor: '#B2F5EA', borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.8, shadowRadius: 2, elevation: 5 }}>
+        <LinearGradient
+            colors={['#F4C3C2', '#DCC6A0']}
+            style={{ margin: 10, padding: 16, borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.8, shadowRadius: 2, elevation: 5 }}
+        >
             <View style={{ marginBottom: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
                 <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{day} {date}</Text>
             </View>
-            {/* <View className="flex-row justify-between mb-5">
-                <Text>Breakfast: {bfastTitle}</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{bfastTitle}</Text>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Icon name="edit" type="antdesign" size={15} style={{ marginRight: 8 }} />
-                        <Icon name="delete" type="material" size={15} onPress={showAlert} />
-                    </View>
-                </View>
-            </View>
-            <View className="flex-row justify-between mb-5">
-                <Text>Lunch: {lunchTitle}</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{lunchTitle}</Text>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Icon name="edit" type="antdesign" size={15} style={{ marginRight: 8 }} />
-                        <Icon name="delete" type="material" size={15} onPress={showAlert} />
-                    </View>
-                </View>
-            </View>
-            <View className="flex-row justify-between mb-5">
-                <Text>Dinner: {dinnerTitle}</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text numberOfLines={1} ellipsizeMode='tail' style={{ flex: 1 }}>{dinnerTitle}</Text>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Icon name="edit" type="antdesign" size={15} style={{ marginRight: 8 }} />
-                        <Icon name="delete" type="material" size={15} onPress={showAlert} />
-                    </View>
-                </View>
-            </View> */}
             {['Breakfast', 'Lunch', 'Dinner'].map((mealType, index) => {
                 const mealTitle = mealType === 'Breakfast' ? bfastTitle : mealType === 'Lunch' ? lunchTitle : dinnerTitle;
                 const mealCal = mealType === 'Breakfast' ? bfastCal : mealType === 'Lunch' ? lunchCal : dinnerCal;
@@ -99,7 +70,7 @@ const Day: React.FC<{
                     </View>
                 );
             })}
-        </View>
+        </LinearGradient>
     );
 };
 
@@ -129,13 +100,6 @@ const MealPlannerScreenComponent = () => {
         }
     }, [userId, currentWeekStart, items]);
 
-    // useEffect(() => {
-    //     // Filter meals for today and update nextMeals state
-    //     const todayMeals = items.filter(item => isToday(item.meal_date));
-
-    //     console.log(todayMeals);
-    //     setNextMeals(todayMeals);
-    // }, [items]);
     useEffect(() => {
         if (!loading) {
             const todayMeals = items.filter(item => isToday(item.meal_date));
@@ -222,8 +186,47 @@ const MealPlannerScreenComponent = () => {
     return (
         <View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 16 }}>
-                <Button title="Previous Week" onPress={handlePrevWeek} />
-                <Button title="Next Week" onPress={handleNextWeek} />
+                <TouchableOpacity
+                    onPress={handlePrevWeek}
+                    style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 20,
+                        backgroundColor: '#F4C3C2',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Text style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        color: '#000000',
+                    }}>
+                        {'<<'}
+                    </Text>
+                </TouchableOpacity>
+                <View >
+                    <AutogenerateGrocery />
+                </View>
+                <TouchableOpacity
+                    onPress={handleNextWeek}
+                    style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 20,
+                        backgroundColor: '#F4C3C2',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Text style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        color: '#000000',
+                    }}>
+                        {'>>'}
+                    </Text>
+                </TouchableOpacity>
             </View>
             <ScrollView>
                 {weekDates.map((date, index) => {
@@ -247,7 +250,6 @@ const MealPlannerScreenComponent = () => {
                     );
                 })}
             </ScrollView>
-            <AutogenerateGrocery />
         </View>
     );
 };
