@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Button, Alert } from "react-native";
 import { Icon } from 'react-native-elements';
 import { supabase } from '../../../../supabase';
-import { format, addDays, startOfWeek, endOfWeek, isToday, parseISO } from 'date-fns';
+import { format, addDays, startOfWeek, endOfWeek, isToday } from 'date-fns';
 import AutogenerateGrocery from './autogenerate-grocery';
-import { Link } from 'expo-router';
-
+import { useRouter } from 'expo-router';
 interface Item {
     meal_calories: number;
     meal_date: string; // Will be formatted to a string for display
@@ -84,6 +83,7 @@ const Day: React.FC<{
                 const mealCal = mealType === 'Breakfast' ? bfastCal : mealType === 'Lunch' ? lunchCal : dinnerCal;
                 const meal = items.find(item => item.meal_date === date && item.meal_type.toLowerCase() === mealType.toLowerCase());
 
+                const router = useRouter();
                 return (
                     <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
                         <Text>{mealType}: {mealTitle || "No meal chosen yet."}</Text>
@@ -93,9 +93,7 @@ const Day: React.FC<{
                                     <Icon name="delete" type="material" size={15} onPress={() => handleDelete(meal.meal_id)} />
                                 </>
                             ) : (
-                                <Link href="../../recipe-screen/index_recipe" asChild>
-                                    <Icon name="add" type="material" size={15} />
-                                </Link>
+                                <Icon name="add" size={15} onPress={() => router.push('/(tabs)/recipe')} />
                             )}
                         </View>
                     </View>
@@ -166,7 +164,6 @@ const MealPlannerScreenComponent = () => {
         if (error) {
             console.error('Error fetching items:', error);
         } else if (data) {
-            // console.log('Fetched items:', data);
             setItems(data);
         }
     };

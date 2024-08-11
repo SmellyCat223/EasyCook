@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, ActivityIndicator } from "react-native";
+import { View, ScrollView, ActivityIndicator } from "react-native";
 import { supabase } from '../../supabase';
 import Button3 from '../../../components/button3';
 import Filter from '../../../components/filter';
