@@ -218,7 +218,7 @@ const MealPlannerScreenComponent = () => {
                         width: 40,
                         height: 40,
                         borderRadius: 20,
-                        backgroundColor: '#F5D5A1',
+                        backgroundColor: '#F9FAEB',
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}
@@ -234,27 +234,27 @@ const MealPlannerScreenComponent = () => {
                 <View >
                     <AutogenerateGrocery />
                 </View>
-                    <TouchableOpacity
-                        onPress={refreshMeals}
-                        style={{
-                            width: 40,
-                            height: 40,
-                            padding: 10,
-                            borderRadius: 25,
-                            backgroundColor: '#F9FAEB',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Icon name="refresh" type="material" size={20} color="#000" />
-                    </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={refreshMeals}
+                    style={{
+                        width: 40,
+                        height: 40,
+                        padding: 10,
+                        borderRadius: 25,
+                        backgroundColor: '#F9FAEB',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Icon name="refresh" type="material" size={20} color="#000" />
+                </TouchableOpacity>
                 <TouchableOpacity
                     onPress={handleNextWeek}
                     style={{
                         width: 40,
                         height: 40,
                         borderRadius: 20,
-                        backgroundColor: '#F5D5A1',
+                        backgroundColor: '#F9FAEB',
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}

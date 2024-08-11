@@ -75,13 +75,6 @@ const TabsLayout = () => {
                     href: null,
                 }}
             />
-
-            <Tabs.Screen
-                name="home-screen/components/group-request"
-                options={{
-                    href: null,
-                }}
-            />
             <Tabs.Screen
                 name="home-screen/components/header"
                 options={{
@@ -101,29 +94,11 @@ const TabsLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="home-screen/components/stats"
-                options={{
-                    href: null,
-                }}
-            />
-            <Tabs.Screen
                 name="home-screen/components/update-inventory"
                 options={{
                     href: null,
                 }}
             />
-            {/* <Tabs.Screen
-                name="mealPlanner-screen/index_mealPlanner"
-                options={{
-                    href: null,
-                }}
-            /> */}
-            {/* <Tabs.Screen
-                name="mealPlanner-screen/components/threeMealsADay"
-                options={{
-                    href: null,
-                }}
-            /> */}
             <Tabs.Screen
                 name="recipe-screen/index_recipe"
                 options={{

@@ -108,17 +108,12 @@ const NextMeal = () => {
 const styles = StyleSheet.create({
     container: {
         paddingVertical: 4,
-        paddingHorizontal: 0,
+        paddingHorizontal: 1,
     },
     card: {
         borderRadius: 16,
         padding: 16,
-        backgroundColor: '#F9FAEB',
-        elevation: 4,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
+        backgroundColor: '#F9FAEB'
     },
     header: {
         flexDirection: 'row',

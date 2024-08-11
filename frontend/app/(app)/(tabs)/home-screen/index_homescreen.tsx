@@ -5,14 +5,11 @@ import Search from "./components/search";
 import UpdateInventory from "./components/update-inventory";
 import NextMeal from "./components/next-meal";
 import Expiring from "./components/expiring";
-import GroupReq from "./components/group-request";
 import Article from "./components/article";
-import Stats from "./components/stats";
 import { useUser } from '../../../UserContext';
 
 const Home = () => {
     const { username } = useUser();
-    
 
     return (
         <View className="flex-1 pt-10 bg-stone-950">
