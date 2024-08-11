@@ -11,6 +11,37 @@ const Expiring = () => {
     const [loading, setLoading] = useState(true);
     const [inventoryId, setInventoryId] = useState<string | null>(null);
 
+    const fetchItems = async () => {
+        if (!inventoryId) return;
+
+        try {
+            const { data, error } = await supabase
+                .from('item')
+                .select('*')
+                .eq('item_inventory_id', inventoryId) // Fetch items based on item_inventory_id
+                .not('expiration_date', 'is', null)
+                .order('expiration_date', { ascending: true })
+                .limit(10);
+            console.log(data);
+            if (error) {
+                console.error('Error fetching items:', error);
+            } else {
+                const today = new Date();
+                const expiringItems = data.filter((item) => {
+                    const expirationDate = parseISO(item.expiration_date);
+                    const daysUntilExpiration = differenceInDays(expirationDate, today);
+                    return daysUntilExpiration > 0 && daysUntilExpiration <= 7;
+                });
+
+                setItems(expiringItems);
+            }
+        } catch (error) {
+            console.error('Error fetching items:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         const fetchInventoryId = async () => {
             try {
@@ -40,43 +71,16 @@ const Expiring = () => {
     }, []);
 
     useEffect(() => {
-        const fetchItems = async () => {
-            if (!inventoryId) return;
-
-            try {
-                const { data, error } = await supabase
-                    .from('item')
-                    .select('*')
-                    .eq('item_inventory_id', inventoryId) // Fetch items based on item_inventory_id
-                    .not('expiration_date', 'is', null)
-                    .order('expiration_date', { ascending: true })
-                    .limit(10);
-                console.log(data);
-                if (error) {
-                    console.error('Error fetching items:', error);
-                } else {
-                    const today = new Date();
-                    const expiringItems = data.filter((item) => {
-                        const expirationDate = parseISO(item.expiration_date);
-                        const daysUntilExpiration = differenceInDays(expirationDate, today);
-                        return daysUntilExpiration > 0 && daysUntilExpiration <= 7;
-                    });
-
-                    setItems(expiringItems);
-                }
-            } catch (error) {
-                console.error('Error fetching items:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchItems();
+        fetchItems(); // Fetch items when inventoryId changes
     }, [inventoryId]);
 
-    // if (loading) {
-    //     return <ActivityIndicator size="large" color="#0000ff" />;
-    // }
+    const handleRefresh = async () => {
+        await fetchItems();
+    };
+
+    if (loading) {
+        return <ActivityIndicator size="large" color="#0000ff" />;
+    }
 
     return (
         <Link href="/expiring-screen" asChild>
@@ -85,14 +89,9 @@ const Expiring = () => {
                     <View className="rounded-2xl p-4 bg-sky-200">
                         <View className="flex flex-row justify-between">
                             <Icon name="clockcircleo" type="antdesign" size={18} />
-                            <View className="flex flex-row justify-between p-1 rounded-2xl bg-zinc-800">
-                                <View className="px-2 py-1 rounded-xl bg-sky-200">
-                                    <Text>Weekly</Text>
-                                </View>
-                                <View className="px-2 py-1 rounded-xl">
-                                    <Text className="text-sky-200">Monthly</Text>
-                                </View>
-                            </View>
+                            <TouchableOpacity onPress={handleRefresh}>
+                                <Icon name="refresh" type="material" size={25} color="#4A4A4A" />
+                            </TouchableOpacity>
                         </View>
                         <View className="pt-2">
                             <View className="w-3/5">
@@ -110,7 +109,6 @@ const Expiring = () => {
                                 );
                             })}
                         </View>
-                        <Text className="text-gray-700">More...</Text>
                     </View>
                 </View>
             </TouchableOpacity>

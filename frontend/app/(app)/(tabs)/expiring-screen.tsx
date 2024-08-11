@@ -59,6 +59,8 @@ const ExpiringScreen: React.FC = () => {
                     const expiringItems = data.filter((item) => {
                         const expirationDate = parseISO(item.expiration_date);
                         const daysUntilExpiration = differenceInDays(expirationDate, today);
+                        console.log(`Item: ${item.item_name}, Days until expiration: ${daysUntilExpiration}`); // Debug statement
+
                         return daysUntilExpiration > 0 && daysUntilExpiration <= 7;
                     });
 
@@ -97,7 +99,7 @@ interface BodyProps {
 }
 
 const Body: React.FC<BodyProps> = ({ items }) => {
-    
+
     return (
         <View className="flex-1 bg-stone-950">
             <ScrollView>

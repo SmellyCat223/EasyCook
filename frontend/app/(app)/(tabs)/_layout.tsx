@@ -127,6 +127,7 @@ const TabsLayout = () => {
                 name="expiring-screen"
                 options={{
                     href: null,
+                    headerTitle: "Expiration Dates",
                 }}
             />
         </Tabs>
