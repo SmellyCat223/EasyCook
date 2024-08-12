@@ -99,7 +99,7 @@ const Grocery: React.FC = () => {
             .eq('item_shopping_list_id', shoppingListId);
 
         if (error) {
-            console.error('Error fetching items:', error);
+            console.log('Error fetching items:', error);
         } else if (data) {
             // Log data for debugging
             // console.log('Fetched items:', data);

@@ -10,6 +10,7 @@ const Expiring = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [inventoryId, setInventoryId] = useState<string | null>(null);
 
+
     const fetchItems = async () => {
         if (!inventoryId) return;
 
@@ -21,7 +22,6 @@ const Expiring = () => {
                 .not('expiration_date', 'is', null)
                 .order('expiration_date', { ascending: true })
                 .limit(10);
-            console.log(data);
             if (error) {
                 console.log('Error fetching items:', error);
             } else {
@@ -68,7 +68,22 @@ const Expiring = () => {
     }, []);
 
     useEffect(() => {
-        fetchItems(); // Fetch items when inventoryId changes
+        fetchItems();
+
+        if (inventoryId) {
+            const channel = supabase
+                .channel(`public:item:inventory_id=eq.${inventoryId}`)
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'item' }, (payload) => {
+                    console.log('Real-time update:', payload);
+                    fetchItems(); // Re-fetch items on any change
+                })
+                .subscribe();
+
+            // Clean up subscription on component unmount
+            return () => {
+                supabase.removeChannel(channel);
+            };
+        }
     }, [inventoryId]);
 
     const handleRefresh = async () => {
@@ -82,9 +97,9 @@ const Expiring = () => {
                     <View className="rounded-2xl p-4 bg-sky-200">
                         <View className="flex flex-row justify-between">
                             <Icon name="clockcircleo" type="antdesign" size={18} />
-                            <TouchableOpacity onPress={handleRefresh}>
+                            {/* <TouchableOpacity onPress={handleRefresh}>
                                 <Icon name="refresh" type="material" size={25} color="#4A4A4A" />
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                         <View className="pt-2">
                             <View className="w-3/5">

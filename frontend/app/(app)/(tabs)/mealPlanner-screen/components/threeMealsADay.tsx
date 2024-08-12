@@ -111,10 +111,29 @@ const MealPlannerScreenComponent = () => {
         fetchUserId();
     }, []);
 
+    // useEffect(() => {
+    //     if (userId) {
+    //         fetchMeals(userId);
+    //     }
+    // }, [userId, currentWeekStart, items]);
+
     useEffect(() => {
         if (userId) {
             fetchMeals(userId);
         }
+        const channel = supabase
+            .channel(`public:meal:user_id=eq.${userId}`)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'meal' }, (payload) => {
+                console.log('Real-time update:', payload);
+                fetchMeals(userId);
+            })
+            .subscribe();
+
+        // Clean up subscription on component unmount
+        return () => {
+            supabase.removeChannel(channel);
+
+        };
     }, [userId, currentWeekStart, items]);
 
     useEffect(() => {
@@ -152,7 +171,7 @@ const MealPlannerScreenComponent = () => {
             .lte('meal_date', end);
 
         if (error) {
-            console.error('Error fetching items:', error);
+            console.log('Error fetching items:', error);
         } else if (data) {
             setItems(data);
         }
@@ -234,7 +253,7 @@ const MealPlannerScreenComponent = () => {
                 <View >
                     <AutogenerateGrocery />
                 </View>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={refreshMeals}
                     style={{
                         width: 40,
@@ -247,7 +266,7 @@ const MealPlannerScreenComponent = () => {
                     }}
                 >
                     <Icon name="refresh" type="material" size={20} color="#000" />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity
                     onPress={handleNextWeek}
                     style={{

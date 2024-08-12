@@ -89,7 +89,7 @@ const Inventory: React.FC = () => {
                 .gt('item_quantity', 0);
 
             if (error) {
-                console.error('Error fetching items:', error);
+                console.log('Error fetching items:', error);
                 return;
             }
 
@@ -97,7 +97,7 @@ const Inventory: React.FC = () => {
                 setItems(data);
             }
         } catch (error) {
-            console.error('Unexpected error fetching items:', error);
+            console.log('Unexpected error fetching items:', error);
         }
     };
 

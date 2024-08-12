@@ -35,6 +35,19 @@ const NextMeal = () => {
         if (userId) {
             fetchMeals(userId);
         }
+        const channel = supabase
+            .channel(`public:meal:user_id=eq.${userId}`)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'meal' }, (payload) => {
+                console.log('Real-time update:', payload);
+                fetchMeals(userId);
+            })
+            .subscribe();
+
+        // Clean up subscription on component unmount
+        return () => {
+            supabase.removeChannel(channel);
+
+        };
     }, [userId]);
 
     useEffect(() => {
@@ -86,9 +99,9 @@ const NextMeal = () => {
                     <View style={styles.card}>
                         <View style={styles.header}>
                             <Icon name="calendar" type="antdesign" size={25} color="#4A4A4A" />
-                            <TouchableOpacity onPress={refreshMeals} style={styles.refreshButton}>
+                            {/* <TouchableOpacity onPress={refreshMeals} style={styles.refreshButton}>
                                 <Icon name="refresh" type="material" size={25} color="#4A4A4A" />
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                         <View style={styles.content}>
                             <Text style={styles.mealText}>{meal}</Text>
@@ -123,7 +136,6 @@ const styles = StyleSheet.create({
     refreshButton: {
         padding: 8,
         borderRadius: 50,
-        backgroundColor: '#F0F0F0',
     },
     content: {
         paddingTop: 8,

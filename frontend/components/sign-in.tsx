@@ -72,7 +72,7 @@ const SignIn: FC<SignInProps> = ({ switchComponent }) => {
 
       setSubmitting(false);
     } catch (error: any) {
-      console.error('Error signing in user:', error.message);
+      console.log('Error signing in user:', error.message);
       // Set the login message to the error message if an error occurs
       setLoginMessage(`${error.message}`);
       setSubmitting(false);
