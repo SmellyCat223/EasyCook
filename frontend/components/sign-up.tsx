@@ -68,7 +68,7 @@ const SignUp: FC<SignUpProps> = ({ switchComponent }) => {
 
       setSubmitting(false);
     } catch (error: any) {
-      console.error('Error signing up user:', error);
+      console.log('Error signing up user:', error);
       setRegistrationMessage(`${error.message}`);
       setSubmitting(false);
     }

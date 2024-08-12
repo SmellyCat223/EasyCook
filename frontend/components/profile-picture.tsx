@@ -10,7 +10,7 @@ const ProfilePicture = () => {
         const fetchUserId = async () => {
             const { data, error } = await supabase.auth.getSession();
             if (error) {
-                console.error('Error fetching user session:', error);
+                console.log('Error fetching user session:', error);
             } else if (data?.session) {
                 setUserId(data.session.user.id);
             }
@@ -52,12 +52,12 @@ const ProfilePicture = () => {
                 .single();
 
             if (error) {
-                console.error('Error fetching username:', error.message);
+                console.log('Error fetching username:', error.message);
             } else if (data) {
                 setUsername(data.username);
             }
         } catch (error: any) {
-            console.error('Error fetching username:', error.message);
+            console.log('Error fetching username:', error.message);
         }
     };
 

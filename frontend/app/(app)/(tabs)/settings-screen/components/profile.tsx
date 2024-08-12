@@ -3,6 +3,7 @@ import { Text, View, Button, Image, TouchableOpacity, ScrollView, TextInput, Ale
 import { supabase } from '../../../../supabase';
 import { Icon } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
+import { decode } from 'base64-arraybuffer';
 
 const Profile = () => {
     const [userId, setUserId] = useState<string | null>(null);
@@ -43,7 +44,7 @@ const Profile = () => {
                 console.error('Error fetching profile:', error.message);
             } else if (data) {
                 setUsername(data.username);
-                setOriginalUsername(data.username); // Save the original username
+                setOriginalUsername(data.username);
                 setPassword(data.password);
                 setEmail(data.email);
                 setImageUri(data.profile_picture);
@@ -102,63 +103,102 @@ const Profile = () => {
     };
 
 
-    const pickImage = async () => {
-        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (permissionResult.granted === false) {
-            Alert.alert('Permission to access camera roll is required!');
-            return;
-        }
+    // const pickImage = async () => {
+    //     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    //     if (permissionResult.granted === false) {
+    //         Alert.alert('Permission to access camera roll is required!');
+    //         return;
+    //     }
 
-        const pickerResult = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
+    //     const pickerResult = await ImagePicker.launchImageLibraryAsync({
+    //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //         allowsEditing: false,
+    //         aspect: [4, 3],
+    //         quality: 0.7,
+    //     });
 
-        if (!pickerResult.canceled) {
-            const uri = pickerResult.uri;
-            setImageUri(uri);
-            uploadImage(uri);
-        }
-    };
+    //     if (!pickerResult.canceled && pickerResult.assets && pickerResult.assets.length > 0) {
+    //         const asset = pickerResult.assets[0];
+    //         const uri = asset.uri;
 
-    const uploadImage = async (uri: string) => {
-        try {
-            const response = await fetch(uri);
-            const blob = await response.blob();
-            const fileExt = uri.split('.').pop();
-            const fileName = `${userId}.${fileExt}`;
-            const { data, error } = await supabase
-                .storage
-                .from('avatars')
-                .upload(fileName, blob, {
-                    cacheControl: '3600',
-                    upsert: true
-                });
+    //         if (uri) {
+    //             setImageUri(uri);
+    //             uploadImage(uri); // Pass URI to upload function
+    //         } else {
+    //             Alert.alert('Failed to get image URI');
+    //         }
+    //     } else {
+    //         Alert.alert('Image selection was canceled or failed');
+    //     }
+    // };
 
-            if (error) {
-                console.log('Error uploading image:', error.message);
-                Alert.alert('Failed to upload image');
-            } else {
-                const url = supabase.storage.from('avatars').getPublicUrl(fileName).data.publicUrl;
-                setImageUri(url);
-            }
-        } catch (error) {
-            console.log('Error uploading image:', error.message);
-            Alert.alert('Failed to upload image');
-        }
-    };
+    // const uploadImage = async (uri: string) => {
+    //     try {
+    //         // Fetch the image from URI
+    //         const response = await fetch(uri);
+
+    //         if (!response.ok) {
+    //             throw new Error(`Failed to fetch image: ${response.statusText}`);
+    //         }
+
+    //         const blob = await response.blob();
+
+    //         if (!blob || blob.size === 0) {
+    //             throw new Error('Blob is empty');
+    //         }
+
+    //         const fileName = `${userId}.${blob.type.split('/')[1]}`; // Get file extension from MIME type
+
+    //         // Upload the image directly using the Blob object
+    //         const { data, error } = await supabase
+    //             .storage
+    //             .from('avatars')
+    //             .upload(fileName, blob, {
+    //                 contentType: blob.type,
+    //                 cacheControl: '3600',
+    //                 upsert: true
+    //             });
+
+    //         console.log('Image URI:', uri);
+    //         console.log('Blob object:', blob);
+    //         console.log('Blob type:', blob.type);
+    //         console.log('Blob size:', blob.size);
+
+    //         // Log response and errors
+    //         console.log('Upload response:', data);
+    //         console.error('Upload error:', error);
+
+    //         if (error) {
+    //             console.log('Error uploading image:', error.message);
+    //             Alert.alert('Failed to upload image');
+    //         } else {
+    //             // Correctly access publicUrl from the response
+    //             const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(fileName);
+    //             if (publicUrl) {
+    //                 setImageUri(publicUrl);
+    //             } else {
+    //                 throw new Error('Failed to get public URL for uploaded image');
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.log('Error uploading image:', error.message);
+    //         Alert.alert('Failed to upload image');
+    //     }
+    // };
+
+
+
+
 
     return (
         <ScrollView contentContainerStyle={{ padding: 20 }} className="bg-stone-950 flex-1">
             <View className="items-center mb-8">
-                <TouchableOpacity onPress={pickImage}>
+                <TouchableOpacity>
                     <Image
                         source={{ uri: imageUri || 'https://i.pinimg.com/564x/af/64/49/af6449c9ece35104f7e351c0c6f8c132.jpg' }}
                         style={{ width: 100, height: 100, borderRadius: 50 }}
                     />
-                    <Icon name="edit" type="material" color="#fff" containerStyle={{ position: 'absolute', bottom: 0, right: 0 }} />
+                    {/* <Icon name="edit" type="material" color="#fff" containerStyle={{ position: 'absolute', bottom: 0, right: 0 }} /> */}
                 </TouchableOpacity>
                 <Text className="text-white text-lg mt-4 font-bold">{username || 'Guest'}</Text>
                 <Text className="text-gray-400">{email || 'guest@example.com'}</Text>
