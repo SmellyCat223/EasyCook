@@ -22,9 +22,34 @@ const Header = () => {
         fetchUserId();
     }, []);
 
+    // useEffect(() => {
+    //     if (userId) {
+    //         fetchUsername(userId);
+    //     }
+    // }, [userId]);
+
     useEffect(() => {
         if (userId) {
             fetchUsername(userId);
+
+            // Subscribe to real-time changes
+            const subscription = supabase
+                .channel(`profiles:${userId}`)
+                .on('postgres_changes', {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'profiles',
+                    filter: `id=eq.${userId}`,
+                }, (payload) => {
+                    console.log('Real-time update:', payload);
+                    setUsername(payload.new.username);
+                })
+                .subscribe();
+
+            // Clean up subscription on component unmount
+            return () => {
+                supabase.removeChannel(subscription);
+            };
         }
     }, [userId]);
 

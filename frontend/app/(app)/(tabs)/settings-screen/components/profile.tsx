@@ -53,37 +53,6 @@ const Profile = () => {
         }
     };
 
-    // const updateProfile = async () => {
-    //     try {
-    //         if (!username || username === originalUsername) {
-    //             Alert.alert('Please choose a new username.');
-    //             return;
-    //         }
-
-    //         if (!password || password.length < 6) {
-    //             Alert.alert('Password must be at least 6 characters long.');
-    //             return;
-    //         }
-
-    //         if (userId) {
-    //             const { error } = await supabase
-    //                 .from('profiles')
-    //                 .update({ username, password, profile_picture: imageUri })
-    //                 .eq('id', userId);
-
-    //             if (error) {
-    //                 console.error('Error updating profile:', error.message);
-    //                 Alert.alert('Failed to update profile');
-    //             } else {
-    //                 Alert.alert('Profile updated successfully!');
-    //             }
-    //         }
-    //     } catch (error: any) {
-    //         console.error('Error updating profile:', error.message);
-    //         Alert.alert('Failed to update profile');
-    //     }
-    // };
-
     const updateProfile = async () => {
         try {
             // Input validation
@@ -102,7 +71,7 @@ const Profile = () => {
                 // Update profile in the `profiles` table
                 const { error: profileError } = await supabase
                     .from('profiles')
-                    .update({ username, profile_picture: imageUri })
+                    .update({ username, profile_picture: imageUri, password })
                     .eq('id', userId);
 
                 if (profileError) {

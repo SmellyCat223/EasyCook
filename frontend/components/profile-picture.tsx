@@ -22,6 +22,23 @@ const ProfilePicture = () => {
     useEffect(() => {
         if (userId) {
             fetchUsername(userId);
+
+            // Subscribe to real-time changes
+            const subscription = supabase
+                .channel('profile-updates')
+                .on('postgres_changes', {
+                    schema: 'public',
+                    table: 'profiles',
+                    filter: `id=eq.${userId}`
+                }, (payload) => {
+                    setUsername(payload.new.username);
+                })
+                .subscribe();
+
+            // Clean up subscription on component unmount
+            return () => {
+                supabase.removeChannel(subscription);
+            };
         }
     }, [userId]);
 
