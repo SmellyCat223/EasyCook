@@ -26,7 +26,7 @@ const Article = () => {
                 setArticle(null);
             }
         } catch (error) {
-            console.error('Error fetching article:', error);
+            console.log('Error fetching article:', error);
             Alert.alert('Error', 'Failed to fetch article. Please try again later.');
         }
     };

@@ -40,11 +40,6 @@ const Header = () => {
                 console.error('Error fetching username:', error.message);
             } else if (data) {
                 setUsername(data.username);
-                // Animated.timing(fadeAnim, {
-                //     toValue: 1,
-                //     duration: 1000, // Adjust duration as needed
-                //     useNativeDriver: true,
-                // }).start();
             }
         } catch (error: any) {
             console.error('Error fetching username:', error.message);

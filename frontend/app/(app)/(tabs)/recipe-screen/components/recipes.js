@@ -336,7 +336,7 @@ const RecipeCard = ({ item, index, userId }) => {
             Alert.alert('Success', 'Meal added successfully');
             toggleModal();
         } catch (error) {
-            console.error('Error adding meal:', error.message);
+            console.log('Error adding meal:', error.message);
             Alert.alert('Error', error.message);
         } finally {
             setLoading(false);

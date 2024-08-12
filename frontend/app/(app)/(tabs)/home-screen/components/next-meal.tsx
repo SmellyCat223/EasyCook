@@ -55,7 +55,7 @@ const NextMeal = () => {
             .eq('user_id', userId);
 
         if (error) {
-            console.error('Error fetching meals:', error);
+            console.log('Error fetching meals:', error);
         } else if (data) {
             setItems(data);
         }
