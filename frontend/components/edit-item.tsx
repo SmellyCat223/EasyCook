@@ -30,7 +30,7 @@ interface EditItemProps {
 }
 
 const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
-    
+
     const formatDateString = (value: string) => {
         // Add '/' automatically while the user types
         const rawValue = value.replace(/\//g, '');
@@ -194,7 +194,7 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
                                 value={values.measurement_unit}
                             />
                         </View>
-                        
+
                         {touched.measurement_unit && errors.measurement_unit && <Text className="text-red-500 text-center pb-2">      {errors.measurement_unit}</Text>}
 
                         <View className="flex flex-row items-center">
@@ -237,8 +237,9 @@ const EditItem: React.FC<EditItemProps> = ({ itemId, onClose }) => {
                         {touched.mfg && errors.mfg && <Text className="text-red-500 text-center pb-2">          {errors.mfg}</Text>}
                     </View>
                     <View className="flex flex-row justify-around pt-2">
-                        <Button title="Update" onPress={handleSubmit as any} />
                         <Button title="Delete" color="red" onPress={handleDelete as any} />
+                        <Button title="Update" onPress={handleSubmit as any} />
+
                     </View>
                 </View>
             )}

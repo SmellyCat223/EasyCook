@@ -103,7 +103,7 @@ const EditItemGrocery: React.FC<EditItemProps> = ({ itemId, onClose }) => {
             Alert.alert('Error', error.message);
         }
     };
-    
+
     return (
         <Formik
             initialValues={initialValues || {
@@ -155,7 +155,7 @@ const EditItemGrocery: React.FC<EditItemProps> = ({ itemId, onClose }) => {
                         </View>
 
                         {touched.item_quantity && errors.item_quantity && <Text className="text-red-500 text-center pb-2">       {errors.item_quantity}</Text>}
-                    
+
                         <View className="flex flex-row items-center">
                             <Text className="text-zinc-100 justify-center w-1/4">Unit: </Text>
                             <TextInput
@@ -170,8 +170,9 @@ const EditItemGrocery: React.FC<EditItemProps> = ({ itemId, onClose }) => {
 
                     </View>
                     <View className="flex flex-row justify-around pt-2">
-                        <Button title="Update" onPress={handleSubmit as any} />
                         <Button title="Delete" color="red" onPress={handleDelete as any} />
+                        <Button title="Update" onPress={handleSubmit as any} />
+
                     </View>
                 </View>
             )}

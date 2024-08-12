@@ -140,7 +140,7 @@ const AutogenerateGrocery: React.FC = () => {
         setLoading(true);
         try {
             if (!userId || !shoppingListId || !isDataFetched) {
-                throw new Error('User ID, Shopping List ID, or data not set');
+                throw new Error('User ID, Shopping List ID, or data not set. Press Create Grocery list button once again.');
             }
 
             // Compare ingredients and update grocery list
