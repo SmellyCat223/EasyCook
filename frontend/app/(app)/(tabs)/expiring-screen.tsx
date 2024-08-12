@@ -53,21 +53,21 @@ const ExpiringScreen: React.FC = () => {
                     .order('expiration_date', { ascending: true });
 
                 if (error) {
-                    console.error('Error fetching items:', error);
+                    console.log('Error fetching items:', error);
                 } else {
                     const today = new Date();
                     const expiringItems = data.filter((item) => {
                         const expirationDate = parseISO(item.expiration_date);
                         const daysUntilExpiration = differenceInDays(expirationDate, today);
-                        console.log(`Item: ${item.item_name}, Days until expiration: ${daysUntilExpiration}`); // Debug statement
+                        // console.log(`Item: ${item.item_name}, Days until expiration: ${daysUntilExpiration}`); // Debug statement
 
-                        return daysUntilExpiration > 0 && daysUntilExpiration <= 7;
+                        return daysUntilExpiration >= 0 && daysUntilExpiration <= 7;
                     });
 
                     setItems(expiringItems);
                 }
             } catch (error) {
-                console.error('Error fetching items:', error);
+                console.log('Error fetching items:', error);
             } finally {
                 setLoading(false);
             }

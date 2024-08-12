@@ -23,7 +23,7 @@ const Expiring = () => {
                 .limit(10);
             console.log(data);
             if (error) {
-                console.error('Error fetching items:', error);
+                console.log('Error fetching items:', error);
             } else {
                 const today = new Date();
                 const expiringItems = data.filter((item) => {
@@ -35,7 +35,7 @@ const Expiring = () => {
                 setItems(expiringItems);
             }
         } catch (error) {
-            console.error('Error fetching items:', error);
+            console.log('Error fetching items:', error);
         }
     };
 

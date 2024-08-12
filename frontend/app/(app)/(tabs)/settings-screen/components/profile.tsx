@@ -53,36 +53,85 @@ const Profile = () => {
         }
     };
 
+    // const updateProfile = async () => {
+    //     try {
+    //         if (!username || username === originalUsername) {
+    //             Alert.alert('Please choose a new username.');
+    //             return;
+    //         }
+
+    //         if (!password || password.length < 6) {
+    //             Alert.alert('Password must be at least 6 characters long.');
+    //             return;
+    //         }
+
+    //         if (userId) {
+    //             const { error } = await supabase
+    //                 .from('profiles')
+    //                 .update({ username, password, profile_picture: imageUri })
+    //                 .eq('id', userId);
+
+    //             if (error) {
+    //                 console.error('Error updating profile:', error.message);
+    //                 Alert.alert('Failed to update profile');
+    //             } else {
+    //                 Alert.alert('Profile updated successfully!');
+    //             }
+    //         }
+    //     } catch (error: any) {
+    //         console.error('Error updating profile:', error.message);
+    //         Alert.alert('Failed to update profile');
+    //     }
+    // };
+
     const updateProfile = async () => {
         try {
+            // Input validation
             if (!username || username === originalUsername) {
                 Alert.alert('Please choose a new username.');
                 return;
             }
 
-            if (!password || password.length < 6) {
+            if (password && password.length < 6) {
                 Alert.alert('Password must be at least 6 characters long.');
                 return;
             }
 
+            // Update user profile in the `profiles` table
             if (userId) {
-                const { error } = await supabase
+                // Update profile in the `profiles` table
+                const { error: profileError } = await supabase
                     .from('profiles')
-                    .update({ username, password, profile_picture: imageUri })
+                    .update({ username, profile_picture: imageUri })
                     .eq('id', userId);
 
-                if (error) {
-                    console.error('Error updating profile:', error.message);
+                if (profileError) {
+                    console.error('Error updating profile:', profileError.message);
                     Alert.alert('Failed to update profile');
-                } else {
-                    Alert.alert('Profile updated successfully!');
+                    return;
                 }
+
+                // If password is provided, update it in the Supabase Auth system
+                if (password) {
+                    const { error: authError } = await supabase.auth.updateUser({
+                        password,
+                    });
+
+                    if (authError) {
+                        console.error('Error updating password:', authError.message);
+                        Alert.alert('Failed to update password');
+                        return;
+                    }
+                }
+
+                Alert.alert('Profile updated successfully!');
             }
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error updating profile:', error.message);
             Alert.alert('Failed to update profile');
         }
     };
+
 
     const pickImage = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -120,14 +169,14 @@ const Profile = () => {
                 });
 
             if (error) {
-                console.error('Error uploading image:', error.message);
+                console.log('Error uploading image:', error.message);
                 Alert.alert('Failed to upload image');
             } else {
                 const url = supabase.storage.from('avatars').getPublicUrl(fileName).data.publicUrl;
                 setImageUri(url);
             }
         } catch (error) {
-            console.error('Error uploading image:', error.message);
+            console.log('Error uploading image:', error.message);
             Alert.alert('Failed to upload image');
         }
     };
