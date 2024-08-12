@@ -198,7 +198,7 @@ const AutogenerateGrocery: React.FC = () => {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#F9FAEB',
+        backgroundColor: '#d1fae5',
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 20,

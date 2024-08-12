@@ -59,7 +59,7 @@ const Day: React.FC<{
             }}
         >
             <LinearGradient
-                colors={['#F5D5A1', '#F9FAEB']}
+                colors={['#d1fae5', '#bae6fd']}
                 style={{ margin: 10, padding: 16, borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.8, shadowRadius: 2, elevation: 5 }}
             >
                 <View style={{ marginBottom: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
@@ -77,10 +77,10 @@ const Day: React.FC<{
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 {meal ? (
                                     <>
-                                        <Icon name="delete" type="material" size={15} onPress={() => handleDelete(meal.meal_id)} />
+                                        <Icon name="delete" type="material" size={17} onPress={() => handleDelete(meal.meal_id)} />
                                     </>
                                 ) : (
-                                    <Icon name="add" size={15} onPress={() => router.push('/(tabs)/recipe')} />
+                                    <Icon name="add" size={17} onPress={() => router.push('/(tabs)/recipe')} />
                                 )}
                             </View>
                         </View>
@@ -237,7 +237,7 @@ const MealPlannerScreenComponent = () => {
                         width: 40,
                         height: 40,
                         borderRadius: 20,
-                        backgroundColor: '#F9FAEB',
+                        backgroundColor: '#d1fae5',
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}
@@ -273,7 +273,7 @@ const MealPlannerScreenComponent = () => {
                         width: 40,
                         height: 40,
                         borderRadius: 20,
-                        backgroundColor: '#F9FAEB',
+                        backgroundColor: '#d1fae5',
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}

@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 16,
         padding: 16,
-        backgroundColor: '#F9FAEB'
+        backgroundColor: '#d1fae5'
     },
     header: {
         flexDirection: 'row',
