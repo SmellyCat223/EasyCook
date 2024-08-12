@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ActivityIndicator, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
 import { Icon } from 'react-native-elements';
 import { differenceInDays, parseISO } from 'date-fns';
 import { supabase } from '../../../../supabase';
@@ -8,7 +8,6 @@ import { Link } from 'expo-router';
 
 const Expiring = () => {
     const [items, setItems] = useState<Item[]>([]);
-    const [loading, setLoading] = useState(true);
     const [inventoryId, setInventoryId] = useState<string | null>(null);
 
     const fetchItems = async () => {
@@ -30,15 +29,13 @@ const Expiring = () => {
                 const expiringItems = data.filter((item) => {
                     const expirationDate = parseISO(item.expiration_date);
                     const daysUntilExpiration = differenceInDays(expirationDate, today);
-                    return daysUntilExpiration > 0 && daysUntilExpiration <= 7;
+                    return daysUntilExpiration >= 0 && daysUntilExpiration <= 7;
                 });
 
                 setItems(expiringItems);
             }
         } catch (error) {
             console.error('Error fetching items:', error);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -77,10 +74,6 @@ const Expiring = () => {
     const handleRefresh = async () => {
         await fetchItems();
     };
-
-    if (loading) {
-        return <ActivityIndicator size="large" color="#0000ff" />;
-    }
 
     return (
         <Link href="/expiring-screen" asChild>
