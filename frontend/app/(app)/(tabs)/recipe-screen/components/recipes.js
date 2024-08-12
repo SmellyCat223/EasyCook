@@ -129,11 +129,22 @@ const RecipeCard = ({ item, index, userId }) => {
             let quantity = '';
 
             if (wholeNumber) {
-                quantity += wholeNumber;
+                quantity += parseFloat(wholeNumber);
             }
 
+            // if (fraction) {
+            //     quantity += unicodeFractions[fraction] || parseFloat(fraction);
+            // }
+
             if (fraction) {
-                quantity += unicodeFractions[fraction] || parseFloat(fraction);
+                if (unicodeFractions[fraction] !== undefined) {
+                    quantity += unicodeFractions[fraction];
+                } else {
+                    const [numerator, denominator] = fraction.split('/').map(Number);
+                    if (!isNaN(numerator) && !isNaN(denominator) && denominator !== 0) {
+                        quantity += numerator / denominator;
+                    }
+                }
             }
 
             return {
