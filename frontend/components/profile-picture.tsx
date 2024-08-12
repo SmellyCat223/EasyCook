@@ -27,6 +27,7 @@ const ProfilePicture = () => {
             const subscription = supabase
                 .channel('profile-updates')
                 .on('postgres_changes', {
+                    event: 'UPDATE',
                     schema: 'public',
                     table: 'profiles',
                     filter: `id=eq.${userId}`
