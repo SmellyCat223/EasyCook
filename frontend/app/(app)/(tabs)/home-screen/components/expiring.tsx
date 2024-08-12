@@ -97,9 +97,9 @@ const Expiring = () => {
                     <View className="rounded-2xl p-4 bg-sky-200">
                         <View className="flex flex-row justify-between">
                             <Icon name="clockcircleo" type="antdesign" size={18} />
-                            {/* <TouchableOpacity onPress={handleRefresh}>
+                            <TouchableOpacity onPress={handleRefresh}>
                                 <Icon name="refresh" type="material" size={25} color="#4A4A4A" />
-                            </TouchableOpacity> */}
+                            </TouchableOpacity>
                         </View>
                         <View className="pt-2">
                             <View className="w-3/5">
