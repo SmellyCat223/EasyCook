@@ -62,15 +62,6 @@ const RecipeCard = ({ item, index, userId }) => {
         };
     });
 
-    const getYoutubeVideoId = url => {
-        const regex = /[?&]v=([^&]+)/;
-        const match = url.match(regex);
-        if (match && match[1]) {
-            return match[1];
-        }
-        return null;
-    };
-
     const fetchRecipeDetails = async (idMeal) => {
         setLoading(true);
         try {
@@ -403,18 +394,6 @@ const RecipeCard = ({ item, index, userId }) => {
                                 <Text className="font-bold text-lg">Instructions:</Text>
                                 <Text className="mb-4">{recipeDetails?.strInstructions || ''}</Text>
 
-                                {recipeDetails?.strYoutube && (
-                                    <View className="space-y-4">
-                                        <Text className="font-bold text-lg">Recipe Video:</Text>
-                                        <View>
-                                            <YouTubeIframe
-                                                videoID={getYoutubeVideoId(recipeDetails.strYoutube)}
-                                                height={hp(30)}
-                                            />
-                                        </View>
-                                    </View>
-                                )}
-
                                 <Text className="font-bold text-lg">Add to Meal Plan</Text>
                                 <Button onPress={() => setShowDatePicker(true)} title="Select Date" />
                                 {showDatePicker && (
@@ -430,8 +409,8 @@ const RecipeCard = ({ item, index, userId }) => {
                                     <Picker.Item label="Lunch" value="Lunch" />
                                     <Picker.Item label="Dinner" value="Dinner" />
                                 </Picker>
-                                <Button title={loading ? "Adding Recipe..." : "Add Recipe"} onPress={handleAddRecipe} disabled={loading} />
-                                {/* <Button title="Add Recipe" onPress={handleAddRecipe} /> */}
+                                <Button title={loading ? "Adding Recipe..." : "Add Recipe"} onPress={handleAddRecipe} disabled={loading}/>
+
                             </ScrollView>)}
                     </View>
                 </View>
