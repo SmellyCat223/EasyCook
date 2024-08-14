@@ -111,8 +111,8 @@ const Expiring = () => {
 
                                 return (
                                     <View key={item.item_id} className="flex flex-row justify-between">
-                                        <Text className="text-xl">{item.item_name}</Text>
-                                        <Text className="text-xl">{daysUntilExpiration} {unit}</Text>
+                                        <Text className="text-2xl">{item.item_name}</Text>
+                                        <Text className="text-2xl ">{daysUntilExpiration} {unit}</Text>
                                     </View>
                                 );
                             })}

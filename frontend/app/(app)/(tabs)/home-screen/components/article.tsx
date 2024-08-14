@@ -11,7 +11,7 @@ const Article = () => {
 
     const fetchArticle = async () => {
         const apiKey = '3dba596a18a04418b792ce9981391ae6';
-        const keywords = 'food'; // Modify keywords as needed
+        const keywords = 'tomato'; // Modify keywords as needed
         const apiUrl = `https://newsapi.org/v2/top-headlines?q=${keywords}&apiKey=${apiKey}`;
 
         try {
@@ -55,7 +55,7 @@ const Article = () => {
                     <Text style={{ fontSize: 16, marginBottom: 10 }}>Article of the day</Text>
                     {article ? (
                         <>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{article.title}</Text>
+                            <Text className="text-2xl">{article.title}</Text>
                             <Text style={{ fontSize: 14, marginBottom: 10 }}>{article.description}</Text>
                         </>
                     ) : (

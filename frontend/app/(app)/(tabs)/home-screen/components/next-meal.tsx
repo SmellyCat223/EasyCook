@@ -104,11 +104,11 @@ const NextMeal = () => {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.content}>
-                            <Text style={styles.mealText}>{meal}</Text>
-                            <View style={styles.mealDetails}>
-                                <Text style={styles.mealDetail}>Breakfast: {breakfast}</Text>
-                                <Text style={styles.mealDetail}>Lunch: {lunch}</Text>
-                                <Text style={styles.mealDetail}>Dinner: {dinner}</Text>
+                            <Text className="w-3/5" >{meal}</Text>
+                            <View className="text-xl ">
+                                <Text className="text-2xl ">Breakfast: {breakfast}</Text>
+                                <Text className="text-2xl ">Lunch: {lunch}</Text>
+                                <Text className="text-2xl ">Dinner: {dinner}</Text>
                             </View>
                         </View>
                     </View>
@@ -139,19 +139,6 @@ const styles = StyleSheet.create({
     },
     content: {
         paddingTop: 8,
-    },
-    mealText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    mealDetails: {
-        flexDirection: 'column',
-        marginTop: 8,
-    },
-    mealDetail: {
-        fontSize: 16,
-        color: '#666',
     },
 });
 
